@@ -1,5 +1,3 @@
-import { camelCase as cc } from "change-case";
-
 /**
  * Capitalizes the first letter of a given string and converts the rest of the letters to lowercase.
  * @param str - The string to capitalize.
@@ -20,5 +18,3 @@ export const capitalize = (str: string): string =>
  * isEmptyString('hello'); // returns false
  */
 export const isEmptyString = (value: string): value is string => value === "";
-
-export const camelCase = (str: string): string => cc(str);
