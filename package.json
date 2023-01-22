@@ -6,6 +6,7 @@
     "description": "",
     "author": "Anton Ödman <anton.odman@gmail.com>",
     "license": "MIT",
+    "private": false,
     "homepage": "https://github.com/banjo/utils#readme",
     "repository": {
         "type": "git",
