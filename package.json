@@ -6,12 +6,12 @@
     "description": "",
     "author": "Anton Ödman <anton.odman@gmail.com>",
     "license": "MIT",
-    "homepage": "https://github.com/banjoanton/utils#readme",
+    "homepage": "https://github.com/banjo/utils#readme",
     "repository": {
         "type": "git",
-        "url": "git+https://github.com/banjoanton/utils.git"
+        "url": "git+https://github.com/banjo/utils.git"
     },
-    "bugs": "https://github.com/banjoanton/utils/issues",
+    "bugs": "https://github.com/banjo/utils/issues",
     "keywords": [],
     "sideEffects": false,
     "exports": {
