@@ -3,3 +3,4 @@
 
 npm test -- --watch=false
 nr prepareImports && git add src/index.ts
+npx pretty-quick --staged
