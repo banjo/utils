@@ -13,6 +13,7 @@ import {
     isRegExp,
     isArray,
     exists,
+    isElement,
 } from "../src/utils/is";
 
 describe("is", () => {
@@ -54,7 +55,9 @@ describe("is", () => {
     });
 
     it("isFunction", () => {
+        const func: () => boolean = () => true;
         expect(isFunction(() => {})).toBe(true);
+        expect(isFunction(func)).toBe(true);
         expect(isFunction("1")).toBe(false);
         expect(isFunction(1)).toBe(false);
         expect(isFunction(true)).toBe(false);

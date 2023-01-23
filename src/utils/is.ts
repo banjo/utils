@@ -101,6 +101,17 @@ export const isArray = (value: any): value is Array<any> =>
     Array.isArray(value);
 
 /**
+ *  Check if the value is a DOM element.
+ * @param value - The value to check.
+ * @returns true if the value is a DOM element, false otherwise.
+ * @example
+ * isElement(document.body); // true
+ * isElement("hello world"); // false
+ */
+export const isElement = (value: any): value is Element =>
+    value instanceof Element;
+
+/**
  * Check if the code is running in a browser environment.
  * @returns true if the code is running in a browser environment, false otherwise.
  */
