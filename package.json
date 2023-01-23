@@ -37,7 +37,7 @@
         "dist"
     ],
     "scripts": {
-        "build": "prepareImports && rollup --config && nr cleanAfterBuild",
+        "build": "nr prepareImports && rollup --config && nr cleanAfterBuild",
         "prepublishOnly": "nr build",
         "format": "npx prettier --write .",
         "release": "bumpp && npm publish",
