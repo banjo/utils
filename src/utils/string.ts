@@ -53,7 +53,7 @@ export const pathCase = (str: string, options?: Options): string =>
  * Convert a string to Capital Case using the "change-case" library.
  * @param str - The string to convert.
  * @param options  - The options to use when converting the string. See the "change-case" library for more information.
- * @returns - The converted string.
+ * @returns The converted string.
  * @example
  * capitalCase('hello world'); // returns 'Hello World'
  */
