@@ -15,5 +15,19 @@ describe("number", () => {
             expect(r).toBeGreaterThanOrEqual(0);
             expect(r).toBeLessThanOrEqual(5);
         });
+
+        range(100).forEach(() => {
+            const r = random(5, true);
+            expect(r).toBeGreaterThanOrEqual(0);
+            expect(r).toBeLessThanOrEqual(5);
+            expect(r.toString()).toContain(".");
+        });
+
+        range(100).forEach(() => {
+            const r = random(0, 5, true);
+            expect(r).toBeGreaterThanOrEqual(0);
+            expect(r).toBeLessThanOrEqual(5);
+            expect(r.toString()).toContain(".");
+        });
     });
 });
