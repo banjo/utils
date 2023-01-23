@@ -127,3 +127,12 @@ export const sample = <T>(array: T[]): T =>
 export const remove = <T>(array: T[], item: T): T[] => {
     return array.filter((i) => i !== item);
 };
+
+/**
+ * Remove falsy values (`null`, `undefined`, `""`, `0`, `false`, `NaN`) from an array.
+ * @param array - The array to compact.
+ * @returns A new array with falsy values removed.
+ * @example
+ * compact([1, 2, 3, 4, 0, null, undefined, false]); // returns [1, 2, 3, 4]
+ */
+export const compact = <T>(array: T[]): T[] => array.filter(Boolean);

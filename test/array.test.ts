@@ -7,6 +7,7 @@ import {
     move,
     sample,
     remove,
+    compact,
 } from "../src/utils/array";
 import { it, describe, expect } from "vitest";
 
@@ -77,5 +78,15 @@ describe("array", () => {
         expect(remove([1, 2, 3], 2)).toEqual([1, 3]);
         expect(remove([1, 2, 3], 3)).toEqual([1, 2]);
         expect(remove([1, 2, 3], 4)).toEqual([1, 2, 3]);
+    });
+
+    it("compact", () => {
+        expect(expect(compact([1, 2, 3])).toEqual([1, 2, 3]));
+        expect(expect(compact([1, 2, 3, null])).toEqual([1, 2, 3]));
+        expect(expect(compact([1, 2, 3, undefined])).toEqual([1, 2, 3]));
+        expect(expect(compact([1, 2, 3, null, undefined])).toEqual([1, 2, 3]));
+        expect(
+            expect(compact([1, 2, 3, null, undefined, 0])).toEqual([1, 2, 3])
+        );
     });
 });
