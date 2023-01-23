@@ -12,6 +12,7 @@ import {
     isNull,
     isRegExp,
     isArray,
+    exists,
 } from "../src/utils/is";
 
 describe("is", () => {
@@ -123,6 +124,20 @@ describe("is", () => {
         expect(isNil([])).toBe(false);
         expect(isNil(new Date())).toBe(false);
         expect(isNil(() => {})).toBe(false);
+    });
+
+    it("exists", () => {
+        expect(exists(1)).toBe(true);
+        expect(exists("1")).toBe(true);
+        expect(exists(true)).toBe(true);
+        expect(exists(false)).toBe(true);
+        expect(exists(true)).toBe(true);
+        expect(exists(null)).toBe(false);
+        expect(exists(undefined)).toBe(false);
+        expect(exists({})).toBe(true);
+        expect(exists([])).toBe(true);
+        expect(exists(new Date())).toBe(true);
+        expect(exists(() => {})).toBe(true);
     });
 
     it("isUndefined", () => {

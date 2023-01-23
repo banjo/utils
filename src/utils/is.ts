@@ -75,6 +75,15 @@ export const isUndefined = (value: any): value is undefined =>
  */
 export const isNil = (value: any): value is null | undefined =>
     isNull(value) || isUndefined(value);
+
+/**
+ * Check if the given value exists (is not null or undefined).
+ * @param value - The value to check.
+ * @returns true if the value exists, false otherwise.
+ */
+export const exists = <T>(value: T | null | undefined): value is T =>
+    value !== null && value !== undefined;
+
 /**
  * Check if the given value is a primitive type (string, number, boolean).
  * @param value - The value to check.
