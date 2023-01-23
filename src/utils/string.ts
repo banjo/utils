@@ -1,4 +1,12 @@
-import { camelCase as cc } from "change-case";
+import {
+    camelCase as cc,
+    pathCase as pc,
+    capitalCase as cac,
+    dotCase as dc,
+    pascalCase as pascalC,
+    snakeCase as sc,
+    Options,
+} from "change-case";
 
 /**
  * Capitalizes the first letter of a given string and converts the rest of the letters to lowercase.
@@ -21,4 +29,66 @@ export const capitalize = (str: string): string =>
  */
 export const isEmptyString = (value: string): value is string => value === "";
 
-export const camelCase = (str: string): string => cc(str);
+/**
+ * Convert a string to camelCase using the "change-case" library.
+ * @param str - The string to convert.
+ * @param options - The options to use when converting the string. See the "change-case" library for more information.
+ * @returns The converted string.
+ * @example
+ * camelCase('hello world'); // returns 'helloWorld'
+ */
+export const camelCase = (str: string, options?: Options): string =>
+    cc(str, options);
+/**
+ *Convert a string to path/case using the "change-case" library.
+ *@param str - The string to convert.
+ *@param options - The options to use when converting the string. See the "change-case" library for more information.
+ *@returns The converted string.
+ *@example
+ *pathCase('hello world'); // returns 'hello/world'
+ */
+export const pathCase = (str: string, options?: Options): string =>
+    pc(str, options);
+/**
+ * Convert a string to Capital Case using the "change-case" library.
+ * @param str - The string to convert.
+ * @param options  - The options to use when converting the string. See the "change-case" library for more information.
+ * @returns - The converted string.
+ * @example
+ * capitalCase('hello world'); // returns 'Hello World'
+ */
+export const capitalCase = (str: string, options?: Options): string =>
+    cac(str, options);
+
+/**
+ * Convert a string to dot.case using the "change-case" library.
+ * @param str - The string to convert.
+ * @param options - The options to use when converting the string. See the "change-case" library for more information.
+ * @returns The converted string.
+ * @example
+ * dotCase('hello world'); // returns 'hello.world'
+ */
+export const dotCase = (str: string, options?: Options): string =>
+    dc(str, options);
+
+/**
+ * Convert a string to PascalCase using the "change-case" library.
+ * @param str - The string to convert.
+ * @param options - The options to use when converting the string. See the "change-case" library for more information.
+ * @returns The converted string.
+ * @example
+ * pascalCase('hello world'); // returns 'HelloWorld'
+ */
+export const pascalCase = (str: string, options?: Options): string =>
+    pascalC(str, options);
+
+/**
+ * Convert a string to snake_case using the "change-case" library.
+ * @param str - The string to convert.
+ * @param options - The options to use when converting the string. See the "change-case" library for more information.
+ * @returns The converted string.
+ * @example
+ * snakeCase('hello world'); // returns 'hello_world'
+ */
+export const snakeCase = (str: string, options?: Options): string =>
+    sc(str, options);
