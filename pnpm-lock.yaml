@@ -3,10 +3,12 @@ lockfileVersion: 5.3
 specifiers:
   '@antfu/ni': ^0.19.0
   '@rollup/plugin-node-resolve': ^15.0.1
+  '@types/lodash-es': ^4.17.6
   '@types/node': ^18.11.18
   bumpp: ^8.2.1
   change-case: ^4.1.2
   esno: ^0.16.3
+  lodash-es: ^4.17.21
   pnpm: ^7.25.1
   rollup: ^3.10.1
   rollup-plugin-ts: ^3.1.1
@@ -17,10 +19,12 @@ specifiers:
 devDependencies:
   '@antfu/ni': 0.19.0
   '@rollup/plugin-node-resolve': 15.0.1_rollup@3.10.1
+  '@types/lodash-es': 4.17.6
   '@types/node': 18.11.18
   bumpp: 8.2.1
   change-case: 4.1.2
   esno: 0.16.3
+  lodash-es: 4.17.21
   pnpm: 7.25.1
   rollup: 3.10.1
   rollup-plugin-ts: 3.1.1_rollup@3.10.1+typescript@4.9.4
@@ -356,6 +360,16 @@ packages:
 
   /@types/estree/1.0.0:
     resolution: {integrity: sha512-WulqXMDUTYAXCjZnk6JtIHPigp55cVtDgDrO2gHRwhyJto21+1zbVCtOYB2L1F9w4qCQ0rOGWBnBe0FNTiEJIQ==}
+    dev: true
+
+  /@types/lodash-es/4.17.6:
+    resolution: {integrity: sha512-R+zTeVUKDdfoRxpAryaQNRKk3105Rrgx2CFRClIgRGaqDTdjsm8h6IYA8ir584W3ePzkZfst5xIgDwYrlh9HLg==}
+    dependencies:
+      '@types/lodash': 4.14.191
+    dev: true
+
+  /@types/lodash/4.14.191:
+    resolution: {integrity: sha512-BdZ5BCCvho3EIXw6wUCXHe7rS53AIDPLE+JzwgT+OsJk53oBfbSmZZ7CX4VaRoN78N+TJpFi9QPlfIVNmJYWxQ==}
     dev: true
 
   /@types/node/17.0.45:
@@ -992,6 +1006,10 @@ packages:
   /local-pkg/0.4.3:
     resolution: {integrity: sha512-SFppqq5p42fe2qcZQqqEOiVRXl+WCP1MdT6k7BDEW1j++sp5fIY+/fdRQitvKgB5BrBcmrs5m/L0v2FrU5MY1g==}
     engines: {node: '>=14'}
+    dev: true
+
+  /lodash-es/4.17.21:
+    resolution: {integrity: sha512-mKnC+QJ9pWVzv+C4/U3rRsHapFfHvQFoFB92e52xeyGMcX6/OlIl78je1u8vePzYZSkkogMPJ2yjxxsb89cxyw==}
     dev: true
 
   /loupe/2.3.6:

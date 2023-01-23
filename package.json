@@ -50,10 +50,12 @@
     "devDependencies": {
         "@antfu/ni": "^0.19.0",
         "@rollup/plugin-node-resolve": "^15.0.1",
+        "@types/lodash-es": "^4.17.6",
         "@types/node": "^18.11.18",
         "bumpp": "^8.2.1",
         "change-case": "^4.1.2",
         "esno": "^0.16.3",
+        "lodash-es": "^4.17.21",
         "pnpm": "^7.25.1",
         "rollup": "^3.10.1",
         "rollup-plugin-ts": "^3.1.1",
