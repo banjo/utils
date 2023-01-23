@@ -1,6 +1,4 @@
 import { readFileSync } from "fs";
-import parseJson from "parse-json";
-import { NormalizeOptions, readPackageSync } from "read-pkg";
 
 type ReadFileSettings = {
     /**
@@ -44,20 +42,10 @@ export const readFile = (path: string, options?: ReadFileSettings) => {
  */
 export const readJsonFile = (path: string, options?: ReadFileSettings) => {
     try {
-        return parseJson(readFileSync(path, "utf8"));
+        return JSON.parse(readFileSync(path, "utf8"));
     } catch (e) {
         if (options?.throws) throw e;
         if (options?.debug) console.log(e);
         return null;
     }
 };
-
-/**
- * Reads the package.json file from the current directory. Based on "read-pkg".
- * @returns The package.json object.
- * @example
- * readPackageJson();
- * readPackageJson({cwd: 'some-other-directory'});
- */
-export const readPackageJson = (options?: NormalizeOptions) =>
-    readPackageSync();
