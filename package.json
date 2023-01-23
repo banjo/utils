@@ -37,7 +37,7 @@
         "dist"
     ],
     "scripts": {
-        "build": "rollup --config && nr cleanAfterBuild",
+        "build": "prepareImports && rollup --config && nr cleanAfterBuild",
         "lint": "eslint .",
         "prepublishOnly": "nr build",
         "release": "bumpp && npm publish",
