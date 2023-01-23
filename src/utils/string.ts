@@ -92,3 +92,16 @@ export const pascalCase = (str: string, options?: Options): string =>
  */
 export const snakeCase = (str: string, options?: Options): string =>
     sc(str, options);
+
+/**
+ * Generate a random string with the length provided, defaults to 10.
+ * @param length - length of string
+ * @returns the generated string
+ * @example
+ * randomString(); // returns 'Fwf4552Dd2'
+ * randomString(5); // return 'f5l32'
+ */
+export const randomString = (length = 10) =>
+    Math.random()
+        .toString(36)
+        .substring(2, length + 2);
