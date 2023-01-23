@@ -38,8 +38,8 @@
     ],
     "scripts": {
         "build": "prepareImports && rollup --config && nr cleanAfterBuild",
-        "lint": "eslint .",
         "prepublishOnly": "nr build",
+        "format": "npx prettier --write .",
         "release": "bumpp && npm publish",
         "start": "esno src/index.ts",
         "test": "vitest",
@@ -56,13 +56,14 @@
         "bumpp": "^8.2.1",
         "change-case": "^4.1.2",
         "esno": "^0.16.3",
+        "husky": "^8.0.0",
         "lodash-es": "^4.17.21",
         "pnpm": "^7.25.1",
+        "prettier": "^2.8.3",
         "rollup": "^3.10.1",
         "rollup-plugin-ts": "^3.1.1",
         "typescript": "^4.9.4",
         "vite": "^4.0.4",
-        "vitest": "^0.27.3",
-        "husky": "^8.0.0"
+        "vitest": "^0.27.3"
     }
 }
