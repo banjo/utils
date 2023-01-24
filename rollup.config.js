@@ -2,6 +2,7 @@ import { nodeResolve } from "@rollup/plugin-node-resolve";
 import ts from "rollup-plugin-ts";
 import commonjs from "@rollup/plugin-commonjs";
 import json from "@rollup/plugin-json";
+import cleanup from "rollup-plugin-cleanup";
 
 export default [
     {
@@ -23,7 +24,8 @@ export default [
                 requireReturnsDefault: "auto",
                 defaultIsModuleExports: true,
             }),
-            json({}),
+            json(),
+            cleanup(),
         ],
     },
 ];
