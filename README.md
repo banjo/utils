@@ -307,6 +307,72 @@ isElement("hello world"); // false
 
 ---
 
+### getProperty
+
+Returns the value at path of object. If the resolved value is undefined, the defaultValue is returned in its place. Undefined will be returned if the path is not found or on failure. Wrapper around the "dot-prop" library.
+
+```ts
+const obj = { a: { b: { c: "d" } } };
+ *
+getProperty(obj, "a.b.c"); // => "d"
+getProperty(obj, "a.b"); // => { c: "d" }
+ *
+getProperty({a: [{b: "c"}]}, "a[0].b"); // => "c"
+getProperty({a: [{b: "c"}]}, "a[1].b"); // => undefined
+ *
+```
+
+#### Params
+
+| Name         | Description                                   |
+| ------------ | --------------------------------------------- |
+| obj          | object to query                               |
+| path         | path to query in object                       |
+| defaultValue | value to return for undefined resolved values |
+
+---
+
+### hasProperty
+
+Checks if object has a property at path. If the resolved value is undefined, false is returned. Wrapper around the "dot-prop" library.
+
+```ts
+const obj = { a: { b: { c: "d" } } };
+hasProperty(obj, "a.b.c"); // => true
+hasProperty(obj, "a.b"); // => true
+hasProperty(obj, "a.b.c.d"); // => false
+```
+
+#### Params
+
+| Name | Description             |
+| ---- | ----------------------- |
+| obj  | object to query         |
+| path | path to query in object |
+
+---
+
+### deleteProperty
+
+Deletes the property at path of object. Wrapper around the "dot-prop" library.
+
+```ts
+const obj = { a: { b: { c: "d" } } };
+ *
+deleteProperty(obj, "a.b.c"); // => true
+deleteProperty(obj, "a.b"); // => true
+deleteProperty(obj, "a.b.c.d"); // => false
+```
+
+#### Params
+
+| Name | Description              |
+| ---- | ------------------------ |
+| obj  | object to modify         |
+| path | path to delete in object |
+
+---
+
 ### select
 
 Selects a single element from the DOM,

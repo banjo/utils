@@ -3,5 +3,5 @@
 
 npm test -- --watch=false
 nr prepareImports
-nr prepareDocs
+nr prepareDocs && git add ./README.md
 npx pretty-quick --staged
