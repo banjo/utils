@@ -1,22 +1,11 @@
 import fs from "fs";
-import path from "path";
-import { fileURLToPath } from "url";
-
-const __filename = fileURLToPath(import.meta.url);
-const __dirname = path.dirname(__filename);
-
-const srcDir = path.join(__dirname, "../src");
-const srcUtilsDir = path.join(srcDir, "utils");
-const srcIndexFile = path.join(srcDir, "index.ts");
+import { getUtilFiles, srcIndexFile } from "./utils";
 
 const main = () => {
-    const utilFiles = fs.readdirSync(srcUtilsDir);
-    const utilFilesWithoutExt = utilFiles.map((file: any) => {
-        return file.replace(".ts", "");
-    });
+    const files = getUtilFiles();
 
-    const exportStatements = utilFilesWithoutExt.map((file: any) => {
-        return `export * from "./utils/${file}";`;
+    const exportStatements = files.map((file) => {
+        return `export * from "./utils/${file.fileName}";`;
     });
 
     const exportStatementsString = exportStatements.join("\n");

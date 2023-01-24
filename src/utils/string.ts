@@ -40,12 +40,12 @@ export const isEmptyString = (value: string): value is string => value === "";
 export const camelCase = (str: string, options?: Options): string =>
     cc(str, options);
 /**
- *Convert a string to path/case using the "change-case" library.
- *@param str - The string to convert.
- *@param options - The options to use when converting the string. See the "change-case" library for more information.
- *@returns The converted string.
- *@example
- *pathCase('hello world'); // returns 'hello/world'
+ * Convert a string to path/case using the "change-case" library.
+ * @param str - The string to convert.
+ * @param options - The options to use when converting the string. See the "change-case" library for more information.
+ * @returns The converted string.
+ * @example
+ * pathCase('hello world'); // returns 'hello/world'
  */
 export const pathCase = (str: string, options?: Options): string =>
     pc(str, options);
