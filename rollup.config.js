@@ -3,6 +3,7 @@ import ts from "rollup-plugin-ts";
 import commonjs from "@rollup/plugin-commonjs";
 import json from "@rollup/plugin-json";
 import cleanup from "rollup-plugin-cleanup";
+import terser from "@rollup/plugin-terser";
 
 export default [
     {
@@ -26,6 +27,7 @@ export default [
             }),
             json(),
             cleanup(),
+            terser({ format: { comments: true } }),
         ],
     },
 ];

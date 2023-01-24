@@ -2,6 +2,6 @@
 . "$(dirname -- "$0")/_/husky.sh"
 
 npm test -- --watch=false
-nr prepareImports && git add src/index.ts
-nr prepareDocs && git add README.md
+nr prepareImports
+nr prepareDocs
 npx pretty-quick --staged

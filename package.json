@@ -44,8 +44,8 @@
         "start": "esno src/index.ts",
         "test": "vitest",
         "typecheck": "tsc --noEmit",
-        "prepareImports": "esno ./scripts/prepareImports.ts",
-        "prepareDocs": "esno ./scripts/addDocsToReadme.ts",
+        "prepareImports": "esno ./scripts/prepareImports.ts && npx prettier --write ./src/index.ts",
+        "prepareDocs": "esno ./scripts/addDocsToReadme.ts && npx prettier --write ./README.md",
         "cleanAfterBuild": "rm dist/index.d.cts && mv dist/index.d.mts dist/index.d.ts",
         "prepare": "husky install"
     },
@@ -54,6 +54,7 @@
         "@rollup/plugin-commonjs": "^24.0.1",
         "@rollup/plugin-json": "^6.0.0",
         "@rollup/plugin-node-resolve": "^15.0.1",
+        "@rollup/plugin-terser": "^0.4.0",
         "@types/node": "^18.11.18",
         "@types/parse-json": "^4.0.0",
         "@types/throttle-debounce": "^5.0.0",
