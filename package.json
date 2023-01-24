@@ -45,6 +45,7 @@
         "test": "vitest",
         "typecheck": "tsc --noEmit",
         "prepareImports": "esno ./scripts/prepareImports.ts",
+        "prepareDocs": "esno ./scripts/addDocsToReadme.ts",
         "cleanAfterBuild": "rm dist/index.d.cts && mv dist/index.d.mts dist/index.d.ts",
         "prepare": "husky install"
     },

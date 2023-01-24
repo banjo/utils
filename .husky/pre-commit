@@ -3,4 +3,5 @@
 
 npm test -- --watch=false
 nr prepareImports && git add src/index.ts
+nr prepareDocs && git add README.md
 npx pretty-quick --staged
