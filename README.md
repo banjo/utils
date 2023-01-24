@@ -274,9 +274,9 @@ Created a throttled version of the provided function. The function is a wrapper 
 
 ```ts
 // invokes the function not more than once per second
-const throttled = throttle(() => console.log('hello world'), 1000);
-element.addEventListener('mousemove', throttled);
- *
+const throttled = throttle(() => console.log("hello world"), 1000);
+element.addEventListener("mousemove", throttled);
+
 // cancel the throttled function
 throttled.cancel();
 ```
@@ -313,13 +313,12 @@ Returns the value at path of object. If the resolved value is undefined, the def
 
 ```ts
 const obj = { a: { b: { c: "d" } } };
- *
+
 getProperty(obj, "a.b.c"); // => "d"
 getProperty(obj, "a.b"); // => { c: "d" }
- *
-getProperty({a: [{b: "c"}]}, "a[0].b"); // => "c"
-getProperty({a: [{b: "c"}]}, "a[1].b"); // => undefined
- *
+
+getProperty({ a: [{ b: "c" }] }, "a[0].b"); // => "c"
+getProperty({ a: [{ b: "c" }] }, "a[1].b"); // => undefined
 ```
 
 #### Params
@@ -358,7 +357,7 @@ Deletes the property at path of object. Wrapper around the "dot-prop" library.
 
 ```ts
 const obj = { a: { b: { c: "d" } } };
- *
+
 deleteProperty(obj, "a.b.c"); // => true
 deleteProperty(obj, "a.b"); // => true
 deleteProperty(obj, "a.b.c.d"); // => false

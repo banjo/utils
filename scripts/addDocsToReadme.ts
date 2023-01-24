@@ -128,7 +128,19 @@ function getFunctionName(example: string) {
     return nameBeforeFunction;
 }
 function getExample(doc: string) {
-    return doc.split("@example")[1].trim();
+    const example = doc.split("@example")[1].trim();
+
+    let final = "";
+    const lines = example.split("\n");
+    lines.forEach((line) => {
+        if (line.startsWith(" *")) {
+            final += line.replace(" *", "").trim() + "\n";
+        } else {
+            final += line.trim() + "\n";
+        }
+    });
+
+    return final;
 }
 
 function getReturns(doc: string) {
