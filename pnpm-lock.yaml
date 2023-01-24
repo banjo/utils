@@ -11,6 +11,7 @@ specifiers:
     "@types/throttle-debounce": ^5.0.0
     bumpp: ^8.2.1
     change-case: ^4.1.2
+    dot-prop: ^7.2.0
     esno: ^0.16.3
     happy-dom: ^8.1.5
     husky: ^8.0.0
@@ -38,6 +39,7 @@ devDependencies:
     "@types/throttle-debounce": 5.0.0
     bumpp: 8.2.1
     change-case: 4.1.2
+    dot-prop: 7.2.0
     esno: 0.16.3
     happy-dom: 8.1.5
     husky: 8.0.3
@@ -1159,6 +1161,16 @@ packages:
         dependencies:
             no-case: 3.0.4
             tslib: 2.4.1
+        dev: true
+
+    /dot-prop/7.2.0:
+        resolution:
+            {
+                integrity: sha512-Ol/IPXUARn9CSbkrdV4VJo7uCy1I3VuSiWCaFSg+8BdUOzF9n3jefIpcgAydvUZbTdEBZs2vEiTiS9m61ssiDA==,
+            }
+        engines: { node: ^12.20.0 || ^14.13.1 || >=16.0.0 }
+        dependencies:
+            type-fest: 2.19.0
         dev: true
 
     /electron-to-chromium/1.4.284:

@@ -60,6 +60,7 @@
         "@types/throttle-debounce": "^5.0.0",
         "bumpp": "^8.2.1",
         "change-case": "^4.1.2",
+        "dot-prop": "^7.2.0",
         "esno": "^0.16.3",
         "happy-dom": "^8.1.5",
         "husky": "^8.0.0",
