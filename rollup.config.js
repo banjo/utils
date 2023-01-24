@@ -27,7 +27,7 @@ export default [
             }),
             json(),
             cleanup(),
-            terser({ format: { comments: true } }),
+            terser({ format: { comments: false } }),
         ],
     },
 ];
