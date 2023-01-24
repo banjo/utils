@@ -250,7 +250,7 @@ readJsonFile("test.json", { throws: true, debug: true });
 
 ### debounce
 
-Created a debounced version of the provided function. The function is a wrapper around the "lodash" library.
+Created a debounced version of the provided function. The function is a wrapper around the "throttle-debounce" library.
 
 ```ts
 const debounced = debounce(() => console.log("hello world"), 1000);
@@ -260,19 +260,17 @@ debounced(); // does nothing if called within 1000ms of the previous call
 
 #### Params
 
-| Name            | Description                                                                                           |
-| --------------- | ----------------------------------------------------------------------------------------------------- |
-| func            | The function to create a debounced version of.                                                        |
-| wait            | The number of milliseconds to wait before invoking the function.                                      |
-| options         | The options to pass to the "lodash" debounce function. See the "lodash" library for more information. |
-| options.leading | Whether to invoke the function on the leading edge of the wait interval.                              |
-| options.maxWait | The maximum time the function is allowed to be delayed before it's invoked.                           |
+| Name     | Description                                                                                   |
+| -------- | --------------------------------------------------------------------------------------------- |
+| callback | The function to create a debounced version of.                                                |
+| wait     | The number of milliseconds to wait before invoking the function.                              |
+| options  | Options for the debounced function. See the "throttle-debounce" library for more information. |
 
 ---
 
 ### throttle
 
-Created a throttled version of the provided function. The function is a wrapper around the "lodash" library.
+Created a throttled version of the provided function. The function is a wrapper around the "throttle-debounce" library.
 
 ```ts
 // invokes the function not more than once per second
@@ -285,11 +283,10 @@ throttled.cancel();
 
 #### Params
 
-| Name    | Description                                                                                           |
-| ------- | ----------------------------------------------------------------------------------------------------- |
-| func    | The function to create a throttled version of.                                                        |
-| wait    | The number of milliseconds to wait before invoking the function.                                      |
-| options | The options to pass to the "lodash" throttle function. See the "lodash" library for more information. |
+| Name     | Description                                                      |
+| -------- | ---------------------------------------------------------------- |
+| callback | The function to create a throttled version of.                   |
+| wait     | The number of milliseconds to wait before invoking the function. |
 
 ---
 

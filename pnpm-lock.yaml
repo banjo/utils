@@ -5,15 +5,14 @@ specifiers:
     "@rollup/plugin-commonjs": ^24.0.1
     "@rollup/plugin-json": ^6.0.0
     "@rollup/plugin-node-resolve": ^15.0.1
-    "@types/lodash-es": ^4.17.6
     "@types/node": ^18.11.18
     "@types/parse-json": ^4.0.0
+    "@types/throttle-debounce": ^5.0.0
     bumpp: ^8.2.1
     change-case: ^4.1.2
     esno: ^0.16.3
     happy-dom: ^8.1.5
     husky: ^8.0.0
-    lodash-es: ^4.17.21
     parse-json: ^6.0.2
     pnpm: ^7.25.1
     prettier: ^2.8.3
@@ -21,6 +20,7 @@ specifiers:
     read-pkg: ^7.1.0
     rollup: ^3.10.1
     rollup-plugin-ts: ^3.1.1
+    throttle-debounce: ^5.0.0
     typescript: ^4.9.4
     vite: ^4.0.4
     vitest: ^0.27.3
@@ -30,15 +30,14 @@ devDependencies:
     "@rollup/plugin-commonjs": 24.0.1_rollup@3.10.1
     "@rollup/plugin-json": 6.0.0_rollup@3.10.1
     "@rollup/plugin-node-resolve": 15.0.1_rollup@3.10.1
-    "@types/lodash-es": 4.17.6
     "@types/node": 18.11.18
     "@types/parse-json": 4.0.0
+    "@types/throttle-debounce": 5.0.0
     bumpp: 8.2.1
     change-case: 4.1.2
     esno: 0.16.3
     happy-dom: 8.1.5
     husky: 8.0.3
-    lodash-es: 4.17.21
     parse-json: 6.0.2
     pnpm: 7.25.1
     prettier: 2.8.3
@@ -46,6 +45,7 @@ devDependencies:
     read-pkg: 7.1.0
     rollup: 3.10.1
     rollup-plugin-ts: 3.1.1_rollup@3.10.1+typescript@4.9.4
+    throttle-debounce: 5.0.0
     typescript: 4.9.4
     vite: 4.0.4_@types+node@18.11.18
     vitest: 0.27.3_happy-dom@8.1.5
@@ -563,22 +563,6 @@ packages:
             }
         dev: true
 
-    /@types/lodash-es/4.17.6:
-        resolution:
-            {
-                integrity: sha512-R+zTeVUKDdfoRxpAryaQNRKk3105Rrgx2CFRClIgRGaqDTdjsm8h6IYA8ir584W3ePzkZfst5xIgDwYrlh9HLg==,
-            }
-        dependencies:
-            "@types/lodash": 4.14.191
-        dev: true
-
-    /@types/lodash/4.14.191:
-        resolution:
-            {
-                integrity: sha512-BdZ5BCCvho3EIXw6wUCXHe7rS53AIDPLE+JzwgT+OsJk53oBfbSmZZ7CX4VaRoN78N+TJpFi9QPlfIVNmJYWxQ==,
-            }
-        dev: true
-
     /@types/minimatch/3.0.5:
         resolution:
             {
@@ -632,6 +616,13 @@ packages:
         resolution:
             {
                 integrity: sha512-21cFJr9z3g5dW8B0CVI9g2O9beqaThGQ6ZFBqHfwhzLDKUxaqTIy3vnfah/UPkfOiF2pLq+tGz+W8RyCskuslw==,
+            }
+        dev: true
+
+    /@types/throttle-debounce/5.0.0:
+        resolution:
+            {
+                integrity: sha512-Pb7k35iCGFcGPECoNE4DYp3Oyf2xcTd3FbFQxXUI9hEYKUl6YX+KLf7HrBmgVcD05nl50LIH6i+80js4iYmWbw==,
             }
         dev: true
 
@@ -1883,13 +1874,6 @@ packages:
             p-locate: 4.1.0
         dev: true
 
-    /lodash-es/4.17.21:
-        resolution:
-            {
-                integrity: sha512-mKnC+QJ9pWVzv+C4/U3rRsHapFfHvQFoFB92e52xeyGMcX6/OlIl78je1u8vePzYZSkkogMPJ2yjxxsb89cxyw==,
-            }
-        dev: true
-
     /loupe/2.3.6:
         resolution:
             {
@@ -2652,6 +2636,14 @@ packages:
                 integrity: sha512-ot0WnXS9fgdkgIcePe6RHNk1WA8+muPa6cSjeR3V8K27q9BB1rTE3R1p7Hv0z1ZyAc8s6Vvv8DIyWf681MAt0w==,
             }
         engines: { node: ">= 0.4" }
+        dev: true
+
+    /throttle-debounce/5.0.0:
+        resolution:
+            {
+                integrity: sha512-2iQTSgkkc1Zyk0MeVrt/3BvuOXYPl/R8Z0U2xxo9rjwNciaHDG3R+Lm6dh4EeUci49DanvBnuqI6jshoQQRGEg==,
+            }
+        engines: { node: ">=12.22" }
         dev: true
 
     /tinybench/2.3.1:

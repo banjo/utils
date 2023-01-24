@@ -1,41 +1,37 @@
-import { debounce as d, throttle as t, DebouncedFunc } from "lodash-es";
+import { debounce as d, throttle as t } from "throttle-debounce";
 
 type DebounceSettings = {
     /**
-     * If true, the debounced function will be invoked on the leading edge of the wait timeout, meaning directly.
+     * If true, the debounced function will be invoked at the beginning of the wait timeout.
      * @example
-     * const debounced = debounce(() => console.log('hello world'), 1000, { leading: true });
+     * const debounced = debounce(() => console.log('hello world'), 1000, { atBeginning: true });
      * debounced(); // logs 'hello world' immediately
      * debounced(); // logs 'hello world' after 1000ms
      * debounced(); // does nothing if called within 1000ms of the previous call
      */
-    leading?: boolean;
-    /**
-     * The maximum time in milliseconds that the debounced function will be delayed before being invoked.
-     */
-    maxWait?: number;
+    atBeginning: boolean;
 };
 
 type Debounce = <T extends (...args: any[]) => any>(
-    func: T,
+    callback: T,
     wait: number,
     options?: DebounceSettings
-) => DebouncedFunc<T>;
+) => d<T>;
 
 /**
- * Created a debounced version of the provided function. The function is a wrapper around the "lodash" library.
- * @param func - The function to create a debounced version of.
+ * Created a debounced version of the provided function. The function is a wrapper around the "throttle-debounce" library.
+ * @param callback - The function to create a debounced version of.
  * @param wait - The number of milliseconds to wait before invoking the function.
- * @param options - The options to pass to the "lodash" debounce function. See the "lodash" library for more information.
- * @param options.leading - Whether to invoke the function on the leading edge of the wait interval.
- * @param options.maxWait - The maximum time the function is allowed to be delayed before it's invoked.
+ * @param options - Options for the debounced function. See the "throttle-debounce" library for more information.
  * @returns The debounced function.
  * @example
  * const debounced = debounce(() => console.log('hello world'), 1000);
  * debounced(); // logs 'hello world' after 1000ms
  * debounced(); // does nothing if called within 1000ms of the previous call
  */
-export const debounce: Debounce = d;
+export const debounce: Debounce = (callback, wait, options) => {
+    return d(wait, callback, options as any);
+};
 
 type ThrottleSettings = {
     /**
@@ -50,16 +46,15 @@ type ThrottleSettings = {
 };
 
 type Throttle = <T extends (...args: any) => any>(
-    func: T,
-    wait?: number | undefined,
+    callback: T,
+    wait: number,
     options?: ThrottleSettings | undefined
-) => DebouncedFunc<T>;
+) => t<T>;
 
 /**
- * Created a throttled version of the provided function. The function is a wrapper around the "lodash" library.
- * @param func - The function to create a throttled version of.
+ * Created a throttled version of the provided function. The function is a wrapper around the "throttle-debounce" library.
+ * @param callback - The function to create a throttled version of.
  * @param wait - The number of milliseconds to wait before invoking the function.
- * @param options - The options to pass to the "lodash" throttle function. See the "lodash" library for more information.
  * @returns The throttled function.
  * @example
  * // invokes the function not more than once per second
@@ -69,4 +64,6 @@ type Throttle = <T extends (...args: any) => any>(
  * // cancel the throttled function
  * throttled.cancel();
  */
-export const throttle: Throttle = t;
+export const throttle: Throttle = (callback, wait, options) => {
+    return t(wait, callback, options as any);
+};
