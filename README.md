@@ -209,6 +209,170 @@ throttled.cancel();
 
 ---
 
+**isBoolean**
+
+> Check if the given value is a boolean.
+
+```ts
+isBoolean(true); // true
+isBoolean("hello world"); // false
+```
+
+---
+
+**isNumber**
+
+> Check if the given value is a number.
+
+```ts
+isNumber(1); // true
+isNumber("hello world"); // false
+```
+
+---
+
+**isString**
+
+> Check if the given value is a string.
+
+```ts
+isString("hello world"); // true
+isString(1); // false
+```
+
+---
+
+**isFunction**
+
+> Check if the given value is a function.
+
+```ts
+isFunction(() => {}); // true
+isFunction("hello world"); // false
+isFunction(1); // false
+```
+
+---
+
+**isObject**
+
+> Check if the given value is an object.
+
+```ts
+isObject({}); // true
+isObject("hello world"); // false
+isObject(1); // false
+```
+
+---
+
+**isDateObject**
+
+> Check if the given value is a Date object. Cannot be used to check if a value is a valid date.
+
+```ts
+isDateObject(new Date()); // true
+isDateObject("hello world"); // false
+isDateObject(1); // false
+isDateObject(new Date("hello world")); // true
+```
+
+---
+
+**isRegExp**
+
+> Check if the given value is a RegExp.
+
+```ts
+isRegExp(/hello world/); // true
+isRegExp("hello world"); // false
+isRegExp(1); // false
+isRegExp(new RegExp("hello world")); // true
+```
+
+---
+
+**isNull**
+
+> Check if the given value is null.
+
+```ts
+isNull(null); // true
+isNull("hello world"); // false
+isNull(1); // false
+isNull(undefined); // false
+```
+
+---
+
+**isUndefined**
+
+> Check if the given value is undefined.
+
+```ts
+isUndefined(undefined); // true
+isUndefined("hello world"); // false
+isUndefined(1); // false
+isUndefined(null); // false
+```
+
+---
+
+**isNil**
+
+> Check if the given value is null or undefined.
+
+```ts
+isNil(null); // true
+isNil(undefined); // true
+isNil("hello world"); // false
+isNil(1); // false
+```
+
+---
+
+**exists**
+
+> Check if the given value exists (is not null or undefined).
+
+```ts
+exists(null); // false
+exists(undefined); // false
+exists("hello world"); // true
+exists(1); // true
+exists(false); // true
+exists([]); // true
+```
+
+---
+
+**isPrimitive**
+
+> Check if the given value is a primitive type (string, number, boolean).
+
+```ts
+isPrimitive("hello world"); // true
+isPrimitive(1); // true
+isPrimitive(false); // true
+isPrimitive({}); // false
+isPrimitive([]); // false
+```
+
+---
+
+**isArray**
+
+> Check if the given value is an array.
+
+```ts
+isArray([1, 2, 3]); // true
+isArray("hello world"); // false
+isArray(1); // false
+isArray(new Array(1, 2, 3)); // true
+```
+
+---
+
 **isElement**
 
 > Check if the value is a DOM element.

@@ -2,6 +2,9 @@
  * Check if the given value is a boolean.
  * @param value - The value to check.
  * @returns true if the value is a boolean, false otherwise.
+ * @example
+ * isBoolean(true); // true
+ * isBoolean("hello world"); // false
  */
 export const isBoolean = (value: any): value is boolean =>
     typeof value === "boolean";
@@ -10,6 +13,9 @@ export const isBoolean = (value: any): value is boolean =>
  * Check if the given value is a number.
  * @param value - The value to check.
  * @returns true if the value is a number, false otherwise.
+ * @example
+ * isNumber(1); // true
+ * isNumber("hello world"); // false
  */
 export const isNumber = (value: any): value is number =>
     typeof value === "number";
@@ -18,6 +24,9 @@ export const isNumber = (value: any): value is number =>
  * Check if the given value is a string.
  * @param value - The value to check.
  * @returns true if the value is a string, false otherwise.
+ * @example
+ * isString("hello world"); // true
+ * isString(1); // false
  */
 export const isString = (value: any): value is string =>
     typeof value === "string";
@@ -26,6 +35,10 @@ export const isString = (value: any): value is string =>
  * Check if the given value is a function.
  * @param value - The value to check.
  * @returns true if the value is a function, false otherwise.
+ * @example
+ * isFunction(() => {}); // true
+ * isFunction("hello world"); // false
+ * isFunction(1); // false
  */
 export const isFunction = (value: any): value is Function =>
     typeof value === "function";
@@ -34,21 +47,38 @@ export const isFunction = (value: any): value is Function =>
  * Check if the given value is an object.
  * @param value - The value to check.
  * @returns true if the value is an object, false otherwise.
+ * @example
+ * isObject({}); // true
+ * isObject("hello world"); // false
+ * isObject(1); // false
  */
 export const isObject = (value: any): value is object =>
     value !== null && typeof value === "object";
 
 /**
- * Check if the given value is a Date.
+ * Check if the given value is a Date object. Cannot be used to check if a value is a valid date.
  * @param value - The value to check.
  * @returns true if the value is a Date, false otherwise.
+ * @example
+ * isDateObject(new Date()); // true
+ * isDateObject("hello world"); // false
+ * isDateObject(1); // false
+ * isDateObject(new Date("hello world")); // true
  */
-export const isDate = (value: any): value is Date => value instanceof Date;
+export const isDateObject = (value: any): value is Date =>
+    value instanceof Date;
+
+// TODO: add isDate string check
 
 /**
  * Check if the given value is a RegExp.
  * @param value - The value to check.
  * @returns true if the value is a RegExp, false otherwise.
+ * @example
+ * isRegExp(/hello world/); // true
+ * isRegExp("hello world"); // false
+ * isRegExp(1); // false
+ * isRegExp(new RegExp("hello world")); // true
  */
 export const isRegExp = (value: any): value is RegExp =>
     value instanceof RegExp;
@@ -57,6 +87,11 @@ export const isRegExp = (value: any): value is RegExp =>
  * Check if the given value is null.
  * @param value - The value to check.
  * @returns true if the value is null, false otherwise.
+ * @example
+ * isNull(null); // true
+ * isNull("hello world"); // false
+ * isNull(1); // false
+ * isNull(undefined); // false
  */
 export const isNull = (value: any): value is null => value === null;
 
@@ -64,6 +99,11 @@ export const isNull = (value: any): value is null => value === null;
  * Check if the given value is undefined.
  * @param value - The value to check.
  * @returns true if the value is undefined, false otherwise.
+ * @example
+ * isUndefined(undefined); // true
+ * isUndefined("hello world"); // false
+ * isUndefined(1); // false
+ * isUndefined(null); // false
  */
 export const isUndefined = (value: any): value is undefined =>
     value === undefined;
@@ -72,6 +112,11 @@ export const isUndefined = (value: any): value is undefined =>
  * Check if the given value is null or undefined.
  * @param value - The value to check.
  * @returns true if the value is null or undefined, false otherwise.
+ * @example
+ * isNil(null); // true
+ * isNil(undefined); // true
+ * isNil("hello world"); // false
+ * isNil(1); // false
  */
 export const isNil = (value: any): value is null | undefined =>
     isNull(value) || isUndefined(value);
@@ -80,6 +125,13 @@ export const isNil = (value: any): value is null | undefined =>
  * Check if the given value exists (is not null or undefined).
  * @param value - The value to check.
  * @returns true if the value exists, false otherwise.
+ * @example
+ * exists(null); // false
+ * exists(undefined); // false
+ * exists("hello world"); // true
+ * exists(1); // true
+ * exists(false); // true
+ * exists([]); // true
  */
 export const exists = <T>(value: T | null | undefined): value is T =>
     value !== null && value !== undefined;
@@ -88,6 +140,12 @@ export const exists = <T>(value: T | null | undefined): value is T =>
  * Check if the given value is a primitive type (string, number, boolean).
  * @param value - The value to check.
  * @returns true if the value is a primitive type, false otherwise.
+ * @example
+ * isPrimitive("hello world"); // true
+ * isPrimitive(1); // true
+ * isPrimitive(false); // true
+ * isPrimitive({}); // false
+ * isPrimitive([]); // false
  */
 export const isPrimitive = (value: any): boolean =>
     isString(value) || isNumber(value) || isBoolean(value);
@@ -96,6 +154,11 @@ export const isPrimitive = (value: any): boolean =>
  * Check if the given value is an array.
  * @param value - The value to check.
  * @returns true if the value is an array, false otherwise.
+ * @example
+ * isArray([1, 2, 3]); // true
+ * isArray("hello world"); // false
+ * isArray(1); // false
+ * isArray(new Array(1, 2, 3)); // true
  */
 export const isArray = (value: any): value is Array<any> =>
     Array.isArray(value);

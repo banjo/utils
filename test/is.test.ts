@@ -5,7 +5,7 @@ import {
     isString,
     isFunction,
     isObject,
-    isDate,
+    isDateObject,
     isPrimitive,
     isNil,
     isUndefined,
@@ -13,7 +13,6 @@ import {
     isRegExp,
     isArray,
     exists,
-    isElement,
 } from "../src/utils/is";
 
 describe("is", () => {
@@ -80,16 +79,17 @@ describe("is", () => {
         expect(isObject(() => {})).toBe(false);
     });
 
-    it("isDate", () => {
-        expect(isDate(new Date())).toBe(true);
-        expect(isDate({})).toBe(false);
-        expect(isDate([])).toBe(false);
-        expect(isDate("1")).toBe(false);
-        expect(isDate(1)).toBe(false);
-        expect(isDate(true)).toBe(false);
-        expect(isDate(null)).toBe(false);
-        expect(isDate(undefined)).toBe(false);
-        expect(isDate(() => {})).toBe(false);
+    it("isDateObjectObject", () => {
+        expect(isDateObject(new Date())).toBe(true);
+        expect(isDateObject({})).toBe(false);
+        expect(isDateObject([])).toBe(false);
+        expect(isDateObject("1")).toBe(false);
+        expect(isDateObject(1)).toBe(false);
+        expect(isDateObject(true)).toBe(false);
+        expect(isDateObject(null)).toBe(false);
+        expect(isDateObject(undefined)).toBe(false);
+        expect(isDateObject(() => {})).toBe(false);
+        expect(isDateObject("2013-02-08T09:30:26.493Z")).toBe(false);
     });
 
     it("isRegExp", () => {
