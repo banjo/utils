@@ -165,6 +165,17 @@ readFile("test.txt", { throws: true, debug: true });
 
 ---
 
+**writeFile**
+
+> Writes a file to a path. Returns true if successful, false if an error occurs.
+
+```ts
+writeFile("test.txt", "hello world");
+writeFile("test.txt", "hello world", { throws: true, debug: true });
+```
+
+---
+
 **readJsonFile**
 
 > Reads a JSON file from a path. Returns null if an error occurs.
@@ -172,6 +183,24 @@ readFile("test.txt", { throws: true, debug: true });
 ```ts
 readJsonFile("test.json");
 readJsonFile("test.json", { throws: true, debug: true });
+```
+
+---
+
+**writeJsonFile**
+
+> Writes a JSON file to a path. Returns true if successful, false if an error occurs. If the data is a string, it will be parsed before writing.
+
+```ts
+const json = {
+    hello: "world",
+};
+
+writeJsonFile("test.json", json);
+writeJsonFile("test.json", json, { spaces: 2 });
+
+const jsonAsString = JSON.stringify(json);
+writeJsonFile("test.json", jsonAsString);
 ```
 
 ---
