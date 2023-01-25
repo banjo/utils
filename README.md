@@ -449,6 +449,42 @@ deleteProperty(obj, "a.b.c.d"); // => false
 
 ---
 
+**objectKeys**
+
+> Strictly typed version of Object.keys. Returns an array of keys of the object.
+
+```ts
+const obj = { a: 1, b: 2, c: 3 };
+objectKeys(obj); // => ["a", "b", "c"]
+objectKeys({}); // => []
+```
+
+---
+
+**objectValues**
+
+> Strictly typed version of Object.values. Returns an array of values of the object.
+
+```ts
+const obj = { a: 1, b: 2, c: 3 };
+objectValues(obj); // => [1, 2, 3]
+objectValues({}); // => []
+```
+
+---
+
+**objectEntries**
+
+> Strictly typed version of Object.entries. Returns an array of key-value pairs of the object.
+
+```ts
+const obj = { a: 1, b: 2, c: 3 };
+objectEntries(obj); // => [["a", 1], ["b", 2], ["c", 3]]
+objectEntries({}); // => []
+```
+
+---
+
 ### Select
 
 ---

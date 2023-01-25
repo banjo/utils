@@ -71,3 +71,48 @@ export const hasProperty = (obj: any, path: string) => {
 export const deleteProperty = (obj: any, path: string) => {
     return dp(obj, path);
 };
+
+/**
+ * Strictly typed version of Object.keys. Returns an array of keys of the object.
+ * @param obj - object to query
+ * @returns An array of keys of the object.
+ * @example
+ * const obj = { a: 1, b: 2, c: 3 };
+ * objectKeys(obj); // => ["a", "b", "c"]
+ * objectKeys({}); // => []
+ */
+export const objectKeys = <T extends object>(
+    obj: T
+): Array<keyof typeof obj> => {
+    return Object.keys(obj) as any;
+};
+
+/**
+ * Strictly typed version of Object.values. Returns an array of values of the object.
+ * @param obj - object to query
+ * @returns An array of values of the object.
+ * @example
+ * const obj = { a: 1, b: 2, c: 3 };
+ * objectValues(obj); // => [1, 2, 3]
+ * objectValues({}); // => []
+ */
+export const objectValues = <T extends object>(obj: T): Array<T[keyof T]> => {
+    return Object.values(obj);
+};
+
+type Entries<T> = {
+    [K in keyof T]: [K, T[K]];
+}[keyof T][];
+
+/**
+ * Strictly typed version of Object.entries. Returns an array of key-value pairs of the object.
+ * @param obj - object to query
+ * @returns An array of key-value pairs of the object.
+ * @example
+ * const obj = { a: 1, b: 2, c: 3 };
+ * objectEntries(obj); // => [["a", 1], ["b", 2], ["c", 3]]
+ * objectEntries({}); // => []
+ */
+export const objectEntries = <T extends object>(obj: T): Entries<T> => {
+    return Object.entries(obj) as any;
+};
