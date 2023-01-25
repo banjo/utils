@@ -279,6 +279,22 @@ isDateObject(new Date("hello world")); // true
 
 ---
 
+**isDate**
+
+> Check if the given value is a valid date. Cannot be used to check if a value is a Date object.
+> Can pass strings, numbers, or Date objects. Notice that dates might works differently in different browsers.
+> Passing in "1" will return true in Chrome, but false in Firefox.
+
+```ts
+isDate(new Date()); // true
+isDate("hello world"); // false
+isDate(1); // true or false depending on the browser
+isDate(new Date("hello world")); // false
+isDate("2022-12-24"); // true
+```
+
+---
+
 **isRegExp**
 
 > Check if the given value is a RegExp.

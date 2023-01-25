@@ -68,7 +68,25 @@ export const isObject = (value: any): value is object =>
 export const isDateObject = (value: any): value is Date =>
     value instanceof Date;
 
-// TODO: add isDate string check
+/**
+ * Check if the given value is a valid date. Cannot be used to check if a value is a Date object.
+ * Can pass strings, numbers, or Date objects. Notice that dates might works differently in different browsers.
+ * Passing in "1" will return true in Chrome, but false in Firefox.
+ * @param value - The value to check.
+ * @returns true if the value is a valid date, false otherwise.
+ * @example
+ * isDate(new Date()); // true
+ * isDate("hello world"); // false
+ * isDate(1); // true or false depending on the browser
+ * isDate(new Date("hello world")); // false
+ * isDate("2022-12-24"); // true
+ */
+export const isDate = (value: any) => {
+    if (isDateObject(value)) {
+        return !isNaN(value.getTime());
+    }
+    return !isNaN(Date.parse(value));
+};
 
 /**
  * Check if the given value is a RegExp.
