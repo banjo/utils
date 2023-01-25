@@ -485,6 +485,27 @@ objectEntries({}); // => []
 
 ---
 
+**merge**
+
+> Deeply merges two or more objects. The last object in the arguments list overwrites previous values.
+
+```ts
+const obj1 = { a: 1 };
+const obj2 = { a: 2 };
+merge(obj1, obj2); // => { a: 2 }
+
+const obj1 = { a: { b: 1 } };
+const obj2 = { a: { c: 2 } };
+merge(obj1, obj2); // => { a: { b: 1, c: 2 } }
+
+const obj1 = { a: { b: 1 } };
+const obj2 = { a: { b: 2 } };
+const obj3 = { a: { b: 3 } };
+merge(obj1, obj2, obj3); // => { a: { b: 3 } }
+```
+
+---
+
 ### Select
 
 ---

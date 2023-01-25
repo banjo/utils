@@ -4,6 +4,7 @@ import {
     hasProperty as hp,
     deleteProperty as dp,
 } from "dot-prop";
+import { isArray, isObject } from "./is";
 
 /**
  * Returns the value at path of object. If the resolved value is undefined, the defaultValue is returned in its place. Undefined will be returned if the path is not found or on failure. Wrapper around the "dot-prop" library.
@@ -115,4 +116,70 @@ type Entries<T> = {
  */
 export const objectEntries = <T extends object>(obj: T): Entries<T> => {
     return Object.entries(obj) as any;
+};
+
+type MergeInsertions<T> = T extends object
+    ? { [K in keyof T]: MergeInsertions<T[K]> }
+    : T;
+
+type DeepMerge<F, S> = MergeInsertions<{
+    [K in keyof F | keyof S]: K extends keyof S & keyof F
+        ? DeepMerge<F[K], S[K]>
+        : K extends keyof S
+        ? S[K]
+        : K extends keyof F
+        ? F[K]
+        : never;
+}>;
+
+const isMergableObject = (item: any): item is Object => {
+    return isObject(item) && !isArray(item);
+};
+
+/**
+ * Deeply merges two or more objects. The last object in the arguments list overwrites previous values.
+ * @param target - object to merge into
+ * @param sources - objects to merge from
+ * @returns The merged object.
+ * @example
+ * const obj1 = { a: 1};
+ * const obj2 = { a: 2};
+ * merge(obj1, obj2); // => { a: 2 }
+ *
+ * const obj1 = { a: { b: 1 } };
+ * const obj2 = { a: { c: 2 } };
+ * merge(obj1, obj2); // => { a: { b: 1, c: 2 } }
+ *
+ * const obj1 = { a: { b: 1 } };
+ * const obj2 = { a: { b: 2 } };
+ * const obj3 = { a: { b: 3 } };
+ * merge(obj1, obj2, obj3); // => { a: { b: 3 } }
+ */
+export const merge = <T extends object = object, S extends object = T>(
+    target: T,
+    ...sources: S[]
+): DeepMerge<T, S> => {
+    if (!sources.length) return target as any;
+
+    const source = sources.shift();
+    if (source === undefined) return target as any;
+
+    if (isMergableObject(target) && isMergableObject(source)) {
+        objectKeys(source).forEach((key) => {
+            if (isMergableObject(source[key])) {
+                // @ts-expect-error
+                if (!target[key])
+                    // @ts-expect-error
+                    target[key] = {};
+
+                // @ts-expect-error
+                merge(target[key], source[key]);
+            } else {
+                // @ts-expect-error
+                target[key] = source[key];
+            }
+        });
+    }
+
+    return merge(target, ...sources);
 };
