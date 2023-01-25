@@ -1,4 +1,5 @@
 import { writeFileSync } from "fs";
+import { capitalize } from "../src/utils/string";
 import { readFile } from "./../src/utils/fs";
 import { getUtilFiles } from "./utils";
 
@@ -20,12 +21,14 @@ function main() {
 
     const placeholder = readme.match(
         /<!-- DOCS START -->[\s\S]*<!-- DOCS END -->/
-    );
+    )?.[0];
     if (!placeholder) throw new Error("No placeholder found");
 
-    const generateReadme = generateReadmeContent(docs);
+    const docsWithContent = generateContentForEachDoc(docs);
 
-    const newReadme = readme.replace(placeholder[0], generateReadme.join("\n"));
+    const markdown = generateMarkdown(docsWithContent);
+
+    const newReadme = readme.replace(placeholder, markdown);
 
     writeFileSync("./README.md", newReadme);
 }
@@ -44,34 +47,57 @@ type Docs = {
     returns: string;
 };
 
-function generateReadmeContent(docs: Docs[]) {
-    const content: string[] = docs.map((doc) => {
+type DocsWithContent = Docs & { content: string };
+
+function addPlaceholders(content: string) {
+    return `<!-- DOCS START -->\n${content}\n<!-- DOCS END -->`;
+}
+
+function generateMarkdown(docs: DocsWithContent[]): string {
+    const groupedArray = docs.reduce((acc: any, doc) => {
+        if (!acc[doc.fileName]) {
+            acc[doc.fileName] = [];
+        }
+
+        acc[doc.fileName].push(doc);
+
+        return acc;
+    }, {});
+
+    let markdown = "";
+    Object.entries(groupedArray).forEach(([fileName, docs]) => {
+        markdown += `### ${capitalize(fileName)}\n---\n`;
+
+        (<DocsWithContent[]>docs).forEach((doc) => {
+            markdown += doc.content;
+        });
+    });
+
+    return addPlaceholders(markdown);
+}
+
+function generateContentForEachDoc(docs: Docs[]) {
+    const content: DocsWithContent[] = docs.map((doc) => {
         const params = doc.params
             .map((param) => {
                 return `| ${param.name} | ${param.description} |`;
             })
             .join("\n");
 
-        return `### ${doc.name}
+        return {
+            ...doc,
+            content: `**${doc.name}**
 
-${doc.description}
+> ${doc.description}
 
 \`\`\`ts
 ${doc.example}
 \`\`\`
 
-#### Params
-
-| Name | Description |
-| ---- | ----------- |
-${params}
-
 ---
-`;
+`,
+        };
     });
-
-    content.unshift("<!-- DOCS START -->");
-    content.push("<!-- DOCS END -->");
 
     return content;
 }
