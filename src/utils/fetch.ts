@@ -1,3 +1,7 @@
+/**
+ * Utlilties that uses the fetch API to fetch data. Smaller implementations that basically saves time.
+ */
+
 type FetchSettings = {
     /**
      * If true, the function will throw an error if the response is not ok. Defaults to false.

@@ -7,6 +7,10 @@ import {
 import { isArray, isObject } from "./is";
 
 /**
+ * Utility functions for working with objects. Both wrappers and custom functions.
+ */
+
+/**
  * Returns the value at path of object. If the resolved value is undefined, the defaultValue is returned in its place. Undefined will be returned if the path is not found or on failure. Wrapper around the "dot-prop" library.
  * @param obj - object to query
  * @param path - path to query in object

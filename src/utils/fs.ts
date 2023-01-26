@@ -1,5 +1,9 @@
 import { readFileSync, writeFileSync } from "fs";
 
+/**
+ * Utilities for working with the file system. These functions are synchronous.
+ */
+
 type FileSettings = {
     /**
      * If true, the function will throw an error if an error occurs. Defaults to false.

@@ -1,4 +1,8 @@
 /**
+ * Utility for selecting elements from the DOM. Simplifies the process of working with the DOM.
+ */
+
+/**
  * Selects a single element from the DOM,
  * or returns null if no element is found. Can search a parent as well.
  * Can also be used to check if element exists or fetch an array of elements.

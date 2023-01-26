@@ -1,4 +1,8 @@
 /**
+ * Utility functions for checking the type of a value.
+ */
+
+/**
  * Check if the given value is a boolean.
  * @param value - The value to check.
  * @returns true if the value is a boolean, false otherwise.

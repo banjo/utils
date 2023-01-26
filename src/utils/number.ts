@@ -1,6 +1,10 @@
 import { isBoolean } from "./is";
 
 /**
+ * Utility functions for working with numbers.
+ */
+
+/**
  * Produces a random number between min and max (inclusive). If only one argument is provided a number between
  * 0 and the given number is returned. If floating is true, or either min or max are floats, a floating-point
  * number is returned instead of an integer.

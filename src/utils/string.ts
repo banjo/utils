@@ -9,6 +9,10 @@ import {
 } from "change-case";
 
 /**
+ * Utilities for working with strings.
+ */
+
+/**
  * Capitalizes the first letter of a given string and converts the rest of the letters to lowercase.
  * @param str - The string to capitalize.
  * @returns The capitalized string.

@@ -14,11 +14,13 @@ The package is designed to be used as `devDependencies` and bundled into your di
 
 ## Docs
 
-> Auto generated from TSDocs
+Auto generated from TSDocs.
 
 <!-- DOCS START -->
 
 ### Array
+
+Utility functions for working with arrays.
 
 ---
 
@@ -134,6 +136,8 @@ compact([1, 2, 3, 4, 0, null, undefined, false]); // returns [1, 2, 3, 4]
 
 ### Fetch
 
+Utlilties that uses the fetch API to fetch data. Smaller implementations that basically saves time.
+
 ---
 
 **fetchJson**
@@ -151,6 +155,8 @@ await fetchJson("https://example.com/api", { method: "POST" });
 ---
 
 ### Fs
+
+Utilities for working with the file system. These functions are synchronous.
 
 ---
 
@@ -207,6 +213,8 @@ writeJsonFile("test.json", jsonAsString);
 
 ### Function
 
+Utilities for working with functions.
+
 ---
 
 **debounce**
@@ -237,6 +245,8 @@ throttled.cancel();
 ---
 
 ### Is
+
+Utility functions for checking the type of a value.
 
 ---
 
@@ -433,6 +443,8 @@ isElement("hello world"); // false
 
 ### Object
 
+Utility functions for working with objects. Both wrappers and custom functions.
+
 ---
 
 **getProperty**
@@ -537,6 +549,8 @@ merge(obj1, obj2, obj3); // => { a: { b: 3 } }
 
 ### Select
 
+Utility for selecting elements from the DOM. Simplifies the process of working with the DOM.
+
 ---
 
 **select**
@@ -578,6 +592,8 @@ select.all(".test", parent); // [element1, element2, ...]
 ---
 
 ### String
+
+Utilities for working with strings.
 
 ---
 

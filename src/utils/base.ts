@@ -1,4 +1,8 @@
 /**
+ * Base utilities that have no particular classification.
+ */
+
+/**
  * Sleep for a given amount of time.
  * @param ms - The amount of time to sleep, in milliseconds. Defaults to 0.
  * @example

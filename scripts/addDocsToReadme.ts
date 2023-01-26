@@ -1,9 +1,11 @@
 import { writeFileSync } from "fs";
+import { objectEntries } from "../src";
 import { capitalize } from "../src/utils/string";
 import { readFile } from "./../src/utils/fs";
 import { getUtilFiles } from "./utils";
 
 const shouldInclude = ["@returns", "@example"];
+const TS_DOCS_REGEX = /\/\*\*[\s\S]*?\*\//g;
 
 main();
 function main() {
@@ -13,7 +15,7 @@ function main() {
     for (const f of files) {
         const comments = getAllTsDocsComments(f.content);
         if (!comments) throw new Error(`No comments found in ${f.fileName}`);
-        docs = [...docs, ...parseComments(comments, f.fileName)];
+        docs = [...docs, ...parseComments(comments, f)];
     }
 
     const readme = readFile("./README.md");
@@ -42,6 +44,7 @@ type Docs = {
     name: string;
     description: string;
     fileName: string;
+    fileContent: string;
     example: string;
     params: Param[];
     returns: string;
@@ -65,8 +68,16 @@ function generateMarkdown(docs: DocsWithContent[]): string {
     }, {});
 
     let markdown = "";
-    Object.entries(groupedArray).forEach(([fileName, docs]) => {
-        markdown += `### ${capitalize(fileName)}\n---\n`;
+    objectEntries(groupedArray).forEach(([fileName, docs]) => {
+        markdown += `### ${capitalize(fileName)}\n\n`;
+
+        const fileDesc = (<DocsWithContent[]>docs)?.[0].fileContent.match(
+            TS_DOCS_REGEX
+        )?.[0];
+
+        if (fileDesc) {
+            markdown += cleanComment(fileDesc) + "\n\n---\n";
+        }
 
         (<DocsWithContent[]>docs).forEach((doc) => {
             markdown += doc.content;
@@ -78,12 +89,6 @@ function generateMarkdown(docs: DocsWithContent[]): string {
 
 function generateContentForEachDoc(docs: Docs[]) {
     const content: DocsWithContent[] = docs.map((doc) => {
-        const params = doc.params
-            .map((param) => {
-                return `| ${param.name} | ${param.description} |`;
-            })
-            .join("\n");
-
         return {
             ...doc,
             content: `**${doc.name}**
@@ -102,15 +107,22 @@ ${doc.example}
     return content;
 }
 
-function parseComments(comments: string[], fileName: string): Docs[] {
+function cleanComment(comment: string) {
+    return comment
+        .replace("/**", "")
+        .replace("*/", "")
+        .replaceAll(" * ", "")
+        .trim();
+}
+
+function parseComments(
+    comments: string[],
+    file: { content: string; fileName: string }
+): Docs[] {
     const docs: Docs[] = [];
 
     for (const comment of comments) {
-        const formattedDoc = comment
-            .replace("/**", "")
-            .replace("*/", "")
-            .replaceAll(" * ", "")
-            .trim();
+        const formattedDoc = cleanComment(comment);
 
         if (!shouldInclude.every((s) => formattedDoc.includes(s))) {
             continue;
@@ -126,9 +138,10 @@ function parseComments(comments: string[], fileName: string): Docs[] {
         docs.push({
             name: functionName,
             description,
-            fileName,
+            fileName: file.fileName,
             example,
             params,
+            fileContent: file.content,
             returns,
         });
     }
@@ -194,5 +207,5 @@ function getDescription(doc: string) {
 }
 
 function getAllTsDocsComments(content: string): string[] | null {
-    return content.match(/\/\*\*[\s\S]*?\*\//g);
+    return content.match(TS_DOCS_REGEX);
 }

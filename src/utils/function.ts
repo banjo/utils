@@ -1,5 +1,9 @@
 import { debounce as d, throttle as t } from "throttle-debounce";
 
+/**
+ * Utilities for working with functions.
+ */
+
 type DebounceSettings = {
     /**
      * If true, the debounced function will be invoked at the beginning of the wait timeout.

@@ -1,6 +1,10 @@
 import { isArray, isNil } from "./is";
 
 /**
+ * Utility functions for working with arrays.
+ */
+
+/**
  * Check if the given value is an empty array.
  * @param value - The value to check.
  * @returns true if the value is an empty array, false otherwise.
