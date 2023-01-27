@@ -92,16 +92,6 @@ export const toast = (message: string, options?: Options) => {
         ...options,
     };
 
-    const container = document.createElement("div");
-    container.classList.add("banjo-toast-container");
-    container.style.cssText = `
-        position: fixed; 
-        bottom: 0; 
-        right: 0; 
-        left: 0;
-        top: 0;
-        overflow: hidden;`;
-
     const toast = document.createElement("div");
     toast.classList.add("banjo-toast");
     toast.style.cssText = `
@@ -111,7 +101,7 @@ export const toast = (message: string, options?: Options) => {
         width: ${width};
         height: fit-content;
         transform: translateX(200%);
-        position: absolute;
+        position: fixed;
         bottom: 2rem;
         right: 2rem;
         padding: 1rem;
@@ -119,6 +109,7 @@ export const toast = (message: string, options?: Options) => {
         display: flex;
         align-items: center;
         gap: 1rem;
+        cursor: pointer;
         `;
 
     toast.style.backgroundColor = backgroundColor[type!];
@@ -133,8 +124,7 @@ export const toast = (message: string, options?: Options) => {
 
     toast.appendChild(document.createTextNode(message));
 
-    container.appendChild(toast);
-    document.body.appendChild(container);
+    document.body.appendChild(toast);
 
     const show = () => {
         toast.style.transform = "translateX(0%)";
@@ -143,11 +133,15 @@ export const toast = (message: string, options?: Options) => {
     const remove = () => {
         toast.style.transform = "translateX(200%)";
         setTimeout(() => {
-            container.remove();
+            toast.remove();
             // @ts-ignore
             window.banjoToast = null;
         }, timing);
     };
+
+    toast.addEventListener("click", () => {
+        remove();
+    });
 
     // @ts-ignore
     if (window.banjoToast) window.banjoToast.remove();
