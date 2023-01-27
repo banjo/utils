@@ -38,6 +38,7 @@
     ],
     "scripts": {
         "build": "nr prepareImports && rollup --config && nr cleanAfterBuild",
+        "dev": "rollup --config --watch",
         "prepublishOnly": "nr build",
         "format": "npx prettier --write .",
         "release": "bumpp && npm publish",

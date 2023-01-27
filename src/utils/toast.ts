@@ -1,0 +1,79 @@
+/**
+ * Toast utility to easily show a toast message in a browser
+ */
+
+const TIMING = 300;
+
+/**
+ * Show a toast message. If a toast is already showing, it will be removed and replaced with the new one.
+ * @param message - The message to show.
+ * @param type - The type of toast. Either "success" or "error".
+ * @param time - The time to show the toast for in milliseconds. Defaults to 5000.
+ * @returns An object with a remove function to remove the toast.
+ * @example
+ * toast("Hello world", "success");
+ * toast("Hello world", "error", 1000);
+ *
+ * const {remove} = toast("Hello world", "success", 10000);
+ * remove();
+ *
+ */
+export const toast = (
+    message: string,
+    type: "success" | "error",
+    time = 5000
+) => {
+    const container = document.createElement("div");
+    container.classList.add("banjo-toast-container");
+    container.style.cssText = `
+        position: fixed; 
+        bottom: 0; 
+        right: 0; 
+        width: 300px; 
+        height: 100px; 
+        overflow: hidden;`;
+
+    const toast = document.createElement("div");
+    toast.classList.add("banjo-toast");
+    toast.style.cssText = `
+        width: fit-content;
+        height: fit-content;
+        transform: translateX(200%);
+        transition: all ${TIMING}ms ease;
+        position: absolute;
+        bottom: 2rem;
+        right: 2rem;
+        padding: 1rem;
+        border-radius: 0.5rem;
+        `;
+
+    toast.style.backgroundColor = type === "success" ? "#bbf7d0" : "#fecdd3";
+    toast.style.color = type === "success" ? "#0f5132" : "#842029";
+    toast.textContent = message;
+
+    container.appendChild(toast);
+    document.body.appendChild(container);
+
+    const show = () => {
+        toast.style.transform = "translateX(0%)";
+    };
+
+    const remove = () => {
+        toast.style.transform = "translateX(200%)";
+        setTimeout(() => {
+            container.remove();
+            // @ts-ignore
+            window.banjoToast = null;
+        }, TIMING);
+    };
+
+    // @ts-ignore
+    if (window.banjoToast) window.banjoToast.remove();
+
+    // @ts-ignore
+    window.banjoToast = { remove };
+    setTimeout(show, TIMING);
+    setTimeout(remove, time);
+
+    return { remove };
+};
