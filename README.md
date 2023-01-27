@@ -701,10 +701,10 @@ Toast utility to easily show a toast message in a browser
 > Show a toast message. If a toast is already showing, it will be removed and replaced with the new one.
 
 ```ts
-toast("Hello world", "success");
-toast("Hello world", "error", 1000);
+toast("Hello world");
+toast("Hello world", { time: 10000, type: "error" });
 
-const { remove } = toast("Hello world", "success", 10000);
+const { remove } = toast("Hello world");
 remove();
 ```
 

@@ -1,28 +1,54 @@
+import { isBrowser } from "./is";
+
 /**
  * Toast utility to easily show a toast message in a browser
  */
 
-const TIMING = 300;
+type Type = "success" | "error";
+type Options = {
+    /**
+     * The time to show the toast for in milliseconds. Defaults to 5000.
+     * @default 5000
+     */
+    time?: number;
+
+    /**
+     * The type of toast. Either "success" or "error".
+     * @default "success"
+     */
+    type?: Type;
+
+    /**
+     * The timing to use for the animation. Defaults to 300.
+     * @default 300
+     */
+    timing?: number;
+};
 
 /**
  * Show a toast message. If a toast is already showing, it will be removed and replaced with the new one.
  * @param message - The message to show.
- * @param type - The type of toast. Either "success" or "error".
- * @param time - The time to show the toast for in milliseconds. Defaults to 5000.
- * @returns An object with a remove function to remove the toast.
+ * @param options - The options to use.
+ * @returns - An object with a remove method to remove the toast.
  * @example
- * toast("Hello world", "success");
- * toast("Hello world", "error", 1000);
+ * toast("Hello world");
+ * toast("Hello world", { time: 10000, type: "error" });
  *
- * const {remove} = toast("Hello world", "success", 10000);
+ * const { remove } = toast("Hello world");
  * remove();
- *
  */
 export const toast = (
     message: string,
-    type: "success" | "error",
-    time = 5000
+    options: Options = {
+        time: 5000,
+        type: "success",
+        timing: 300,
+    }
 ) => {
+    if (!isBrowser()) throw new Error("toast can only be used in a browser");
+
+    const { time, type, timing } = options;
+
     const container = document.createElement("div");
     container.classList.add("banjo-toast-container");
     container.style.cssText = `
@@ -39,7 +65,7 @@ export const toast = (
         width: fit-content;
         height: fit-content;
         transform: translateX(200%);
-        transition: all ${TIMING}ms ease;
+        transition: all ${timing}ms ease;
         position: absolute;
         bottom: 2rem;
         right: 2rem;
@@ -64,7 +90,7 @@ export const toast = (
             container.remove();
             // @ts-ignore
             window.banjoToast = null;
-        }, TIMING);
+        }, timing);
     };
 
     // @ts-ignore
@@ -72,7 +98,7 @@ export const toast = (
 
     // @ts-ignore
     window.banjoToast = { remove };
-    setTimeout(show, TIMING);
+    setTimeout(show, timing);
     setTimeout(remove, time);
 
     return { remove };
