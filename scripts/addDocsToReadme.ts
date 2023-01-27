@@ -1,8 +1,8 @@
 import { writeFileSync } from "fs";
-import { objectEntries } from "../src";
+import { objectEntries } from "../src/utils/object";
 import { capitalize } from "../src/utils/string";
-import { readFile } from "./../src/utils/fs";
 import { getUtilFiles } from "./utils";
+import { readFileSync } from "fs";
 
 const shouldInclude = ["@returns", "@example"];
 const TS_DOCS_REGEX = /\/\*\*[\s\S]*?\*\//g;
@@ -18,7 +18,7 @@ function main() {
         docs = [...docs, ...parseComments(comments, f)];
     }
 
-    const readme = readFile("./README.md");
+    const readme = readFileSync("./README.md", "utf8");
     if (!readme) throw new Error("No readme found");
 
     const placeholder = readme.match(

@@ -690,4 +690,24 @@ randomString(5); // return 'f5l32'
 
 ---
 
+### Toast
+
+Toast utility to easily show a toast message in a browser
+
+---
+
+**toast**
+
+> Show a toast message. If a toast is already showing, it will be removed and replaced with the new one.
+
+```ts
+toast("Hello world", "success");
+toast("Hello world", "error", 1000);
+
+const { remove } = toast("Hello world", "success", 10000);
+remove();
+```
+
+---
+
 <!-- DOCS END -->
