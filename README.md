@@ -702,7 +702,12 @@ Toast utility to easily show a toast message in a browser
 
 ```ts
 toast("Hello world");
-toast("Hello world", { time: 10000, type: "error" });
+toast("Hello world", {
+    time: 10000,
+    type: "error",
+    timing: 500,
+    fontSize: "1.5rem",
+});
 
 const { remove } = toast("Hello world");
 remove();
