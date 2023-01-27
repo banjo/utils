@@ -156,7 +156,7 @@ await fetchJson("https://example.com/api", { method: "POST" });
 
 ### Fs
 
-Utilities for working with the file system. These functions are synchronous.
+Utilities for working with the file system. These functions are synchronous. Only works in a node environment.
 
 ---
 

@@ -1,8 +1,14 @@
 /**
- * Utilities for working with the file system. These functions are synchronous.
+ * Utilities for working with the file system. These functions are synchronous. Only works in a node environment.
  */
 
+import { isBrowser } from "./is";
+
 const importFsSync = () => {
+    if (isBrowser()) {
+        throw new Error("fs can only be used in a node environment.");
+    }
+
     const { readFileSync, writeFileSync } = require("fs");
     return { readFileSync, writeFileSync };
 };
