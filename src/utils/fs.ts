@@ -1,8 +1,11 @@
-import { readFileSync, writeFileSync } from "fs";
-
 /**
  * Utilities for working with the file system. These functions are synchronous.
  */
+
+const importFsSync = () => {
+    const { readFileSync, writeFileSync } = require("fs");
+    return { readFileSync, writeFileSync };
+};
 
 type FileSettings = {
     /**
@@ -26,7 +29,8 @@ type FileSettings = {
  */
 export const readFile = (path: string, options?: FileSettings) => {
     try {
-        return readFileSync(path, "utf8");
+        const fs = importFsSync();
+        return fs.readFileSync(path, "utf8");
     } catch (e) {
         if (options?.throws) throw e;
         if (options?.debug) console.log(e);
@@ -50,7 +54,8 @@ export const writeFile = (
     options?: FileSettings
 ) => {
     try {
-        writeFileSync(path, data);
+        const fs = importFsSync();
+        fs.writeFileSync(path, data);
         return true;
     } catch (error) {
         if (options?.throws) throw error;
@@ -71,7 +76,8 @@ export const writeFile = (
  */
 export const readJsonFile = (path: string, options?: FileSettings) => {
     try {
-        return JSON.parse(readFileSync(path, "utf8"));
+        const fs = importFsSync();
+        return JSON.parse(fs.readFileSync(path, "utf8"));
     } catch (e) {
         if (options?.throws) throw e;
         if (options?.debug) console.log(e);
@@ -118,7 +124,8 @@ export const writeJsonFile = (
         } else {
             json = JSON.stringify(data, null, spaces);
         }
-        writeFileSync(path, json);
+        const fs = importFsSync();
+        fs.writeFileSync(path, json);
         return true;
     } catch (error) {
         if (options?.throws) throw error;
