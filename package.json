@@ -72,7 +72,6 @@
         "change-case": "^4.1.2",
         "dot-prop": "^7.2.0",
         "esbuild": "^0.17.5",
-        "esm-env": "^1.0.0",
         "esno": "^0.16.3",
         "happy-dom": "^8.1.5",
         "husky": "^8.0.0",
