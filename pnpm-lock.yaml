@@ -26,6 +26,7 @@ specifiers:
     typescript: ^4.9.4
     vite: ^4.0.4
     vitest: ^0.27.3
+    wildcard-match: ^5.1.2
 
 devDependencies:
     "@antfu/ni": 0.19.0
@@ -53,6 +54,7 @@ devDependencies:
     typescript: 4.9.4
     vite: 4.0.4_@types+node@18.11.18
     vitest: 0.27.3_happy-dom@8.1.5
+    wildcard-match: 5.1.2
 
 packages:
     /@antfu/ni/0.19.0:
@@ -2945,6 +2947,13 @@ packages:
         dependencies:
             siginfo: 2.0.0
             stackback: 0.0.2
+        dev: true
+
+    /wildcard-match/5.1.2:
+        resolution:
+            {
+                integrity: sha512-qNXwI591Z88c8bWxp+yjV60Ch4F8Riawe3iGxbzquhy8Xs9m+0+SLFBGb/0yCTIDElawtaImC37fYZ+dr32KqQ==,
+            }
         dev: true
 
     /wrappy/1.0.2:

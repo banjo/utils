@@ -690,6 +690,18 @@ randomString(5); // return 'f5l32'
 
 ---
 
+**wildcardMatch**
+
+> Check if a string matches a wildcard pattern. Uses the "wildcard-match" library.
+
+```ts
+wildcardMatch("/foo/bar", "/foo/*"); // returns true
+wildcardMatch("/foo/bar", "/foo/bar"); // returns true
+wildcardMatch("/foo/bar", "/foo/bar/*"); // returns false
+```
+
+---
+
 ### Toast
 
 Toast utility to easily show a toast message in a browser

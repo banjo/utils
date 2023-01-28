@@ -7,6 +7,7 @@ import {
     snakeCase as sc,
     Options,
 } from "change-case";
+import wcmatch from "wildcard-match";
 
 /**
  * Utilities for working with strings.
@@ -109,3 +110,18 @@ export const randomString = (length = 10) =>
     Math.random()
         .toString(36)
         .substring(2, length + 2);
+
+/**
+ * Check if a string matches a wildcard pattern. Uses the "wildcard-match" library.
+ * @param str - The string to check.
+ * @param pattern - The wildcard pattern to check against.
+ * @returns true if the string matches the pattern, false otherwise.
+ * @example
+ * wildcardMatch('/foo/bar', '/foo/*'); // returns true
+ * wildcardMatch('/foo/bar', '/foo/bar'); // returns true
+ * wildcardMatch('/foo/bar', '/foo/bar/*'); // returns false
+ */
+export const wildcardMatch = (str: string, pattern: string): boolean => {
+    const isMatch = wcmatch(pattern);
+    return isMatch(str);
+};
