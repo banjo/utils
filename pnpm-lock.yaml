@@ -12,6 +12,7 @@ specifiers:
     bumpp: ^8.2.1
     change-case: ^4.1.2
     dot-prop: ^7.2.0
+    esm-env: ^1.0.0
     esno: ^0.16.3
     happy-dom: ^8.1.5
     husky: ^8.0.0
@@ -40,6 +41,7 @@ devDependencies:
     bumpp: 8.2.1
     change-case: 4.1.2
     dot-prop: 7.2.0
+    esm-env: 1.0.0
     esno: 0.16.3
     happy-dom: 8.1.5
     husky: 8.0.3
@@ -1426,6 +1428,13 @@ packages:
                 integrity: sha512-k0er2gUkLf8O0zKJiAhmkTnJlTvINGv7ygDNPbeIsX/TJjGJZHuh9B2UxbsaEkmlEo9MfhrSzmhIlhRlI2GXnw==,
             }
         engines: { node: ">=6" }
+        dev: true
+
+    /esm-env/1.0.0:
+        resolution:
+            {
+                integrity: sha512-Cf6VksWPsTuW01vU9Mk/3vRue91Zevka5SjyNf3nEpokFRuqt/KjUQoGAwq9qMmhpLTHmXzSIrFRw8zxWzmFBA==,
+            }
         dev: true
 
     /esno/0.16.3:

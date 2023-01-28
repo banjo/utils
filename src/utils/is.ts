@@ -1,3 +1,4 @@
+import { DEV, BROWSER } from "esm-env";
 /**
  * Utility functions for checking the type of a value.
  */
@@ -201,10 +202,18 @@ export const isElement = (value: any): value is Element =>
  * @returns true if the code is running in a browser environment, false otherwise.
  */
 // @ts-ignore
-export const isBrowser = (): boolean => typeof window !== "undefined";
+export const isBrowser = (): boolean =>
+    typeof window !== "undefined" && BROWSER === true;
 
 /**
  * Check if the code is running in a Node.js environment.
  * @returns true if the code is running in a Node.js environment, false otherwise.
  */
-export const isNode = (): boolean => typeof process !== "undefined";
+export const isNode = (): boolean =>
+    typeof process !== "undefined" && BROWSER === false;
+
+/**
+ * Check if the code is running in a development environment.  Wrapper around the "esm-env" library.
+ * @returns true if the code is running in a development environment, false otherwise.
+ */
+export const isDev = (): boolean => DEV === true;
