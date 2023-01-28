@@ -134,6 +134,37 @@ compact([1, 2, 3, 4, 0, null, undefined, false]); // returns [1, 2, 3, 4]
 
 ---
 
+### Cli
+
+Tools for CLI applications, mostly wrappers around other neat tools.
+
+---
+
+**spinner**
+
+> Create a spinner in a CLI application. The spinner is returned as an object. Wrapper around the `ora` package.
+
+```ts
+const spinner = spinner("Hello world");
+
+// set to success
+spinner.succeed("Done!");
+
+// set to fail
+spinner.fail("Failed!");
+
+// set the color
+spinner.setColor("yellow");
+
+// set the text
+spinner.setText("Hello world");
+
+// stop the spinner
+spinner.stop();
+```
+
+---
+
 ### Fetch
 
 Utlilties that uses the fetch API to fetch data. Smaller implementations that basically saves time.

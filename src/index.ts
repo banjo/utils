@@ -1,5 +1,6 @@
 export * from "./utils/array";
 export * from "./utils/base";
+export * from "./utils/cli";
 export * from "./utils/fetch";
 export * from "./utils/fs";
 export * from "./utils/function";
