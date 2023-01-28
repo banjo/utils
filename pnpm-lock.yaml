@@ -16,6 +16,7 @@ specifiers:
     esno: ^0.16.3
     happy-dom: ^8.1.5
     husky: ^8.0.0
+    nanospinner: ^1.1.0
     ora: ^6.1.2
     pnpm: ^7.25.1
     prettier: ^2.8.3
@@ -46,6 +47,7 @@ devDependencies:
     esno: 0.16.3
     happy-dom: 8.1.5
     husky: 8.0.3
+    nanospinner: 1.1.0
     ora: 6.1.2
     pnpm: 7.25.1
     prettier: 2.8.3
@@ -2108,6 +2110,15 @@ packages:
             }
         engines: { node: ^10 || ^12 || ^13.7 || ^14 || >=15.0.1 }
         hasBin: true
+        dev: true
+
+    /nanospinner/1.1.0:
+        resolution:
+            {
+                integrity: sha512-yFvNYMig4AthKYfHFl1sLj7B2nkHL4lzdig4osvl9/LdGbXwrdFRoqBS98gsEsOakr0yH+r5NZ/1Y9gdVB8trA==,
+            }
+        dependencies:
+            picocolors: 1.0.0
         dev: true
 
     /no-case/3.0.4:

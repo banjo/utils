@@ -20,12 +20,12 @@ export default [
         ],
         plugins: [
             nodeResolve(),
-            ts(),
             commonjs({
                 requireReturnsDefault: "auto",
                 defaultIsModuleExports: true,
             }),
             json(),
+            ts(),
             cleanup(),
             terser({ format: { comments: false } }),
         ],

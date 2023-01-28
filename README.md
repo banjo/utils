@@ -142,16 +142,19 @@ Tools for CLI applications, mostly wrappers around other neat tools.
 
 **spinner**
 
-> Create a spinner in a CLI application. The spinner is returned as an object. Wrapper around the `ora` package.
+> Create a spinner in a CLI application. The spinner is returned as an object. Wrapper around the `nanospinner` package.
 
 ```ts
 const spinner = spinner("Hello world");
 
 // set to success
-spinner.succeed("Done!");
+spinner.succeed({ text: "Success!"});
+
+// can modify mark and color
+spinner.succeed({ text: "Success!", mark: "✔", color: "green" }});
 
 // set to fail
-spinner.fail("Failed!");
+spinner.fail({ text: "Failed!"});
 
 // set the color
 spinner.setColor("yellow");
@@ -161,6 +164,7 @@ spinner.setText("Hello world");
 
 // stop the spinner
 spinner.stop();
+
 ```
 
 ---
