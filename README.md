@@ -698,19 +698,19 @@ Toast utility to easily show a toast message in a browser
 
 **toast**
 
-> Show a toast message. If a toast is already showing, it will be removed and replaced with the new one.
+> Show a toast message. If a toast is already showing, it will be removed and replaced with the new one. Wrapper around "toastler".
 
 ```ts
 toast("Hello world");
 toast("Hello world", {
-    time: 10000,
+    duration: 10000,
     type: "error",
-    timing: 500,
+    animationTiming: 500,
     fontSize: "1.5rem",
 });
 
-const { remove } = toast("Hello world");
-remove();
+const { hide } = toast("Hello world");
+hide();
 ```
 
 ---
