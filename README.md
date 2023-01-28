@@ -11,7 +11,7 @@ A collection of some of my most used JavaScript / TypeScript utility functions.
 -   :zap: - Import for node or browser
 -   :bookmark: - Own well-tested utilities or imported from large open source projects.
 
-The package is designed to be used as `devDependencies` and bundled into your dist.
+The package is designed to be used as `devDependencies` and bundled into your dist. So basically only the used function will be imported in the production bundle.
 
 ## Install
 
