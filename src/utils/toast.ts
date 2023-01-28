@@ -1,4 +1,3 @@
-import { isBrowser } from "./is";
 import { toast as t } from "toastler";
 
 /**
@@ -17,4 +16,4 @@ import { toast as t } from "toastler";
  * const { hide } = toast("Hello world");
  * hide();
  */
-const toast = t;
+export const toast = t;

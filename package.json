@@ -27,7 +27,7 @@
             "import": "./dist/index.mjs"
         },
         "./browser": {
-            "types": "./dist/index.d.ts",
+            "types": "./dist/index.browser.d.ts",
             "require": "./dist/index.browser.cjs",
             "import": "./dist/index.browser.mjs"
         }
@@ -55,9 +55,9 @@
         "start": "esno src/index.ts",
         "test": "vitest",
         "typecheck": "tsc --noEmit",
-        "prepareImports": "esno ./scripts/prepareImports.ts && npx prettier --write ./src/index.ts",
+        "prepareImports": "esno ./scripts/prepareImports.ts && npx prettier --write ./src/index.ts ./src/index.browser.ts",
         "prepareDocs": "esno ./scripts/addDocsToReadme.ts && npx prettier --write ./README.md",
-        "cleanAfterBuild": "rm dist/index.d.cts dist/index.browser.d.cts dist/index.browser.d.mts && mv dist/index.d.mts dist/index.d.ts",
+        "cleanAfterBuild": "rm dist/index.d.cts dist/index.browser.d.cts && mv dist/index.d.mts dist/index.d.ts && mv dist/index.browser.d.mts dist/index.browser.d.ts",
         "prepare": "husky install"
     },
     "devDependencies": {
