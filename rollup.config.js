@@ -2,8 +2,18 @@ import { nodeResolve } from "@rollup/plugin-node-resolve";
 import ts from "rollup-plugin-ts";
 import commonjs from "@rollup/plugin-commonjs";
 import json from "@rollup/plugin-json";
-import cleanup from "rollup-plugin-cleanup";
-import terser from "@rollup/plugin-terser";
+import esbuild from "rollup-plugin-esbuild";
+
+const plugins = [
+    nodeResolve(),
+    commonjs({
+        requireReturnsDefault: "auto",
+        defaultIsModuleExports: true,
+    }),
+    json(),
+    ts(),
+    esbuild(),
+];
 
 export default [
     {
@@ -18,16 +28,20 @@ export default [
                 format: "esm",
             },
         ],
-        plugins: [
-            nodeResolve(),
-            commonjs({
-                requireReturnsDefault: "auto",
-                defaultIsModuleExports: true,
-            }),
-            json(),
-            ts(),
-            cleanup(),
-            terser({ format: { comments: false } }),
+        plugins,
+    },
+    {
+        input: "src/index.browser.ts",
+        output: [
+            {
+                file: "dist/index.browser.cjs",
+                format: "cjs",
+            },
+            {
+                file: "dist/index.browser.mjs",
+                format: "esm",
+            },
         ],
+        plugins,
     },
 ];

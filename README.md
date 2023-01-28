@@ -8,9 +8,38 @@ A collection of some of my most used JavaScript / TypeScript utility functions.
 -   :speech_balloon: - Fully typed TSDocs with examples
 -   :star: - No dependencies
 -   :file_folder: - Small size
+-   :zap: - Import for node or browser
 -   :bookmark: - Own well-tested utilities or imported from large open source projects.
 
 The package is designed to be used as `devDependencies` and bundled into your dist.
+
+## Install
+
+```bash
+# npm
+npm install @banjoanton/utils -D
+
+# yarn
+yarn add @banjoanton/utils -D
+
+#pnpm
+pnpm install @banjoanton/utils -D
+```
+
+## Import
+
+There are utils specifically for node and a browser environment. The default one can be used in node, but you need to append `browser` to use it in the browser to due dependencies.
+
+```ts
+// default
+import { isArray, readFile } from "@banjoanton/utils";
+
+// node
+import { readFile } from "@banjoanton/utils/node";
+
+// browser
+import { toast } from "@banjoanton/utils/browser";
+```
 
 ## Docs
 
