@@ -138,7 +138,7 @@ function parseComments(
         docs.push({
             name: functionName,
             description,
-            fileName: file.fileName,
+            fileName: file.fileName.replace("-node", ""),
             example,
             params,
             fileContent: file.content,

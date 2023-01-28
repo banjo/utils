@@ -1,16 +1,24 @@
 import fs from "fs";
-import { getUtilFiles, srcIndexFile } from "./utils";
+import { getUtilFiles, srcIndexFile, srcBrowserIndexFile } from "./utils";
 
 const main = () => {
     const files = getUtilFiles();
 
-    const exportStatements = files.map((file) => {
-        return `export * from "./utils/${file.fileName}";`;
-    });
+    const exportStatements = files
+        .map((file) => {
+            return `export * from "./utils/${file.fileName}";`;
+        })
+        .join("\n");
 
-    const exportStatementsString = exportStatements.join("\n");
+    fs.writeFileSync(srcIndexFile, exportStatements);
 
-    fs.writeFileSync(srcIndexFile, exportStatementsString);
+    const browserExportStatements = files
+        .filter((file) => !file.fileName.includes("node"))
+        .map((file) => {
+            return `export * from "./utils/${file.fileName}";`;
+        });
+
+    fs.writeFileSync(srcBrowserIndexFile, browserExportStatements.join("\n"));
 };
 
 main();
