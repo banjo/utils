@@ -158,41 +158,6 @@ compact([1, 2, 3, 4, 0, null, undefined, false]); // returns [1, 2, 3, 4]
 
 ---
 
-### Cli
-
-Tools for CLI applications, mostly wrappers around other neat tools.
-
----
-
-**spinner**
-
-> Create a spinner in a CLI application. The spinner is returned as an object. Wrapper around the `nanospinner` package.
-
-```ts
-const spinner = spinner("Hello world");
-
-// set to success
-spinner.succeed({ text: "Success!"});
-
-// can modify mark and color
-spinner.succeed({ text: "Success!", mark: "✔", color: "green" }});
-
-// set to fail
-spinner.fail({ text: "Failed!"});
-
-// set the color
-spinner.setColor("yellow");
-
-// set the text
-spinner.setText("Hello world");
-
-// stop the spinner
-spinner.stop();
-
-```
-
----
-
 ### Fetch
 
 Utlilties that uses the fetch API to fetch data. Smaller implementations that basically saves time.
@@ -209,63 +174,6 @@ await fetchJson("https://example.com/api");
 await fetchJson("https://example.com/api", { throws: true });
 await fetchJson("https://example.com/api", { debug: true });
 await fetchJson("https://example.com/api", { method: "POST" });
-```
-
----
-
-### Fs
-
-Utilities for working with the file system. These functions are synchronous. Only works in a node environment.
-
----
-
-**readFile**
-
-> Reads a file from a path. Returns null if an error occurs.
-
-```ts
-readFile("test.txt");
-readFile("test.txt", { throws: true, debug: true });
-```
-
----
-
-**writeFile**
-
-> Writes a file to a path. Returns true if successful, false if an error occurs.
-
-```ts
-writeFile("test.txt", "hello world");
-writeFile("test.txt", "hello world", { throws: true, debug: true });
-```
-
----
-
-**readJsonFile**
-
-> Reads a JSON file from a path. Returns null if an error occurs.
-
-```ts
-readJsonFile("test.json");
-readJsonFile("test.json", { throws: true, debug: true });
-```
-
----
-
-**writeJsonFile**
-
-> Writes a JSON file to a path. Returns true if successful, false if an error occurs. If the data is a string, it will be parsed before writing.
-
-```ts
-const json = {
-    hello: "world",
-};
-
-writeJsonFile("test.json", json);
-writeJsonFile("test.json", json, { spaces: 2 });
-
-const jsonAsString = JSON.stringify(json);
-writeJsonFile("test.json", jsonAsString);
 ```
 
 ---
