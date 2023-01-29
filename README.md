@@ -11,7 +11,7 @@ A collection of some of my most used JavaScript / TypeScript utility functions.
 -   :zap: - Import for node or browser
 -   :bookmark: - Own well-tested utilities or imported from large open source projects.
 
-The package is designed to be used as `devDependencies` and bundled into your dist. So basically only the used function will be imported in the production bundle.
+The package is designed to be used as `devDependencies` and bundled into your dist.
 
 ## Install
 
@@ -31,14 +31,9 @@ pnpm install @banjoanton/utils -D
 There are utils specifically for node and a browser environment. The default one can be used in node, but you need to append `browser` to use it in the browser to due dependencies.
 
 ```ts
-// default
-import { isArray, readFile } from "@banjoanton/utils";
-
-// node
-import { readFile } from "@banjoanton/utils/node";
-
-// browser
-import { toast } from "@banjoanton/utils/browser";
+import { isArray, fetchJson } from "@banjoanton/utils";
+// or
+const { isArray, fetchJson } = require("@banjoanton/utils");
 ```
 
 ## Docs
@@ -762,31 +757,6 @@ randomString(5); // return 'f5l32'
 wildcardMatch("/foo/bar", "/foo/*"); // returns true
 wildcardMatch("/foo/bar", "/foo/bar"); // returns true
 wildcardMatch("/foo/bar", "/foo/bar/*"); // returns false
-```
-
----
-
-### Toast
-
-Toast utility to easily show a toast message in a browser
-
----
-
-**toast**
-
-> Show a toast message. If a toast is already showing, it will be removed and replaced with the new one. Wrapper around "toastler".
-
-```ts
-toast("Hello world");
-toast("Hello world", {
-    duration: 10000,
-    type: "error",
-    animationTiming: 500,
-    fontSize: "1.5rem",
-});
-
-const { hide } = toast("Hello world");
-hide();
 ```
 
 ---

@@ -12,7 +12,7 @@ const plugins = [
     }),
     json(),
     ts(),
-    esbuild(),
+    esbuild({ minify: true, treeShaking: true }),
 ];
 
 export default [
@@ -25,20 +25,6 @@ export default [
             },
             {
                 file: "dist/index.mjs",
-                format: "esm",
-            },
-        ],
-        plugins,
-    },
-    {
-        input: "src/index.browser.ts",
-        output: [
-            {
-                file: "dist/index.browser.cjs",
-                format: "cjs",
-            },
-            {
-                file: "dist/index.browser.mjs",
                 format: "esm",
             },
         ],

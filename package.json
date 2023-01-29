@@ -20,16 +20,6 @@
             "types": "./dist/index.d.ts",
             "require": "./dist/index.cjs",
             "import": "./dist/index.mjs"
-        },
-        "./node": {
-            "types": "./dist/index.d.ts",
-            "require": "./dist/index.cjs",
-            "import": "./dist/index.mjs"
-        },
-        "./browser": {
-            "types": "./dist/index.browser.d.ts",
-            "require": "./dist/index.browser.cjs",
-            "import": "./dist/index.browser.mjs"
         }
     },
     "main": "./dist/index.mjs",
@@ -55,9 +45,9 @@
         "start": "esno src/index.ts",
         "test": "vitest",
         "typecheck": "tsc --noEmit",
-        "prepareImports": "esno ./scripts/prepareImports.ts && npx prettier --write ./src/index.ts ./src/index.browser.ts",
+        "prepareImports": "esno ./scripts/prepareImports.ts && npx prettier --write ./src/index.ts",
         "prepareDocs": "esno ./scripts/addDocsToReadme.ts && npx prettier --write ./README.md",
-        "cleanAfterBuild": "rm dist/index.d.cts dist/index.browser.d.cts && mv dist/index.d.mts dist/index.d.ts && mv dist/index.browser.d.mts dist/index.browser.d.ts",
+        "cleanAfterBuild": "rm dist/index.d.cts && mv dist/index.d.mts dist/index.d.ts",
         "prepare": "husky install"
     },
     "devDependencies": {
