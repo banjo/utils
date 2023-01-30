@@ -676,7 +676,7 @@ snakeCase("hello world"); // returns 'hello_world'
 
 **randomString**
 
-> Generate a random string with the length provided, defaults to 10.
+> Generate a random string with the length provided, defaults to 16.
 
 ```ts
 randomString(); // returns 'Fwf4552Dd2'

@@ -113,18 +113,23 @@ export const pascalCase = (str: string, options?: Options): string =>
 export const snakeCase = (str: string, options?: Options): string =>
     sc(str, options);
 
+const randomDictionary =
+    "0123456789abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ-_";
 /**
- * Generate a random string with the length provided, defaults to 10.
+ * Generate a random string with the length provided, defaults to 16.
  * @param length - length of string
  * @returns the generated string
  * @example
  * randomString(); // returns 'Fwf4552Dd2'
  * randomString(5); // return 'f5l32'
  */
-export const randomString = (length = 10) =>
-    Math.random()
-        .toString(36)
-        .substring(2, length + 2);
+export const randomString = (length = 16, dictionary = randomDictionary) => {
+    let id = "";
+    let i = length;
+    const len = dictionary.length;
+    while (i--) id += dictionary[(Math.random() * len) | 0];
+    return id;
+};
 
 /**
  * Check if a string matches a wildcard pattern. Uses the "wildcard-match" library.

@@ -24,7 +24,7 @@ describe("string", () => {
 
     it("randomString", () => {
         const random = randomString();
-        expect(random).toHaveLength(10);
+        expect(random).toHaveLength(16);
         expect(random).toBeTruthy();
 
         const random2 = randomString(5);
