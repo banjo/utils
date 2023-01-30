@@ -721,4 +721,21 @@ ensureSuffix("hello", "hello"); // returns 'hello'
 
 ---
 
+**template**
+
+> Simple templating function that replaces {0}, {1} or {{key}} with the provided arguments.
+
+```ts
+template("hello {0}", "world"); // returns 'hello world'
+template("hello {0} {1}", "world", "foo"); // returns 'hello world foo'
+template("hello {0} {1}", "world"); // returns 'hello world {1}'
+
+template("hello {{name}}", { name: "world" }); // returns 'hello world'
+template("hello {{name}}, I am {{me}}", { name: "world", me: "Kent" }); // returns 'hello world, I am Kent'
+template("hello {{name}}", { name: "world", foo: "bar" }); // returns 'hello world'
+template("hello {{name}}", { foo: "bar" }); // returns 'hello {{name}}'
+```
+
+---
+
 <!-- DOCS END -->

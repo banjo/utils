@@ -4,6 +4,7 @@ import {
     ensureSuffix,
     kebabCase,
     randomString,
+    template,
 } from "./../src/utils/string";
 import { capitalize, isEmptyString } from "../src/utils/string";
 import { it, describe, expect } from "vitest";
@@ -60,5 +61,59 @@ describe("string", () => {
         expect(ensureSuffix("hello", "")).toBe("hello");
         expect(ensureSuffix("hello", " ")).toBe("hello ");
         expect(ensureSuffix("hello", "-5p")).toBe("hello-5p");
+    });
+
+    it("template", () => {
+        expect(
+            template("hello {{name}}", {
+                name: "world",
+            })
+        ).toBe("hello world");
+        expect(
+            template("hello {{name}}, my name is {{name}}", {
+                name: "world",
+            })
+        ).toBe("hello world, my name is world");
+
+        expect(
+            template("hello {{name}}, my name is {{me}}", {
+                name: "world",
+                me: "Kent",
+            })
+        ).toBe("hello world, my name is Kent");
+
+        expect(
+            template("hello {{name}}, my name is {{me}}", {
+                name: "world",
+            })
+        ).toBe("hello world, my name is {{me}}");
+
+        expect(
+            template("hello {{name}}, my name is {{me}}", {
+                name: "world",
+                me: "Kent",
+                age: "20",
+            })
+        ).toBe("hello world, my name is Kent");
+        expect(
+            template("hello {{ name }}, my name is {{  me  }}", {
+                name: "world",
+                me: "Kent",
+            })
+        ).toBe("hello world, my name is Kent");
+
+        expect(template("hello {0}", "world")).toBe("hello world");
+        expect(template("hello {0}, my name is {0}", "world")).toBe(
+            "hello world, my name is world"
+        );
+        expect(template("hello {0}, my name is {1}", "world", "Kent")).toBe(
+            "hello world, my name is Kent"
+        );
+        expect(template("hello {0}, my name is {1}", "world")).toBe(
+            "hello world, my name is {1}"
+        );
+        expect(
+            template("hello {0}, my name is {1}", "world", "Kent", "20")
+        ).toBe("hello world, my name is Kent");
     });
 });

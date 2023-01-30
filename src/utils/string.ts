@@ -166,3 +166,39 @@ export const ensurePrefix = (str: string, prefix: string): string =>
  */
 export const ensureSuffix = (str: string, suffix: string): string =>
     str.endsWith(suffix) ? str : `${str}${suffix}`;
+
+/**
+ * Simple templating function that replaces {0}, {1} or {{key}} with the provided arguments.
+ * @param string - The string to replace the values in.
+ * @param args - The values to replace in the string. Could be multiple string arguments or a single object.
+ * @returns The string with the values replaced.
+ * @example
+ * template('hello {0}', 'world'); // returns 'hello world'
+ * template('hello {0} {1}', 'world', 'foo'); // returns 'hello world foo'
+ * template('hello {0} {1}', 'world'); // returns 'hello world {1}'
+ *
+ * template('hello {{name}}', { name: 'world' }); // returns 'hello world'
+ * template('hello {{name}}, I am {{me}}', { name: 'world', me: "Kent" }); // returns 'hello world, I am Kent'
+ * template('hello {{name}}', { name: 'world', foo: 'bar' }); // returns 'hello world'
+ * template('hello {{name}}', { foo: 'bar' }); // returns 'hello {{name}}'
+ */
+export function template(string: string, data: Record<string, string>): string;
+export function template(string: string, ...args: string[]): string;
+export function template(string: string, ...args: any): string {
+    const data = args[0];
+    if (typeof data === "string") {
+        return string.replace(/{(\d+)}/g, (match, key) => {
+            const index = Number(key);
+            if (Number.isNaN(index)) return match;
+            const value = args[index];
+            if (value === undefined) return match;
+            return value;
+        });
+    }
+
+    return string.replace(/{{\s*([\w.]+)\s*}}/g, (match, key) => {
+        const value = data[key];
+        if (value === undefined) return match;
+        return value;
+    });
+}
