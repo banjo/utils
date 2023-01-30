@@ -632,6 +632,18 @@ capitalCase("hello world"); // returns 'Hello World'
 
 ---
 
+**kebabCase**
+
+> Convert a string to kebab-case using the "change-case" library.
+
+```ts
+kebabCase("hello world"); // returns 'hello-world'
+kebabCase("hello_world"); // returns 'hello-world'
+kebabCase("helloWorld"); // returns 'hello-world'
+```
+
+---
+
 **dotCase**
 
 > Convert a string to dot.case using the "change-case" library.
@@ -681,6 +693,30 @@ randomString(5); // return 'f5l32'
 wildcardMatch("/foo/bar", "/foo/*"); // returns true
 wildcardMatch("/foo/bar", "/foo/bar"); // returns true
 wildcardMatch("/foo/bar", "/foo/bar/*"); // returns false
+```
+
+---
+
+**ensurePrefix**
+
+> Ensure a string starts with a given prefix.
+
+```ts
+ensurePrefix("hello", "foo"); // returns 'foohello'
+ensurePrefix("foohello", "foo"); // returns 'foohello'
+ensurePrefix("hello", "hello"); // returns 'hello'
+```
+
+---
+
+**ensureSuffix**
+
+> Ensure a string ends with a given suffix.
+
+```ts
+ensureSuffix("hello", "foo"); // returns 'hellofoo'
+ensureSuffix("hellofoo", "foo"); // returns 'hellofoo'
+ensureSuffix("hello", "hello"); // returns 'hello'
 ```
 
 ---

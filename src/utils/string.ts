@@ -66,6 +66,21 @@ export const capitalCase = (str: string, options?: Options): string =>
     cac(str, options);
 
 /**
+ * Convert a string to kebab-case using the "change-case" library.
+ * @param str - The string to convert.
+ * @param options - The options to use when converting the string. See the "change-case" library for more information.
+ * @returns The converted string.
+ * @example
+ * kebabCase('hello world'); // returns 'hello-world'
+ * kebabCase('hello_world'); // returns 'hello-world'
+ * kebabCase('helloWorld'); // returns 'hello-world'
+ */
+export const kebabCase = (str: string, options?: Options): string => {
+    const result = sc(str, options);
+    return result.replace(/_/g, "-");
+};
+
+/**
  * Convert a string to dot.case using the "change-case" library.
  * @param str - The string to convert.
  * @param options - The options to use when converting the string. See the "change-case" library for more information.
@@ -125,3 +140,29 @@ export const wildcardMatch = (str: string, pattern: string): boolean => {
     const isMatch = wcmatch(pattern);
     return isMatch(str);
 };
+
+/**
+ * Ensure a string starts with a given prefix.
+ * @param str - The string to check.
+ * @param prefix - The prefix to check for.
+ * @returns The string with the prefix added if it was not already present.
+ * @example
+ * ensurePrefix('hello', 'foo'); // returns 'foohello'
+ * ensurePrefix('foohello', 'foo'); // returns 'foohello'
+ * ensurePrefix('hello', 'hello'); // returns 'hello'
+ */
+export const ensurePrefix = (str: string, prefix: string): string =>
+    str.startsWith(prefix) ? str : `${prefix}${str}`;
+
+/**
+ * Ensure a string ends with a given suffix.
+ * @param str - The string to check.
+ * @param suffix - The suffix to check for.
+ * @returns The string with the suffix added if it was not already present.
+ * @example
+ * ensureSuffix('hello', 'foo'); // returns 'hellofoo'
+ * ensureSuffix('hellofoo', 'foo'); // returns 'hellofoo'
+ * ensureSuffix('hello', 'hello'); // returns 'hello'
+ */
+export const ensureSuffix = (str: string, suffix: string): string =>
+    str.endsWith(suffix) ? str : `${str}${suffix}`;
