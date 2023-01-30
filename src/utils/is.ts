@@ -1,3 +1,5 @@
+import equal from "fast-deep-equal/es6";
+
 /**
  * Utility functions for checking the type of a value.
  */
@@ -195,6 +197,24 @@ export const isArray = (value: any): value is Array<any> =>
  */
 export const isElement = (value: any): value is Element =>
     value instanceof Element;
+
+/**
+ * Check whether the two values are equal. Uses the fast-deep-equal package. Works with all types.
+ * @param a - The first value to compare.
+ * @param b - The second value to compare.
+ * @returns true if the values are equal, false otherwise.
+ * @example
+ * isEqual(1, 1); // true
+ * isEqual(1, 2); // false
+ * isEqual("hello", "hello"); // true
+ * isEqual(null, undefined); // false
+ * isEqual({ a: 1 }, { a: 1 }); // true
+ * isEqual({ a: 1 }, { a: 2 }); // false
+ * isEqual([1, 2, 3], [1, 2, 3]); // true
+ */
+export const isEqual = (a: any, b: any): boolean => {
+    return equal(a, b);
+};
 
 /**
  * Check if the code is running in a browser environment.

@@ -408,6 +408,22 @@ isElement("hello world"); // false
 
 ---
 
+**isEqual**
+
+> Check whether the two values are equal. Uses the fast-deep-equal package. Works with all types.
+
+```ts
+isEqual(1, 1); // true
+isEqual(1, 2); // false
+isEqual("hello", "hello"); // true
+isEqual(null, undefined); // false
+isEqual({ a: 1 }, { a: 1 }); // true
+isEqual({ a: 1 }, { a: 2 }); // false
+isEqual([1, 2, 3], [1, 2, 3]); // true
+```
+
+---
+
 ### Object
 
 Utility functions for working with objects. Both wrappers and custom functions.
