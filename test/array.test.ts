@@ -8,6 +8,8 @@ import {
     sample,
     remove,
     compact,
+    difference,
+    intersection,
 } from "../src/utils/array";
 import { it, describe, expect } from "vitest";
 
@@ -81,12 +83,82 @@ describe("array", () => {
     });
 
     it("compact", () => {
-        expect(expect(compact([1, 2, 3])).toEqual([1, 2, 3]));
-        expect(expect(compact([1, 2, 3, null])).toEqual([1, 2, 3]));
-        expect(expect(compact([1, 2, 3, undefined])).toEqual([1, 2, 3]));
-        expect(expect(compact([1, 2, 3, null, undefined])).toEqual([1, 2, 3]));
+        expect(compact([1, 2, 3])).toEqual([1, 2, 3]);
+        expect(compact([1, 2, 3, null])).toEqual([1, 2, 3]);
+        expect(compact([1, 2, 3, undefined])).toEqual([1, 2, 3]);
+        expect(compact([1, 2, 3, null, undefined])).toEqual([1, 2, 3]);
+        expect(compact([1, 2, 3, null, undefined, 0])).toEqual([1, 2, 3]);
+    });
+
+    it("difference", () => {
+        expect(difference([1, 2, 3], [1, 2])).toEqual([3]);
+        expect(difference([1, 2, 3], [1, 2, 3])).toEqual([]);
+        expect(difference([1, 2, 3], [1, 2, 3, 4])).toEqual([]);
+        expect(difference([1, 2, 3], [4])).toEqual([1, 2, 3]);
+
+        expect(difference(["a", "b", "c"], ["a", "b"])).toEqual(["c"]);
+        expect(difference(["a", "b", "c"], ["a", "b", "c"])).toEqual([]);
+        expect(difference(["a", "b", "c"], ["a", "b", "c", "d"])).toEqual([]);
+        expect(difference(["a", "b", "c"], ["d"])).toEqual(["a", "b", "c"]);
+
         expect(
-            expect(compact([1, 2, 3, null, undefined, 0])).toEqual([1, 2, 3])
-        );
+            difference([{ a: 1 }, { a: 2 }, { a: 3 }], [{ a: 1 }, { a: 2 }])
+        ).toEqual([{ a: 3 }]);
+        expect(
+            difference(
+                [{ a: 1 }, { a: 2 }, { a: 3 }],
+                [{ a: 1 }, { a: 2 }, { a: 3 }]
+            )
+        ).toEqual([]);
+        expect(
+            difference(
+                [{ a: 1 }, { a: 2 }, { a: 3 }],
+                [{ a: 1 }, { a: 2 }, { a: 3 }, { a: 4 }]
+            )
+        ).toEqual([]);
+        expect(difference([{ a: 1 }, { a: 2 }, { a: 3 }], [{ a: 4 }])).toEqual([
+            { a: 1 },
+            { a: 2 },
+            { a: 3 },
+        ]);
+    });
+
+    it("intersection", () => {
+        expect(intersection([1, 2, 3], [1, 2])).toEqual([1, 2]);
+        expect(intersection([1, 2, 3], [1, 2, 3])).toEqual([1, 2, 3]);
+        expect(intersection([1, 2, 3], [1, 2, 3, 4])).toEqual([1, 2, 3]);
+        expect(intersection([1, 2, 3], [4])).toEqual([]);
+
+        expect(intersection(["a", "b", "c"], ["a", "b"])).toEqual(["a", "b"]);
+        expect(intersection(["a", "b", "c"], ["a", "b", "c"])).toEqual([
+            "a",
+            "b",
+            "c",
+        ]);
+        expect(intersection(["a", "b", "c"], ["a", "b", "c", "d"])).toEqual([
+            "a",
+            "b",
+            "c",
+        ]);
+        expect(intersection(["a", "b", "c"], ["d"])).toEqual([]);
+
+        expect(
+            intersection([{ a: 1 }, { a: 2 }, { a: 3 }], [{ a: 1 }, { a: 2 }])
+        ).toEqual([{ a: 1 }, { a: 2 }]);
+        expect(
+            intersection(
+                [{ a: 1 }, { a: 2 }, { a: 3 }],
+                [{ a: 1 }, { a: 2 }, { a: 3 }]
+            )
+        ).toEqual([{ a: 1 }, { a: 2 }, { a: 3 }]);
+        expect(
+            intersection(
+                [{ a: 1 }, { a: 2 }, { a: 3 }],
+                [{ a: 1 }, { a: 2 }, { a: 3 }, { a: 4 }]
+            )
+        ).toEqual([{ a: 1 }, { a: 2 }, { a: 3 }]);
+        expect(
+            intersection([{ a: 1 }, { a: 2 }, { a: 3 }], [{ a: 4 }])
+        ).toEqual([]);
     });
 });

@@ -158,6 +158,53 @@ compact([1, 2, 3, 4, 0, null, undefined, false]); // returns [1, 2, 3, 4]
 
 ---
 
+**difference**
+
+> Return the difference between two arrays. Objects are compared by value, meaning that two objects with the same properties will be considered equal. Can also take a custom comparator function.
+
+```ts
+// primitives are compared by value
+difference([1, 2, 3, 4], [2, 4]); // returns [1, 3]
+difference(["a", "b", "c", "d"], ["b", "d"]); // returns ['a', 'c']
+
+// objects are also compared by value by default
+const obj = {};
+difference([obj], [obj]); // returns []
+difference([{ a: 1 }], [{ a: 1 }]); // returns []
+difference([{ a: 1 }], [{ a: 2 }]); // returns [{ a: 1 }, { a: 2 }]
+
+// custom comparator
+const comparator = (a: any, b: any) => a === b;
+difference([1, 2, 3, 4], [2, 4], comparator); // returns [1, 3]
+difference(["a", "b", "c", "d"], ["b", "d"], comparator); // returns ['a', 'c']
+```
+
+---
+
+**intersection**
+
+> Return the intersection between two arrays. Objects are compared by value, meaning that two objects with the same properties will be considered equal. Can also take a custom comparator function.
+
+```ts
+// primitives are compared by value
+intersection([1, 2, 3, 4], [2, 4]); // returns [2, 4]
+intersection(["a", "b", "c", "d"], ["b", "d"]); // returns ['b', 'd']
+intersection([1, 2, 3, 4], [2, 4, 5]); // returns [2, 4]
+
+// objects are also compared by value by default
+const obj = {};
+intersection([obj], [obj]); // returns [obj]
+intersection([{ a: 1 }], [{ a: 1 }]); // returns [{ a: 1 }]
+intersection([{ a: 1 }], [{ a: 2 }]); // returns []
+
+// custom comparator
+const comparator = (a: any, b: any) => a === b;
+intersection([1, 2, 3, 4], [2, 4], comparator); // returns [2, 4]
+intersection(["a", "b", "c", "d"], ["b", "d"], comparator); // returns ['b', 'd']
+```
+
+---
+
 ### Fetch
 
 Utlilties that uses the fetch API to fetch data. Smaller implementations that basically saves time.
