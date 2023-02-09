@@ -17,24 +17,25 @@
     "sideEffects": false,
     "exports": {
         ".": {
-            "types": "./dist/index.d.ts",
+            "types": "./index.d.ts",
             "require": "./dist/index.cjs",
             "import": "./dist/index.mjs"
         }
     },
     "main": "./dist/index.mjs",
     "module": "./dist/index.mjs",
-    "types": "./dist/index.d.ts",
+    "types": "index.d.ts",
     "typesVersions": {
         "*": {
             "*": [
                 "./dist/*",
-                "./dist/index.d.ts"
+                "./*.d.ts"
             ]
         }
     },
     "files": [
-        "dist"
+        "dist",
+        "*.d.ts"
     ],
     "scripts": {
         "build": "nr prepareImports && rollup --config && nr cleanAfterBuild",
@@ -47,7 +48,7 @@
         "typecheck": "tsc --noEmit",
         "prepareImports": "esno ./scripts/prepareImports.ts && npx prettier --write ./src/index.ts",
         "prepareDocs": "esno ./scripts/addDocsToReadme.ts && npx prettier --write ./README.md",
-        "cleanAfterBuild": "rm dist/index.d.cts && mv dist/index.d.mts dist/index.d.ts",
+        "cleanAfterBuild": "rm dist/index.d.cts && mv dist/index.d.mts ./index.d.ts",
         "prepare": "husky install"
     },
     "devDependencies": {
