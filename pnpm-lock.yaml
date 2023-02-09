@@ -1,4 +1,4 @@
-lockfileVersion: 5.3
+lockfileVersion: 5.4
 
 specifiers:
     "@antfu/ni": ^0.19.0
@@ -51,8 +51,8 @@ devDependencies:
     prettier: 2.8.3
     pretty-quick: 3.1.3_prettier@2.8.3
     rollup: 3.10.1
-    rollup-plugin-esbuild: 5.0.0_esbuild@0.17.5+rollup@3.10.1
-    rollup-plugin-ts: 3.1.1_rollup@3.10.1+typescript@4.9.4
+    rollup-plugin-esbuild: 5.0.0_vnogblvxo6egyqdp3slxc3bipy
+    rollup-plugin-ts: 3.1.1_p3yyytxbmytz5gvmi4zzszibjy
     throttle-debounce: 5.0.0
     toastler: 0.0.3
     typescript: 4.9.4
@@ -2511,7 +2511,7 @@ packages:
         engines: { iojs: ">=1.0.0", node: ">=0.10.0" }
         dev: true
 
-    /rollup-plugin-esbuild/5.0.0_esbuild@0.17.5+rollup@3.10.1:
+    /rollup-plugin-esbuild/5.0.0_vnogblvxo6egyqdp3slxc3bipy:
         resolution:
             {
                 integrity: sha512-1cRIOHAPh8WQgdQQyyvFdeOdxuiyk+zB5zJ5+YOwrZP4cJ0MT3Fs48pQxrZeyZHcn+klFherytILVfE4aYrneg==,
@@ -2532,7 +2532,7 @@ packages:
             - supports-color
         dev: true
 
-    /rollup-plugin-ts/3.1.1_rollup@3.10.1+typescript@4.9.4:
+    /rollup-plugin-ts/3.1.1_p3yyytxbmytz5gvmi4zzszibjy:
         resolution:
             {
                 integrity: sha512-Zm+cq11QVV6thgGdvrhz1tUQGN7pzK/jt2+6ttqfUaX1bk6QB4rFIHm/bW5O057eAXd1H8gBi47QFE0+tqMopw==,

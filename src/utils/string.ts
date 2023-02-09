@@ -1,11 +1,11 @@
 import {
     camelCase as cc,
-    pathCase as pc,
     capitalCase as cac,
     dotCase as dc,
-    pascalCase as pascalC,
-    snakeCase as sc,
     Options,
+    pascalCase as pascalC,
+    pathCase as pc,
+    snakeCase as sc,
 } from "change-case";
 import wcmatch from "wildcard-match";
 

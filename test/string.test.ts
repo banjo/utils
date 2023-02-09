@@ -1,3 +1,5 @@
+import { describe, expect, it } from "vitest";
+import { capitalize, isEmptyString } from "../src/utils/string";
 import {
     camelCase,
     ensurePrefix,
@@ -6,8 +8,6 @@ import {
     randomString,
     template,
 } from "./../src/utils/string";
-import { capitalize, isEmptyString } from "../src/utils/string";
-import { it, describe, expect } from "vitest";
 
 describe("string", () => {
     it("capitalize", () => {
