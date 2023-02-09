@@ -1,17 +1,18 @@
+import { describe, expect, it } from "vitest";
 import {
-    first,
-    last,
-    toArray,
-    uniq,
-    range,
-    move,
-    sample,
-    remove,
+    chunk,
     compact,
     difference,
+    first,
     intersection,
+    last,
+    move,
+    range,
+    remove,
+    sample,
+    toArray,
+    uniq,
 } from "../src/utils/array";
-import { it, describe, expect } from "vitest";
 
 describe("array", () => {
     it("first", () => {
@@ -41,6 +42,21 @@ describe("array", () => {
         expect(uniq([])).toEqual([]);
         expect(uniq([1])).toEqual([1]);
         expect(uniq([1, 1])).toEqual([1]);
+    });
+
+    it("chunk", () => {
+        expect(chunk([1, 2, 3, 4, 5], 2)).toEqual([[1, 2], [3, 4], [5]]);
+        expect(chunk([1, 2, 3, 4, 5], 3)).toEqual([
+            [1, 2, 3],
+            [4, 5],
+        ]);
+        expect(chunk([1, 2, 3, 4, 5], 5)).toEqual([[1, 2, 3, 4, 5]]);
+        expect(chunk([1, 2, 3, 4, 5], 6)).toEqual([[1, 2, 3, 4, 5]]);
+        expect(chunk([1, 2, 3, 4, 5], 1)).toEqual([[1], [2], [3], [4], [5]]);
+        expect(chunk([1, 2, 3, 4, 5], 0)).toEqual([]);
+        expect(chunk([1, 2, 3, 4, 5], -1)).toEqual([]);
+        expect(chunk([], 2)).toEqual([]);
+        expect(chunk([1], 2)).toEqual([[1]]);
     });
 
     it("range", () => {

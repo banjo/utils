@@ -1,4 +1,4 @@
-import { isArray, isEqual, isNil, isObject, isPrimitive } from "./is";
+import { isArray, isEqual, isNil, isPrimitive } from "./is";
 
 /**
  * Utility functions for working with arrays.
@@ -37,6 +37,30 @@ export const toArray = <T>(value: T | T[]): T[] => {
  * uniq(['a', 'a', 'b', 'c']); // returns ['a', 'b', 'c']
  */
 export const uniq = <T>(array: T[]): T[] => Array.from(new Set(array));
+
+/**
+ * Create a chunk of an array. A chunk is a new array containing a specified number of elements from the original array.
+ * @param array - The array to chunk.
+ * @param size - The size of the chunk.
+ * @returns A new array containing the chunked elements.
+ * @example
+ * chunk([1, 2, 3, 4, 5], 2); // returns [[1, 2], [3, 4], [5]]
+ * chunk(['a', 'b', 'c', 'd', 'e'], 3); // returns [['a', 'b', 'c'], ['d', 'e']]
+ * chunk([1, 2, 3, 4, 5], 10); // returns [[1, 2, 3, 4, 5]]
+ * chunk([1, 2, 3, 4, 5], 1); // returns [[1], [2], [3], [4], [5]]
+ * chunk([1, 2, 3, 4, 5], 0); // returns []
+ */
+export const chunk = <T>(array: T[], size: number): T[][] => {
+    if (size <= 0) return [];
+
+    const chunkedArr: T[][] = [];
+    let index = 0;
+    while (index < array.length) {
+        chunkedArr.push(array.slice(index, index + size));
+        index += size;
+    }
+    return chunkedArr;
+};
 
 /**
  * Return the last element of an array.

@@ -81,6 +81,20 @@ uniq(["a", "a", "b", "c"]); // returns ['a', 'b', 'c']
 
 ---
 
+**chunk**
+
+> Create a chunk of an array. A chunk is a new array containing a specified number of elements from the original array.
+
+```ts
+chunk([1, 2, 3, 4, 5], 2); // returns [[1, 2], [3, 4], [5]]
+chunk(["a", "b", "c", "d", "e"], 3); // returns [['a', 'b', 'c'], ['d', 'e']]
+chunk([1, 2, 3, 4, 5], 10); // returns [[1, 2, 3, 4, 5]]
+chunk([1, 2, 3, 4, 5], 1); // returns [[1], [2], [3], [4], [5]]
+chunk([1, 2, 3, 4, 5], 0); // returns []
+```
+
+---
+
 **last**
 
 > Return the last element of an array.
