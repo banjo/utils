@@ -1,7 +1,7 @@
 {
     "name": "@banjoanton/utils",
     "type": "module",
-    "version": "0.1.25",
+    "version": "0.1.26",
     "packageManager": "pnpm@7.27.0",
     "description": "",
     "author": "Anton Ödman <anton.odman@gmail.com>",
