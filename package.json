@@ -37,7 +37,7 @@
         "dist"
     ],
     "scripts": {
-        "build": "nr prepareImports && rollup --config && nr cleanAfterBuild",
+        "build": "rimraf dist && nr prepareImports && rollup --config && nr cleanAfterBuild",
         "dev": "rollup --config --watch",
         "prepublishOnly": "nr build",
         "format": "npx prettier --write .",
@@ -70,6 +70,7 @@
         "pnpm": "^7.25.1",
         "prettier": "^2.8.3",
         "pretty-quick": "^3.1.3",
+        "rimraf": "^4.1.2",
         "rollup": "^3.10.1",
         "rollup-plugin-esbuild": "^5.0.0",
         "rollup-plugin-ts": "^3.1.1",
