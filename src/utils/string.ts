@@ -1,12 +1,3 @@
-import {
-    camelCase as cc,
-    capitalCase as cac,
-    dotCase as dc,
-    Options,
-    pascalCase as pascalC,
-    pathCase as pc,
-    snakeCase as sc,
-} from "change-case";
 import wcmatch from "wildcard-match";
 
 /**
@@ -33,85 +24,6 @@ export const capitalize = (str: string): string =>
  * isEmptyString('hello'); // returns false
  */
 export const isEmptyString = (value: string): value is string => value === "";
-
-/**
- * Convert a string to camelCase using the "change-case" library.
- * @param str - The string to convert.
- * @param options - The options to use when converting the string. See the "change-case" library for more information.
- * @returns The converted string.
- * @example
- * camelCase('hello world'); // returns 'helloWorld'
- */
-export const camelCase = (str: string, options?: Options): string =>
-    cc(str, options);
-/**
- * Convert a string to path/case using the "change-case" library.
- * @param str - The string to convert.
- * @param options - The options to use when converting the string. See the "change-case" library for more information.
- * @returns The converted string.
- * @example
- * pathCase('hello world'); // returns 'hello/world'
- */
-export const pathCase = (str: string, options?: Options): string =>
-    pc(str, options);
-/**
- * Convert a string to Capital Case using the "change-case" library.
- * @param str - The string to convert.
- * @param options  - The options to use when converting the string. See the "change-case" library for more information.
- * @returns The converted string.
- * @example
- * capitalCase('hello world'); // returns 'Hello World'
- */
-export const capitalCase = (str: string, options?: Options): string =>
-    cac(str, options);
-
-/**
- * Convert a string to kebab-case using the "change-case" library.
- * @param str - The string to convert.
- * @param options - The options to use when converting the string. See the "change-case" library for more information.
- * @returns The converted string.
- * @example
- * kebabCase('hello world'); // returns 'hello-world'
- * kebabCase('hello_world'); // returns 'hello-world'
- * kebabCase('helloWorld'); // returns 'hello-world'
- */
-export const kebabCase = (str: string, options?: Options): string => {
-    const result = sc(str, options);
-    return result.replace(/_/g, "-");
-};
-
-/**
- * Convert a string to dot.case using the "change-case" library.
- * @param str - The string to convert.
- * @param options - The options to use when converting the string. See the "change-case" library for more information.
- * @returns The converted string.
- * @example
- * dotCase('hello world'); // returns 'hello.world'
- */
-export const dotCase = (str: string, options?: Options): string =>
-    dc(str, options);
-
-/**
- * Convert a string to PascalCase using the "change-case" library.
- * @param str - The string to convert.
- * @param options - The options to use when converting the string. See the "change-case" library for more information.
- * @returns The converted string.
- * @example
- * pascalCase('hello world'); // returns 'HelloWorld'
- */
-export const pascalCase = (str: string, options?: Options): string =>
-    pascalC(str, options);
-
-/**
- * Convert a string to snake_case using the "change-case" library.
- * @param str - The string to convert.
- * @param options - The options to use when converting the string. See the "change-case" library for more information.
- * @returns The converted string.
- * @example
- * snakeCase('hello world'); // returns 'hello_world'
- */
-export const snakeCase = (str: string, options?: Options): string =>
-    sc(str, options);
 
 const randomDictionary =
     "0123456789abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ-_";

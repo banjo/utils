@@ -1,10 +1,8 @@
 import { describe, expect, it } from "vitest";
 import { capitalize, isEmptyString } from "../src/utils/string";
 import {
-    camelCase,
     ensurePrefix,
     ensureSuffix,
-    kebabCase,
     randomString,
     template,
 } from "./../src/utils/string";
@@ -30,21 +28,6 @@ describe("string", () => {
         const random2 = randomString(5);
         expect(random2).toHaveLength(5);
         expect(random2).toBeTruthy();
-    });
-
-    it("camelCase", () => {
-        expect(camelCase("hello world")).toBe("helloWorld");
-        expect(camelCase("")).toBe("");
-        expect(camelCase("this is a long string")).toBe("thisIsALongString");
-        expect(camelCase("this-is-a-long-string")).toBe("thisIsALongString");
-    });
-
-    it("kebabCase", () => {
-        expect(kebabCase("hello world")).toBe("hello-world");
-        expect(kebabCase("hello_world")).toBe("hello-world");
-        expect(kebabCase("helloWorld")).toBe("hello-world");
-        expect(kebabCase("")).toBe("");
-        expect(kebabCase("hello-world-already")).toBe("hello-world-already");
     });
 
     it("ensurePrefix", () => {
