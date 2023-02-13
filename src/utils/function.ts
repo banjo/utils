@@ -86,6 +86,8 @@ export const batchInvoke = <T extends () => void>(array: T[]): void => {
 /**
  * A no-op function. Useful for default values.
  * @example
+ * noop(); // does nothing
+ *
  * const myFunction = (callback = noop) => {
  *    callback();
  * };

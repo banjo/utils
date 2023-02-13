@@ -238,7 +238,7 @@ Cache utility.
 
 **cache**
 
-> Creates a super simple cache based on a map. Can be used with strings and symbols as key. The cache is not persisted. It is not meant to be used as a replacement for a proper cache library. Is generic and can be used with any type.
+> Creates a super simple cache based on a map. Can be used with strings and symbols as key. The cache is not persisted. Is generic and can be used with any type.
 
 ```ts
 const { get, set, has, delete, clear } = cache();
@@ -296,6 +296,28 @@ getDays({ startOnMonday: false }); // returns ['Sunday', 'Monday', ...]
 getDays({ locales: "fr-FR" }); // returns ['lundi', 'mardi', ...]
 getDays({ locales: "sv-SE" }); // returns ['måndag', 'tisdag', ...]
 getDays({ locales: "sv-SE", startOnMonday: false }); // returns ['söndag', 'måndag', ...]
+```
+
+---
+
+**getMilliseconds**
+
+> Converts a time unit to milliseconds. If an array of objects is passed, the values are summed.
+
+```ts
+getMilliseconds({ time: 1, unit: "second" }); // returns 1000
+getMilliseconds({ time: 1, unit: "minute" }); // returns 60000
+getMilliseconds({ time: 1, unit: "hour" }); // returns 3600000
+getMilliseconds({ time: 1, unit: "day" }); // returns 86400000
+
+getMilliseconds([
+    { time: 1, unit: "second" },
+    { time: 1, unit: "minute" },
+]); // returns 61000
+getMilliseconds([
+    { time: 1, unit: "hour" },
+    { time: 1, unit: "day" },
+]); // returns 90060000
 ```
 
 ---

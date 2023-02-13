@@ -72,3 +72,44 @@ export const getDays = (options?: DayOptions): string[] => {
         return date.toLocaleString(locales, { weekday: format });
     });
 };
+
+type Props = {
+    time: number;
+    unit: "second" | "minute" | "hour" | "day";
+};
+
+const converter = (time: number, unit: Props["unit"]) => {
+    switch (unit) {
+        case "second":
+            return time * 1000;
+        case "minute":
+            return time * 1000 * 60;
+        case "hour":
+            return time * 1000 * 60 * 60;
+        case "day":
+            return time * 1000 * 60 * 60 * 24;
+    }
+};
+
+/**
+ * Converts a time unit to milliseconds. If an array of objects is passed, the values are summed.
+ * @param props - Object with definition or array of objects with definition.
+ * @returns Time in milliseconds.
+ * @example
+ * getMilliseconds({ time: 1, unit: 'second' }); // returns 1000
+ * getMilliseconds({ time: 1, unit: 'minute' }); // returns 60000
+ * getMilliseconds({ time: 1, unit: 'hour' }); // returns 3600000
+ * getMilliseconds({ time: 1, unit: 'day' }); // returns 86400000
+ *
+ * getMilliseconds([{ time: 1, unit: 'second' }, { time: 1, unit: 'minute' }]); // returns 61000
+ * getMilliseconds([{ time: 1, unit: 'hour' }, { time: 1, unit: 'day' }]); // returns 90060000
+ */
+export const getMilliseconds = (props: Props | Array<Props>): number => {
+    if (Array.isArray(props)) {
+        return props.reduce((acc, { time, unit }) => {
+            return acc + converter(time, unit);
+        }, 0);
+    } else {
+        return converter(props.time, props.unit);
+    }
+};

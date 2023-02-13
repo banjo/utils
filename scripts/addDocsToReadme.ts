@@ -153,7 +153,7 @@ function getFunctionName(example: string) {
     const calledFunctions = example.match(regexForCalledFunction);
 
     if (!calledFunctions) {
-        throw new Error("No function called in example");
+        throw new Error(`No function called in example`);
     }
 
     let nameBeforeFunction = calledFunctions[0].split("(")[0];

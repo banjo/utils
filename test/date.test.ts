@@ -1,5 +1,5 @@
 import { describe, expect, it } from "vitest";
-import { getDays, getMonths } from "../src/utils/date";
+import { getDays, getMilliseconds, getMonths } from "../src/utils/date";
 
 describe("date", () => {
     it("getMonths", () => {
@@ -134,5 +134,33 @@ describe("date", () => {
             "fredag",
             "lördag",
         ]);
+    });
+
+    it("getMilliseconds", () => {
+        expect(getMilliseconds({ time: 1, unit: "second" })).toBe(1000);
+        expect(getMilliseconds({ time: 1, unit: "minute" })).toBe(60000);
+        expect(getMilliseconds({ time: 1, unit: "hour" })).toBe(3600000);
+        expect(getMilliseconds({ time: 1, unit: "day" })).toBe(86400000);
+
+        expect(
+            getMilliseconds([
+                { time: 1, unit: "second" },
+                { time: 1, unit: "second" },
+            ])
+        ).toBe(2000);
+        expect(
+            getMilliseconds([
+                { time: 1, unit: "second" },
+                { time: 1, unit: "minute" },
+            ])
+        ).toBe(61000);
+
+        expect(
+            getMilliseconds([
+                { time: 1, unit: "second" },
+                { time: 1, unit: "minute" },
+                { time: 1, unit: "hour" },
+            ])
+        ).toBe(3661000);
     });
 });
