@@ -230,6 +230,37 @@ intersection(["a", "b", "c", "d"], ["b", "d"], comparator); // returns ['b', 'd'
 
 ---
 
+### Cache
+
+Cache utility.
+
+---
+
+**cache**
+
+> Creates a super simple cache based on a map. Can be used with strings and symbols as key. The cache is not persisted. It is not meant to be used as a replacement for a proper cache library. Is generic and can be used with any type.
+
+```ts
+const { get, set, has, delete, clear } = cache();
+
+set("key", "value");
+get("key"); // "value"
+has("key"); // true
+delete("key"); // true
+clear();
+
+// can be used with generics
+const cache = cache<string>();
+
+// can be used with symbols
+const cache = cache();
+const key = Symbol("key");
+cache.set(key, "value");
+
+```
+
+---
+
 ### Date
 
 Utility functions for date and time.
