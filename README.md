@@ -669,6 +669,7 @@ select("#test"); // returns element
 select("#test", parent); // returns element if it exists within parent
 select.exists("#test"); // returns true if element exists
 select.all(".test"); // returns array of elements
+select.style(element, { color: "red" }); // sets the color of the element to red
 ```
 
 ---

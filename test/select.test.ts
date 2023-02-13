@@ -1,5 +1,5 @@
+import { beforeEach, describe, expect, it } from "vitest";
 import { select } from "../src/utils/select";
-import { it, expect, describe, beforeEach } from "vitest";
 
 // @vitest-environment happy-dom
 describe("select", () => {
@@ -88,6 +88,17 @@ describe("select", () => {
 
         it("should return an empty array when no element is found", () => {
             expect(select.all("#test")).toEqual([]);
+        });
+    });
+
+    describe("style", () => {
+        it("should set the style of an element", () => {
+            const el = document.createElement("div");
+            document.body.appendChild(el);
+
+            select.style(el, { color: "red" });
+
+            expect(el.style.color).toBe("red");
         });
     });
 });
