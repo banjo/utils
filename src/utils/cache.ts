@@ -88,7 +88,7 @@ const initMap = <T>(key: string, persistant: boolean) => {
  * // can be be persisted in local storage with a custom key
  * const cache = cache({ persistant: true, key: "my-cache" });
  *
- * custom expiration time in ms
+ * // custom expiration time in ms
  * const cache = cache({ expires: 1000 });
  */
 export const cache = <T>(options: Options = defaultOptions) => {
