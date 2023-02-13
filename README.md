@@ -309,24 +309,17 @@ getDays({ locales: "sv-SE", startOnMonday: false }); // returns ['söndag', 'må
 
 ---
 
-**getMilliseconds**
+**toMilliseconds**
 
-> Converts a time unit to milliseconds. If an array of objects is passed, the values are summed.
+> Converts a time unit to milliseconds. Combined all units to get the total time in milliseconds.
 
 ```ts
-getMilliseconds({ time: 1, unit: "second" }); // returns 1000
-getMilliseconds({ time: 1, unit: "minute" }); // returns 60000
-getMilliseconds({ time: 1, unit: "hour" }); // returns 3600000
-getMilliseconds({ time: 1, unit: "day" }); // returns 86400000
+toMilliseconds({ seconds: 10 }); // returns 10000
+toMilliseconds({ minutes: 10 }); // returns 600000
+toMilliseconds({ hours: 10 }); // returns 36000000
 
-getMilliseconds([
-    { time: 1, unit: "second" },
-    { time: 1, unit: "minute" },
-]); // returns 61000
-getMilliseconds([
-    { time: 1, unit: "hour" },
-    { time: 1, unit: "day" },
-]); // returns 90060000
+toMilliseconds({ seconds: 10, minutes: 10 }); // returns 610000
+toMilliseconds({ seconds: 10, minutes: 10, hours: 10 }); // returns 3610000
 ```
 
 ---

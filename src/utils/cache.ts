@@ -2,7 +2,7 @@
  * Cache utility.
  */
 
-import { getMilliseconds } from "./date";
+import { toMilliseconds } from "./date";
 import { isBrowser } from "./is";
 
 type Options = {
@@ -26,7 +26,7 @@ type Options = {
 };
 
 const defaultOptions = {
-    expires: getMilliseconds({ time: 24, unit: "hour" }),
+    expires: toMilliseconds({ minutes: 5 }),
     persistant: false,
     key: "banjo-cache",
 };

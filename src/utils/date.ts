@@ -74,42 +74,42 @@ export const getDays = (options?: DayOptions): string[] => {
 };
 
 type Props = {
-    time: number;
-    unit: "second" | "minute" | "hour" | "day";
+    seconds?: number;
+    minutes?: number;
+    hours?: number;
+    days?: number;
 };
 
-const converter = (time: number, unit: Props["unit"]) => {
-    switch (unit) {
-        case "second":
-            return time * 1000;
-        case "minute":
-            return time * 1000 * 60;
-        case "hour":
-            return time * 1000 * 60 * 60;
-        case "day":
-            return time * 1000 * 60 * 60 * 24;
-    }
+const defaultProps = {
+    seconds: 0,
+    minutes: 0,
+    hours: 0,
+    days: 0,
 };
 
 /**
- * Converts a time unit to milliseconds. If an array of objects is passed, the values are summed.
+ * Converts a time unit to milliseconds. Combined all units to get the total time in milliseconds.
  * @param props - Object with definition or array of objects with definition.
  * @returns Time in milliseconds.
  * @example
- * getMilliseconds({ time: 1, unit: 'second' }); // returns 1000
- * getMilliseconds({ time: 1, unit: 'minute' }); // returns 60000
- * getMilliseconds({ time: 1, unit: 'hour' }); // returns 3600000
- * getMilliseconds({ time: 1, unit: 'day' }); // returns 86400000
+ * toMilliseconds({ seconds: 10 }); // returns 10000
+ * toMilliseconds({ minutes: 10 }); // returns 600000
+ * toMilliseconds({ hours: 10 }); // returns 36000000
  *
- * getMilliseconds([{ time: 1, unit: 'second' }, { time: 1, unit: 'minute' }]); // returns 61000
- * getMilliseconds([{ time: 1, unit: 'hour' }, { time: 1, unit: 'day' }]); // returns 90060000
+ * toMilliseconds({ seconds: 10, minutes: 10 }); // returns 610000
+ * toMilliseconds({ seconds: 10, minutes: 10, hours: 10 }); // returns 3610000
  */
-export const getMilliseconds = (props: Props | Array<Props>): number => {
-    if (Array.isArray(props)) {
-        return props.reduce((acc, { time, unit }) => {
-            return acc + converter(time, unit);
-        }, 0);
-    } else {
-        return converter(props.time, props.unit);
+export const toMilliseconds = (props: Props) => {
+    if (!props) {
+        throw new Error("You must pass an object with a time definition.");
     }
+
+    const { seconds, minutes, hours, days } = { ...defaultProps, ...props };
+
+    return (
+        seconds * 1000 +
+        minutes * 1000 * 60 +
+        hours * 1000 * 60 * 60 +
+        days * 1000 * 60 * 60 * 24
+    );
 };

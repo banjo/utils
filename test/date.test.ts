@@ -1,5 +1,5 @@
 import { describe, expect, it } from "vitest";
-import { getDays, getMilliseconds, getMonths } from "../src/utils/date";
+import { getDays, getMonths, toMilliseconds } from "../src/utils/date";
 
 describe("date", () => {
     it("getMonths", () => {
@@ -136,31 +136,15 @@ describe("date", () => {
         ]);
     });
 
-    it("getMilliseconds", () => {
-        expect(getMilliseconds({ time: 1, unit: "second" })).toBe(1000);
-        expect(getMilliseconds({ time: 1, unit: "minute" })).toBe(60000);
-        expect(getMilliseconds({ time: 1, unit: "hour" })).toBe(3600000);
-        expect(getMilliseconds({ time: 1, unit: "day" })).toBe(86400000);
+    it("toMilliseconds", () => {
+        expect(toMilliseconds({ seconds: 10 })).toBe(10000);
+        expect(toMilliseconds({ minutes: 10 })).toBe(600000);
+        expect(toMilliseconds({ hours: 10 })).toBe(36000000);
+        expect(toMilliseconds({ days: 10 })).toBe(864000000);
 
-        expect(
-            getMilliseconds([
-                { time: 1, unit: "second" },
-                { time: 1, unit: "second" },
-            ])
-        ).toBe(2000);
-        expect(
-            getMilliseconds([
-                { time: 1, unit: "second" },
-                { time: 1, unit: "minute" },
-            ])
-        ).toBe(61000);
-
-        expect(
-            getMilliseconds([
-                { time: 1, unit: "second" },
-                { time: 1, unit: "minute" },
-                { time: 1, unit: "hour" },
-            ])
-        ).toBe(3661000);
+        expect(toMilliseconds({ seconds: 10, minutes: 10 })).toBe(610000);
+        expect(toMilliseconds({ seconds: 10, minutes: 10, hours: 10 })).toBe(
+            36610000
+        );
     });
 });
