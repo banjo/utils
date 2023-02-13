@@ -174,3 +174,42 @@ export const unescapeHtml = (str: string): string => {
 export const escapeRegExp = (str: string): string => {
     return str.replace(/[/\-\\^$*+?.()|[\]{}]/g, "\\$&");
 };
+
+/**
+ * Slugify a string. Converts a string to lowercase, removes non-word characters and replaces spaces with dashes.
+ * @param str - The string to slugify.
+ * @returns The slugified string.
+ * @example
+ * slugify('hello world'); // returns 'hello-world'
+ * slugify('hello world!'); // returns 'hello-world'
+ * slugify(''); // returns ''
+ * slugify('This is a long sentence that should be slugified!!'); // returns 'this-is-a-long-sentence-that-should-be-slugified'
+ */
+export const slugify = (str: string): string => {
+    return str
+        .toString()
+        .toLowerCase()
+        .replace(/\s+/g, "-") // Replace spaces with -
+        .replace(/[^\w-]+/g, "") // Remove all non-word chars
+        .replace(/--+/g, "-") // Replace multiple - with single -
+        .replace(/^-+/, "") // Trim - from start of text
+        .replace(/-+$/, ""); // Trim - from end of text
+};
+
+/**
+ * Truncate a string to a given length. Adds an ellipsis to the end of the string if it was truncated.
+ * @param str - The string to truncate.
+ * @param length - The length to truncate the string to.
+ * @param end - The string to add to the end of the truncated string.
+ * @returns The truncated string.
+ * @example
+ * truncate('hello world', 5); // returns 'hello...'
+ * truncate('hello world', 5, '...more'); // returns 'hello...more'
+ * truncate('hello world', 100); // returns 'hello world'
+ * truncate('hello world', 5, ''); // returns 'hello'
+ * truncate('hello world', 5, '...'); // returns 'hello...'
+ */
+export const truncate = (str: string, length: number, end = "..."): string => {
+    if (str.length <= length) return str;
+    return str.slice(0, length) + end;
+};

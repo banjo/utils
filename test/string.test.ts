@@ -4,6 +4,8 @@ import {
     escapeHtml,
     escapeRegExp,
     isEmptyString,
+    slugify,
+    truncate,
     unescapeHtml,
 } from "../src/utils/string";
 import {
@@ -141,5 +143,23 @@ describe("string", () => {
         expect(escapeRegExp("hello this .. is * a long / sentence ***")).toBe(
             "hello this \\.\\. is \\* a long \\/ sentence \\*\\*\\*"
         );
+    });
+
+    it("slugify", () => {
+        expect(slugify("hello")).toBe("hello");
+        expect(slugify("hello world")).toBe("hello-world");
+        expect(slugify("hello world, this is a long sentence")).toBe(
+            "hello-world-this-is-a-long-sentence"
+        );
+        expect(
+            slugify("a lot of % signs and things !! and spaces!* and so on")
+        ).toBe("a-lot-of-signs-and-things-and-spaces-and-so-on");
+    });
+
+    it("truncate", () => {
+        expect(truncate("hello", 10)).toBe("hello");
+        expect(truncate("hello world", 10)).toBe("hello worl...");
+        expect(truncate("hello world", 5)).toBe("hello...");
+        expect(truncate("hello world", 5, "!!")).toBe("hello!!");
     });
 });
