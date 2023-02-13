@@ -238,7 +238,7 @@ Cache utility.
 
 **cache**
 
-> Creates a super simple cache based on a map. Can be used with strings and symbols as key. The cache is not persisted. Is generic and can be used with any type.
+> Creates a super simple cache with expiration and support for persistance. Can be used with strings and symbols as key. Is generic and can be used with any type.
 
 ```ts
 const { get, set, has, delete, clear } = cache();

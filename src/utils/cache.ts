@@ -19,7 +19,7 @@ type Options = {
     persistant?: boolean;
 
     /**
-     * The key used to store the cache in local storage. Defaults to "banjo-cache".
+     * The key used to store the cache in local storage. Defaults to "banjo-cache". Only used if persistant is true. It is recommended to change this if you are using multiple caches.
      * @default "banjo-cache"
      */
     key?: string;
@@ -63,7 +63,7 @@ const initMap = <T>(key: string, persistant: boolean) => {
 };
 
 /**
- * Creates a super simple cache based on a map. Can be used with strings and symbols as key. The cache is not persisted. Is generic and can be used with any type.
+ * Creates a super simple cache with expiration and support for persistance. Can be used with strings and symbols as key. Is generic and can be used with any type.
  * @returns An object with the following methods: get, set, has, delete, clear.
  * @example
  * const { get, set, has, delete, clear } = cache();
