@@ -81,6 +81,17 @@ uniq(["a", "a", "b", "c"]); // returns ['a', 'b', 'c']
 
 ---
 
+**shuffle**
+
+> Shuffle the elements of an array. Creates a new array with the elements of the original array in a random order.
+
+```ts
+shuffle([1, 2, 3, 4, 5]); // returns [2, 4, 1, 5, 3]
+shuffle(["a", "b", "c", "d", "e"]); // returns ['b', 'd', 'a', 'e', 'c']
+```
+
+---
+
 **chunk**
 
 > Create a chunk of an array. A chunk is a new array containing a specified number of elements from the original array.

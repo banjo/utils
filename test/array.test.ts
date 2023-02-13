@@ -10,6 +10,7 @@ import {
     range,
     remove,
     sample,
+    shuffle,
     toArray,
     uniq,
 } from "../src/utils/array";
@@ -42,6 +43,11 @@ describe("array", () => {
         expect(uniq([])).toEqual([]);
         expect(uniq([1])).toEqual([1]);
         expect(uniq([1, 1])).toEqual([1]);
+    });
+
+    it("shuffle", () => {
+        expect(shuffle([1, 2, 3, 4, 5])).not.toEqual([1, 2, 3, 4, 5]);
+        expect(shuffle([1, 2, 3, 4, 5]).length).toBe(5);
     });
 
     it("chunk", () => {

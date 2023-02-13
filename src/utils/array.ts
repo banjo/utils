@@ -39,6 +39,21 @@ export const toArray = <T>(value: T | T[]): T[] => {
 export const uniq = <T>(array: T[]): T[] => Array.from(new Set(array));
 
 /**
+ * Shuffle the elements of an array. Creates a new array with the elements of the original array in a random order.
+ * @param array - The array to shuffle.
+ * @returns A new array with the elements of the original array in a random order.
+ * @example
+ * shuffle([1, 2, 3, 4, 5]); // returns [2, 4, 1, 5, 3]
+ * shuffle(['a', 'b', 'c', 'd', 'e']); // returns ['b', 'd', 'a', 'e', 'c']
+ */
+export const shuffle = <T>(array: T[]): T[] => {
+    return array
+        .map((value) => ({ value, sort: Math.random() }))
+        .sort((a, b) => a.sort - b.sort)
+        .map(({ value }) => value);
+};
+
+/**
  * Create a chunk of an array. A chunk is a new array containing a specified number of elements from the original array.
  * @param array - The array to chunk.
  * @param size - The size of the chunk.
