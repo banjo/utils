@@ -230,6 +230,45 @@ intersection(["a", "b", "c", "d"], ["b", "d"], comparator); // returns ['b', 'd'
 
 ---
 
+### Date
+
+Utility functions for date and time.
+
+---
+
+**getMonths**
+
+> Returns an array of month names. The array is zero-based, so the first month is January.
+
+```ts
+getMonths(); // returns ['January', 'February', ...]
+getMonths({ month: "short" }); // returns ['Jan', 'Feb', ...]
+getMonths({ month: "narrow" }); // returns ['J', 'F', ...]
+getMonths({ month: "numeric" }); // returns ['1', '2', ...]
+
+getMonths({ locales: "fr-FR" }); // returns ['janvier', 'février', ...]
+getMonths({ locales: "sv-SE" }); // returns ['januari', 'februari', ...]
+```
+
+---
+
+**getDays**
+
+> Returns an array of day names. The array is zero-based. The first day is Monday by default.
+
+```ts
+getDays(); // returns ['Monday', 'Tuesday', ...]
+getDays({ day: "short" }); // returns ['Mon', 'Tue', ...]
+getDays({ day: "narrow" }); // returns ['M', 'T', ...]
+getDays({ startOnMonday: false }); // returns ['Sunday', 'Monday', ...]
+
+getDays({ locales: "fr-FR" }); // returns ['lundi', 'mardi', ...]
+getDays({ locales: "sv-SE" }); // returns ['måndag', 'tisdag', ...]
+getDays({ locales: "sv-SE", startOnMonday: false }); // returns ['söndag', 'måndag', ...]
+```
+
+---
+
 ### Fetch
 
 Utlilties that uses the fetch API to fetch data. Smaller implementations that basically saves time.
@@ -602,6 +641,17 @@ merge(obj1, obj2, obj3); // => { a: { b: 3 } }
 
 ---
 
+**flip**
+
+> Flips the keys and values of an object. If the object has duplicate values, the last key will be used.
+
+```ts
+const obj = { a: 1, b: 2, c: 3 };
+flip(obj); // => { 1: "a", 2: "b", 3: "c" }
+```
+
+---
+
 ### Select
 
 Utility for selecting elements from the DOM. Simplifies the process of working with the DOM.
@@ -734,6 +784,66 @@ template("hello {{name}}", { name: "world" }); // returns 'hello world'
 template("hello {{name}}, I am {{me}}", { name: "world", me: "Kent" }); // returns 'hello world, I am Kent'
 template("hello {{name}}", { name: "world", foo: "bar" }); // returns 'hello world'
 template("hello {{name}}", { foo: "bar" }); // returns 'hello {{name}}'
+```
+
+---
+
+**escapeHtml**
+
+> Escape HTML special characters.
+
+```ts
+escapeHtml("<div>hello</div>"); // returns '&lt;div&gt;hello&lt;/div&gt;'
+```
+
+---
+
+**unescapeHtml**
+
+> Unescape HTML special characters. Opposite of escapeHtml.
+
+```ts
+unescapeHtml("&lt;div&gt;hello&lt;/div&gt;"); // returns '<div>hello</div>'
+```
+
+---
+
+**escapeRegExp**
+
+> Escape RegExp special characters.
+
+```ts
+escapeRegExp("hello world"); // returns 'hello world'
+escapeRegExp("hello*world"); // returns 'hello\\*world'
+escapeRegExp("hello?world"); // returns 'hello\\?world'
+escapeRegExp("hello(world"); // returns 'hello\\(world'
+```
+
+---
+
+**slugify**
+
+> Slugify a string. Converts a string to lowercase, removes non-word characters and replaces spaces with dashes.
+
+```ts
+slugify("hello world"); // returns 'hello-world'
+slugify("hello world!"); // returns 'hello-world'
+slugify(""); // returns ''
+slugify("This is a long sentence that should be slugified!!"); // returns 'this-is-a-long-sentence-that-should-be-slugified'
+```
+
+---
+
+**truncate**
+
+> Truncate a string to a given length. Adds an ellipsis to the end of the string if it was truncated.
+
+```ts
+truncate("hello world", 5); // returns 'hello...'
+truncate("hello world", 5, "...more"); // returns 'hello...more'
+truncate("hello world", 100); // returns 'hello world'
+truncate("hello world", 5, ""); // returns 'hello'
+truncate("hello world", 5, "..."); // returns 'hello...'
 ```
 
 ---

@@ -16,7 +16,7 @@ const defaultMonthOptions = {
 
 /**
  * Returns an array of month names. The array is zero-based, so the first month is January.
- * @param options
+ * @param options - Options object.
  * @returns An array of month names.
  * @example
  * getMonths(); // returns ['January', 'February', ...]
@@ -49,7 +49,7 @@ const defaultDayOptions = {
 
 /**
  * Returns an array of day names. The array is zero-based. The first day is Monday by default.
- * @param options
+ * @param options - Options object.
  * @returns An array of day names.
  * @example
  * getDays(); // returns ['Monday', 'Tuesday', ...]

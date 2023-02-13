@@ -1,8 +1,7 @@
-import { writeFileSync } from "fs";
+import { readFileSync, writeFileSync } from "fs";
 import { objectEntries } from "../src/utils/object";
 import { capitalize } from "../src/utils/string";
 import { getUtilFiles } from "./utils";
-import { readFileSync } from "fs";
 
 const shouldInclude = ["@returns", "@example"];
 const TS_DOCS_REGEX = /\/\*\*[\s\S]*?\*\//g;
