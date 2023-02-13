@@ -2,7 +2,6 @@
     "name": "@banjoanton/utils",
     "type": "module",
     "version": "0.1.29",
-    "packageManager": "pnpm@7.27.0",
     "description": "",
     "author": "Anton Ödman <anton.odman@gmail.com>",
     "license": "MIT",
@@ -14,27 +13,18 @@
     },
     "bugs": "https://github.com/banjo/utils/issues",
     "keywords": [],
-    "sideEffects": false,
+    "main": "dist/index.esm.js",
+    "module": "dist/index.esm.js",
+    "types": "dist/index.d.ts",
     "exports": {
         ".": {
             "types": "./dist/index.d.ts",
             "require": "./dist/index.cjs",
-            "import": "./dist/index.mjs"
-        }
-    },
-    "main": "./dist/index.mjs",
-    "module": "./dist/index.mjs",
-    "types": "./dist/index.d.ts",
-    "typesVersions": {
-        "*": {
-            "*": [
-                "./dist/*",
-                "./dist/index.d.ts"
-            ]
+            "import": "./dist/index.esm.js"
         }
     },
     "files": [
-        "dist"
+        "dist/*"
     ],
     "scripts": {
         "build": "rimraf dist && nr prepareImports && rollup --config",
