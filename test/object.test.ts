@@ -1,5 +1,6 @@
-import { describe, expect, it, assertType, expectTypeOf } from "vitest";
+import { describe, expect, it } from "vitest";
 import {
+    flip,
     merge,
     objectEntries,
     objectKeys,
@@ -44,5 +45,15 @@ describe("object", () => {
 
         const res3 = merge(obj, obj2, obj3);
         expect(res3).toEqual({ a: 2, b: 2, c: 3, d: 5, e: { f: 5 } });
+    });
+
+    it("flip", () => {
+        const obj = { a: 1, b: 2, c: 3 };
+        const res = flip(obj);
+        expect(res).toEqual({ 1: "a", 2: "b", 3: "c" });
+
+        const obj2 = { a: 1, b: 2, c: 3, d: 1 };
+        const res2 = flip(obj2);
+        expect(res2).toEqual({ 1: "d", 2: "b", 3: "c" });
     });
 });

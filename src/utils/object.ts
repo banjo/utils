@@ -1,8 +1,8 @@
 import {
-    getProperty as gp,
-    setProperty as sp,
-    hasProperty as hp,
     deleteProperty as dp,
+    getProperty as gp,
+    hasProperty as hp,
+    setProperty as sp,
 } from "dot-prop";
 import { isArray, isObject } from "./is";
 
@@ -186,4 +186,20 @@ export const merge = <T extends object = object, S extends object = T>(
     }
 
     return merge(target, ...sources);
+};
+
+/**
+ * Flips the keys and values of an object. If the object has duplicate values, the last key will be used.
+ * @param obj - object to flip
+ * @returns The flipped object.
+ * @example
+ * const obj = { a: 1, b: 2, c: 3 };
+ * flip(obj); // => { 1: "a", 2: "b", 3: "c" }
+ */
+export const flip = <T extends object>(obj: T): T => {
+    const ret: any = {};
+    objectKeys(obj).forEach((key) => {
+        ret[obj[key]] = key;
+    });
+    return ret;
 };

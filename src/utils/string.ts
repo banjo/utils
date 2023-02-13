@@ -1,4 +1,5 @@
 import wcmatch from "wildcard-match";
+import { flip } from "./object";
 
 /**
  * Utilities for working with strings.
@@ -119,3 +120,57 @@ export function template(string: string, ...args: any): string {
         return value;
     });
 }
+
+const htmlEscapes: Record<string, string> = {
+    "&": "&amp;",
+    "<": "&lt;",
+    ">": "&gt;",
+    '"': "&quot;",
+    "'": "&#39;",
+};
+
+/**
+ * Escape HTML special characters.
+ * @param str - The string to escape.
+ * @returns The escaped string.
+ * @example
+ * escapeHtml('<div>hello</div>'); // returns '&lt;div&gt;hello&lt;/div&gt;'
+ */
+export const escapeHtml = (str: string): string => {
+    return str.replace(/[&<>"']/g, (match) => {
+        const escape = htmlEscapes[match];
+        if (!escape) return match;
+        return escape;
+    });
+};
+
+const htmlUnescapes: Record<string, string> = flip(htmlEscapes);
+
+/**
+ * Unescape HTML special characters. Opposite of escapeHtml.
+ * @param str - The string to unescape.
+ * @returns The unescaped string.
+ * @example
+ * unescapeHtml('&lt;div&gt;hello&lt;/div&gt;'); // returns '<div>hello</div>'
+ */
+export const unescapeHtml = (str: string): string => {
+    return str.replace(/&(?:amp|lt|gt|quot|#39);/g, (match) => {
+        const unescape = htmlUnescapes[match];
+        if (!unescape) return match;
+        return unescape;
+    });
+};
+
+/**
+ * Escape RegExp special characters.
+ * @param str - The string to escape.
+ * @returns The escaped string.
+ * @example
+ * escapeRegExp('hello world'); // returns 'hello world'
+ * escapeRegExp('hello*world'); // returns 'hello\\*world'
+ * escapeRegExp('hello?world'); // returns 'hello\\?world'
+ * escapeRegExp('hello(world'); // returns 'hello\\(world'
+ */
+export const escapeRegExp = (str: string): string => {
+    return str.replace(/[/\-\\^$*+?.()|[\]{}]/g, "\\$&");
+};

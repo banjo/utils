@@ -71,3 +71,28 @@ type Throttle = <T extends (...args: any) => any>(
 export const throttle: Throttle = (callback, wait, options) => {
     return t(wait, callback, options as any);
 };
+
+/**
+ * Invoke all functions in an array. Will not invoke any functions that are undefined.
+ * @param array - The array of functions to invoke.
+ * @example
+ * batchInvoke([() => console.log('hello'), () => console.log('world')]); // logs 'hello' and 'world'
+ * batchInvoke([() => console.log('hello'), undefined, () => console.log('world')]); // logs 'hello' and 'world'
+ */
+export const batchInvoke = <T extends () => void>(array: T[]): void => {
+    array.forEach((fn) => fn && fn());
+};
+
+/**
+ * A no-op function. Useful for default values.
+ * @example
+ * const myFunction = (callback = noop) => {
+ *    callback();
+ * };
+ *
+ * myFunction(); // does nothing
+ *
+ * const func = noop;
+ * func(); // does nothing
+ */
+export const noop = (): void => {};
