@@ -257,6 +257,15 @@ const cache = cache();
 const key = Symbol("key");
 cache.set(key, "value");
 
+// can be be persisted in local storage
+const cache = cache({ persistant: true });
+
+// can be be persisted in local storage with a custom key
+const cache = cache({ persistant: true, key: "my-cache" });
+
+custom expiration time in ms
+const cache = cache({ expires: 1000 });
+
 ```
 
 ---
