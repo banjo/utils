@@ -1,19 +1,19 @@
 import { describe, expect, it } from "vitest";
 import {
-    isNumber,
-    isBoolean,
-    isString,
-    isFunction,
-    isObject,
-    isDateObject,
-    isPrimitive,
-    isNil,
-    isUndefined,
-    isNull,
-    isRegExp,
     isArray,
-    exists,
+    isBoolean,
     isDate,
+    isDateObject,
+    isDefined,
+    isFunction,
+    isNil,
+    isNull,
+    isNumber,
+    isObject,
+    isPrimitive,
+    isRegExp,
+    isString,
+    isUndefined,
 } from "../src/utils/is";
 
 describe("is", () => {
@@ -145,18 +145,18 @@ describe("is", () => {
         expect(isNil(() => {})).toBe(false);
     });
 
-    it("exists", () => {
-        expect(exists(1)).toBe(true);
-        expect(exists("1")).toBe(true);
-        expect(exists(true)).toBe(true);
-        expect(exists(false)).toBe(true);
-        expect(exists(true)).toBe(true);
-        expect(exists(null)).toBe(false);
-        expect(exists(undefined)).toBe(false);
-        expect(exists({})).toBe(true);
-        expect(exists([])).toBe(true);
-        expect(exists(new Date())).toBe(true);
-        expect(exists(() => {})).toBe(true);
+    it("isDefined", () => {
+        expect(isDefined(1)).toBe(true);
+        expect(isDefined("1")).toBe(true);
+        expect(isDefined(true)).toBe(true);
+        expect(isDefined(false)).toBe(true);
+        expect(isDefined(true)).toBe(true);
+        expect(isDefined(null)).toBe(false);
+        expect(isDefined(undefined)).toBe(false);
+        expect(isDefined({})).toBe(true);
+        expect(isDefined([])).toBe(true);
+        expect(isDefined(new Date())).toBe(true);
+        expect(isDefined(() => {})).toBe(true);
     });
 
     it("isUndefined", () => {

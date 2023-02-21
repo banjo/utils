@@ -146,18 +146,18 @@ export const isNil = (value: any): value is null | undefined =>
     isNull(value) || isUndefined(value);
 
 /**
- * Check if the given value exists (is not null or undefined).
+ * Check if the given value exists (is not null or undefined). Also type guards against null and undefined. Previously named `exists`.
  * @param value - The value to check.
  * @returns true if the value exists, false otherwise.
  * @example
- * exists(null); // false
- * exists(undefined); // false
- * exists("hello world"); // true
- * exists(1); // true
- * exists(false); // true
- * exists([]); // true
+ * isDefined(null); // false
+ * isDefined(undefined); // false
+ * isDefined("hello world"); // true
+ * isDefined(1); // true
+ * isDefined(false); // true
+ * isDefined([]); // true
  */
-export const exists = <T>(value: T | null | undefined): value is T =>
+export const isDefined = <T>(value: T | null | undefined): value is T =>
     value !== null && value !== undefined;
 
 /**

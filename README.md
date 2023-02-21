@@ -4,11 +4,10 @@
 
 A collection of some of my most used JavaScript / TypeScript utility functions.
 
--   :palm_tree: - Three shakable ESM modules.
+-   :palm_tree: - Three-shakable ESM modules.
 -   :speech_balloon: - Fully typed TSDocs with examples
 -   :star: - No dependencies
 -   :file_folder: - Small size
--   :zap: - Import for node or browser
 -   :bookmark: - Own well-tested utilities or imported from large open source projects.
 
 The package is designed to be used as `devDependencies` and bundled into your dist.
@@ -22,13 +21,11 @@ npm install @banjoanton/utils -D
 # yarn
 yarn add @banjoanton/utils -D
 
-#pnpm
+# pnpm
 pnpm install @banjoanton/utils -D
 ```
 
 ## Import
-
-There are utils specifically for node and a browser environment. The default one can be used in node, but you need to append `browser` to use it in the browser to due dependencies.
 
 ```ts
 import { isArray, fetchJson } from "@banjoanton/utils";
@@ -226,6 +223,29 @@ intersection([{ a: 1 }], [{ a: 2 }]); // returns []
 const comparator = (a: any, b: any) => a === b;
 intersection([1, 2, 3, 4], [2, 4], comparator); // returns [2, 4]
 intersection(["a", "b", "c", "d"], ["b", "d"], comparator); // returns ['b', 'd']
+```
+
+---
+
+**sortBy**
+
+> Sort an array. Can sort by a single key or multiple keys. Can also take a custom function that receives the item to choose the value to sort by.
+
+```ts
+const a = { name: "Alex", age: 20 };
+const b = { name: "Alex", age: 15 };
+const c = { name: "Bony", age: 5 };
+
+// sort by a single key
+sortBy([a, b, c], "name"); // returns [a, b, c]
+sortBy([a, b, c], "age"); // returns [c, b, a]
+
+// sort by multiple keys
+sortBy([a, b, c], ["name", "age"]); // returns [b, a, c]
+
+// sort by a custom function
+sortBy([a, b, c], (item) => item.name); // returns [a, b, c]
+sortBy([a, b, c], (item) => item.age); // returns [c, b, a]
 ```
 
 ---
@@ -521,17 +541,17 @@ isNil(1); // false
 
 ---
 
-**exists**
+**isDefined**
 
-> Check if the given value exists (is not null or undefined).
+> Check if the given value exists (is not null or undefined). Also type guards against null and undefined. Previously named `exists`.
 
 ```ts
-exists(null); // false
-exists(undefined); // false
-exists("hello world"); // true
-exists(1); // true
-exists(false); // true
-exists([]); // true
+isDefined(null); // false
+isDefined(undefined); // false
+isDefined("hello world"); // true
+isDefined(1); // true
+isDefined(false); // true
+isDefined([]); // true
 ```
 
 ---
