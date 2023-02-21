@@ -1,4 +1,5 @@
 import { isArray, isEqual, isNil, isPrimitive } from "./is";
+import { getProperty } from "./object";
 
 /**
  * Utility functions for working with arrays.
@@ -247,4 +248,79 @@ export const intersection = <T>(
         if (isPrimitive(x)) return values.includes(x);
         return values.some((y) => isEqual(x, y));
     });
+};
+
+/**
+ * Sort an array. Can sort by a single key or multiple keys. Can also take a custom function that receives the item to choose the value to sort by.
+ * @param array - The array to sort.
+ * @param key - The key to sort by. Can be a string, an array of strings, or a function that receives the item and returns the value to sort by.
+ * @param order - The order to sort by. Defaults to asc.
+ * @returns A new sorted array.
+ * @example
+ * const a = {name: "Alex", age: 20};
+ * const b = {name: "Alex", age: 15};
+ * const c = {name: "Bony", age: 5};
+ *
+ * // sort by a single key
+ * sortBy([a, b, c], "name"); // returns [a, b, c]
+ * sortBy([a, b, c], "age"); // returns [c, b, a]
+ *
+ * // sort by multiple keys
+ * sortBy([a, b, c], ["name", "age"]); // returns [b, a, c]
+ *
+ * // sort by a custom function
+ * sortBy([a, b, c], (item) => item.name); // returns [a, b, c]
+ * sortBy([a, b, c], (item) => item.age); // returns [c, b, a]
+ */
+export const sortBy = <T>(
+    array: T[],
+    key: string | ((item: T) => any) | string[],
+    order: "asc" | "desc" = "asc"
+): T[] => {
+    const handle = (a: unknown, b: unknown) => {
+        if (isNil(a) || isNil(b)) return 0;
+
+        if (typeof a === "string" && typeof b === "string") {
+            return order === "asc" ? a.localeCompare(b) : b.localeCompare(a);
+        }
+
+        if (typeof a === "number" && typeof b === "number") {
+            if (a < b) return order === "asc" ? -1 : 1;
+            if (a > b) return order === "asc" ? 1 : -1;
+        }
+
+        return 0;
+    };
+
+    let comparator;
+    if (typeof key === "string") {
+        comparator = (a: T, b: T) => {
+            const aVal = getProperty(a, key);
+            const bVal = getProperty(b, key);
+
+            return handle(aVal, bVal);
+        };
+    } else if (isArray(key)) {
+        comparator = (a: T, b: T) => {
+            for (let i = 0; i < key.length; i++) {
+                const k = key[i];
+                const aVal = getProperty(a, k);
+                const bVal = getProperty(b, k);
+
+                const result = handle(aVal, bVal);
+                if (result !== 0) return result;
+            }
+
+            return 0;
+        };
+    } else {
+        comparator = (a: T, b: T) => {
+            const aVal = key(a);
+            const bVal = key(b);
+
+            return handle(aVal, bVal);
+        };
+    }
+
+    return [...array].sort(comparator);
 };

@@ -11,6 +11,7 @@ import {
     remove,
     sample,
     shuffle,
+    sortBy,
     toArray,
     uniq,
 } from "../src/utils/array";
@@ -182,5 +183,61 @@ describe("array", () => {
         expect(
             intersection([{ a: 1 }, { a: 2 }, { a: 3 }], [{ a: 4 }])
         ).toEqual([]);
+    });
+
+    it("sortBy", () => {
+        const a = { name: "a", age: 10 };
+        const b = { name: "a", age: 20 };
+        const c = { name: "b", age: 10 };
+        const d = { name: "b", age: 20 };
+
+        // asc
+        expect(sortBy([a, b, c, d], "name")).toEqual([a, b, c, d]);
+        expect(sortBy([a, b, c, d], "age")).toEqual([a, c, b, d]);
+        expect(sortBy([a, b, c, d], ["name", "age"])).toEqual([a, b, c, d]);
+        expect(sortBy([a, b, c, d], ["age", "name"])).toEqual([a, c, b, d]);
+        expect(sortBy([b, c, d, a], ["name", "age"])).toEqual([a, b, c, d]);
+        expect(sortBy([a, b, c, d], (x) => x.name)).toEqual([a, b, c, d]);
+        expect(sortBy([a, b, c, d], (x) => x.age)).toEqual([a, c, b, d]);
+
+        // desc
+        expect(sortBy([a, b, c, d], "name", "desc")).toEqual([c, d, a, b]);
+        expect(sortBy([a, b, c, d], "age", "desc")).toEqual([b, d, a, c]);
+        expect(sortBy([a, b, c, d], ["name", "age"], "desc")).toEqual([
+            d,
+            c,
+            b,
+            a,
+        ]);
+        expect(sortBy([a, b, c, d], ["age", "name"], "desc")).toEqual([
+            d,
+            b,
+            c,
+            a,
+        ]);
+        expect(sortBy([b, c, d, a], ["name", "age"], "desc")).toEqual([
+            d,
+            c,
+            b,
+            a,
+        ]);
+        expect(sortBy([a, b, c, d], (x) => x.name, "desc")).toEqual([
+            c,
+            d,
+            a,
+            b,
+        ]);
+        expect(sortBy([a, b, c, d], (x) => x.age, "desc")).toEqual([
+            b,
+            d,
+            a,
+            c,
+        ]);
+
+        const a1 = { name: "Alex", age: 20 };
+        const b1 = { name: "Alex", age: 15 };
+        const c1 = { name: "Bony", age: 5 };
+
+        expect(sortBy([a1, b1, c1], ["name", "age"])).toEqual([b1, a1, c1]); // returns [a, c, b]
     });
 });
