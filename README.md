@@ -39,13 +39,86 @@ Auto generated from TSDocs.
 
 <!-- DOCS START -->
 
+### Table of Contents
+
+-   [Array](#array)
+    -   [isEmptyArray](#isEmptyArray)
+    -   [toArray](#toArray)
+    -   [uniq](#uniq)
+    -   [shuffle](#shuffle)
+    -   [chunk](#chunk)
+    -   [last](#last)
+    -   [first](#first)
+    -   [range](#range)
+    -   [move](#move)
+    -   [sample](#sample)
+    -   [remove](#remove)
+    -   [compact](#compact)
+    -   [difference](#difference)
+    -   [intersection](#intersection)
+    -   [sortBy](#sortBy)
+-   [Cache](#cache)
+    -   [cache](#cache)
+-   [Date](#date)
+    -   [getMonths](#getMonths)
+    -   [getDays](#getDays)
+    -   [toMilliseconds](#toMilliseconds)
+-   [Fetch](#fetch)
+    -   [fetchJson](#fetchJson)
+-   [Function](#function)
+    -   [debounce](#debounce)
+    -   [throttle](#throttle)
+-   [Is](#is)
+    -   [isBoolean](#isBoolean)
+    -   [isNumber](#isNumber)
+    -   [isString](#isString)
+    -   [isFunction](#isFunction)
+    -   [isObject](#isObject)
+    -   [isDateObject](#isDateObject)
+    -   [isDate](#isDate)
+    -   [isRegExp](#isRegExp)
+    -   [isNull](#isNull)
+    -   [isUndefined](#isUndefined)
+    -   [isNil](#isNil)
+    -   [isDefined](#isDefined)
+    -   [isPrimitive](#isPrimitive)
+    -   [isArray](#isArray)
+    -   [isElement](#isElement)
+    -   [isEqual](#isEqual)
+-   [Object](#object)
+    -   [getProperty](#getProperty)
+    -   [hasProperty](#hasProperty)
+    -   [deleteProperty](#deleteProperty)
+    -   [objectKeys](#objectKeys)
+    -   [objectValues](#objectValues)
+    -   [objectEntries](#objectEntries)
+    -   [merge](#merge)
+    -   [flip](#flip)
+-   [Select](#select)
+    -   [select](#select)
+    -   [select.exists](#select.exists)
+    -   [select.all](#select.all)
+-   [String](#string)
+    -   [capitalize](#capitalize)
+    -   [isEmptyString](#isEmptyString)
+    -   [randomString](#randomString)
+    -   [wildcardMatch](#wildcardMatch)
+    -   [ensurePrefix](#ensurePrefix)
+    -   [ensureSuffix](#ensureSuffix)
+    -   [template](#template)
+    -   [escapeHtml](#escapeHtml)
+    -   [unescapeHtml](#unescapeHtml)
+    -   [escapeRegExp](#escapeRegExp)
+    -   [slugify](#slugify)
+    -   [truncate](#truncate)
+
 ### Array
 
 Utility functions for working with arrays.
 
 ---
 
-**isEmptyArray**
+#### isEmptyArray
 
 > Check if the given value is an empty array.
 
@@ -56,7 +129,7 @@ isEmptyArray([1, 2, 3]); // returns false
 
 ---
 
-**toArray**
+#### toArray
 
 > Convert a single value or array of values into an array.
 
@@ -67,7 +140,7 @@ toArray([1, 2, 3]); // returns [1, 2, 3]
 
 ---
 
-**uniq**
+#### uniq
 
 > Remove duplicate values from an array.
 
@@ -78,7 +151,7 @@ uniq(["a", "a", "b", "c"]); // returns ['a', 'b', 'c']
 
 ---
 
-**shuffle**
+#### shuffle
 
 > Shuffle the elements of an array. Creates a new array with the elements of the original array in a random order.
 
@@ -89,7 +162,7 @@ shuffle(["a", "b", "c", "d", "e"]); // returns ['b', 'd', 'a', 'e', 'c']
 
 ---
 
-**chunk**
+#### chunk
 
 > Create a chunk of an array. A chunk is a new array containing a specified number of elements from the original array.
 
@@ -103,7 +176,7 @@ chunk([1, 2, 3, 4, 5], 0); // returns []
 
 ---
 
-**last**
+#### last
 
 > Return the last element of an array.
 
@@ -114,7 +187,7 @@ last(["a", "b", "c"]); // returns 'c'
 
 ---
 
-**first**
+#### first
 
 > Return the first element of an array.
 
@@ -125,7 +198,7 @@ first(["a", "b", "c"]); // returns 'a'
 
 ---
 
-**range**
+#### range
 
 > Generate an array of numbers in a given range.
 
@@ -137,7 +210,7 @@ range(2, 10, 2); // returns [2, 4, 6, 8]
 
 ---
 
-**move**
+#### move
 
 > Move an element of an array from one position to another.
 
@@ -148,7 +221,7 @@ move(["a", "b", "c", "d"], 1, 3); // returns ['a', 'c', 'd', 'b']
 
 ---
 
-**sample**
+#### sample
 
 > Return a random element from an array.
 
@@ -159,7 +232,7 @@ sample(["a", "b", "c", "d"]); // returns a random element from the array
 
 ---
 
-**remove**
+#### remove
 
 > Remove an element from an array.
 
@@ -170,7 +243,7 @@ remove(["a", "b", "c", "d"], "b"); // returns ['a', 'c', 'd']
 
 ---
 
-**compact**
+#### compact
 
 > Remove falsy values (`null`, `undefined`, `""`, `0`, `false`, `NaN`) from an array.
 
@@ -180,7 +253,7 @@ compact([1, 2, 3, 4, 0, null, undefined, false]); // returns [1, 2, 3, 4]
 
 ---
 
-**difference**
+#### difference
 
 > Return the difference between two arrays. Objects are compared by value, meaning that two objects with the same properties will be considered equal. Can also take a custom comparator function.
 
@@ -203,7 +276,7 @@ difference(["a", "b", "c", "d"], ["b", "d"], comparator); // returns ['a', 'c']
 
 ---
 
-**intersection**
+#### intersection
 
 > Return the intersection between two arrays. Objects are compared by value, meaning that two objects with the same properties will be considered equal. Can also take a custom comparator function.
 
@@ -227,7 +300,7 @@ intersection(["a", "b", "c", "d"], ["b", "d"], comparator); // returns ['b', 'd'
 
 ---
 
-**sortBy**
+#### sortBy
 
 > Sort an array. Can sort by a single key or multiple keys. Can also take a custom function that receives the item to choose the value to sort by.
 
@@ -256,7 +329,7 @@ Cache utility.
 
 ---
 
-**cache**
+#### cache
 
 > Creates a super simple cache with expiration and support for persistance. Can be used with strings and symbols as key. Is generic and can be used with any type.
 
@@ -296,7 +369,7 @@ Utility functions for date and time.
 
 ---
 
-**getMonths**
+#### getMonths
 
 > Returns an array of month names. The array is zero-based, so the first month is January.
 
@@ -312,7 +385,7 @@ getMonths({ locales: "sv-SE" }); // returns ['januari', 'februari', ...]
 
 ---
 
-**getDays**
+#### getDays
 
 > Returns an array of day names. The array is zero-based. The first day is Monday by default.
 
@@ -329,7 +402,7 @@ getDays({ locales: "sv-SE", startOnMonday: false }); // returns ['söndag', 'må
 
 ---
 
-**toMilliseconds**
+#### toMilliseconds
 
 > Converts a time unit to milliseconds. Combined all units to get the total time in milliseconds.
 
@@ -350,7 +423,7 @@ Utlilties that uses the fetch API to fetch data. Smaller implementations that ba
 
 ---
 
-**fetchJson**
+#### fetchJson
 
 > Fetches a JSON response from a URL. Returns null if the response is not ok.
 > Can pass normal fetch options as well as custom options for the wrapper.
@@ -370,7 +443,7 @@ Utilities for working with functions.
 
 ---
 
-**debounce**
+#### debounce
 
 > Created a debounced version of the provided function. The function is a wrapper around the "throttle-debounce" library.
 
@@ -382,7 +455,7 @@ debounced(); // does nothing if called within 1000ms of the previous call
 
 ---
 
-**throttle**
+#### throttle
 
 > Created a throttled version of the provided function. The function is a wrapper around the "throttle-debounce" library.
 
@@ -403,7 +476,7 @@ Utility functions for checking the type of a value.
 
 ---
 
-**isBoolean**
+#### isBoolean
 
 > Check if the given value is a boolean.
 
@@ -414,7 +487,7 @@ isBoolean("hello world"); // false
 
 ---
 
-**isNumber**
+#### isNumber
 
 > Check if the given value is a number.
 
@@ -425,7 +498,7 @@ isNumber("hello world"); // false
 
 ---
 
-**isString**
+#### isString
 
 > Check if the given value is a string.
 
@@ -436,7 +509,7 @@ isString(1); // false
 
 ---
 
-**isFunction**
+#### isFunction
 
 > Check if the given value is a function.
 
@@ -448,7 +521,7 @@ isFunction(1); // false
 
 ---
 
-**isObject**
+#### isObject
 
 > Check if the given value is an object.
 
@@ -460,7 +533,7 @@ isObject(1); // false
 
 ---
 
-**isDateObject**
+#### isDateObject
 
 > Check if the given value is a Date object. Cannot be used to check if a value is a valid date.
 
@@ -473,7 +546,7 @@ isDateObject(new Date("hello world")); // true
 
 ---
 
-**isDate**
+#### isDate
 
 > Check if the given value is a valid date. Cannot be used to check if a value is a Date object.
 > Can pass strings, numbers, or Date objects. Notice that dates might works differently in different browsers.
@@ -489,7 +562,7 @@ isDate("2022-12-24"); // true
 
 ---
 
-**isRegExp**
+#### isRegExp
 
 > Check if the given value is a RegExp.
 
@@ -502,7 +575,7 @@ isRegExp(new RegExp("hello world")); // true
 
 ---
 
-**isNull**
+#### isNull
 
 > Check if the given value is null.
 
@@ -515,7 +588,7 @@ isNull(undefined); // false
 
 ---
 
-**isUndefined**
+#### isUndefined
 
 > Check if the given value is undefined.
 
@@ -528,7 +601,7 @@ isUndefined(null); // false
 
 ---
 
-**isNil**
+#### isNil
 
 > Check if the given value is null or undefined.
 
@@ -541,7 +614,7 @@ isNil(1); // false
 
 ---
 
-**isDefined**
+#### isDefined
 
 > Check if the given value exists (is not null or undefined). Also type guards against null and undefined. Previously named `exists`.
 
@@ -556,7 +629,7 @@ isDefined([]); // true
 
 ---
 
-**isPrimitive**
+#### isPrimitive
 
 > Check if the given value is a primitive type (string, number, boolean).
 
@@ -570,7 +643,7 @@ isPrimitive([]); // false
 
 ---
 
-**isArray**
+#### isArray
 
 > Check if the given value is an array.
 
@@ -583,7 +656,7 @@ isArray(new Array(1, 2, 3)); // true
 
 ---
 
-**isElement**
+#### isElement
 
 > Check if the value is a DOM element.
 
@@ -594,7 +667,7 @@ isElement("hello world"); // false
 
 ---
 
-**isEqual**
+#### isEqual
 
 > Check whether the two values are equal. Uses the fast-deep-equal package. Works with all types.
 
@@ -616,7 +689,7 @@ Utility functions for working with objects. Both wrappers and custom functions.
 
 ---
 
-**getProperty**
+#### getProperty
 
 > Returns the value at path of object. If the resolved value is undefined, the defaultValue is returned in its place. Undefined will be returned if the path is not found or on failure. Wrapper around the "dot-prop" library.
 
@@ -632,7 +705,7 @@ getProperty({ a: [{ b: "c" }] }, "a[1].b"); // => undefined
 
 ---
 
-**hasProperty**
+#### hasProperty
 
 > Checks if object has a property at path. If the resolved value is undefined, false is returned. Wrapper around the "dot-prop" library.
 
@@ -645,7 +718,7 @@ hasProperty(obj, "a.b.c.d"); // => false
 
 ---
 
-**deleteProperty**
+#### deleteProperty
 
 > Deletes the property at path of object. Wrapper around the "dot-prop" library.
 
@@ -659,7 +732,7 @@ deleteProperty(obj, "a.b.c.d"); // => false
 
 ---
 
-**objectKeys**
+#### objectKeys
 
 > Strictly typed version of Object.keys. Returns an array of keys of the object.
 
@@ -671,7 +744,7 @@ objectKeys({}); // => []
 
 ---
 
-**objectValues**
+#### objectValues
 
 > Strictly typed version of Object.values. Returns an array of values of the object.
 
@@ -683,7 +756,7 @@ objectValues({}); // => []
 
 ---
 
-**objectEntries**
+#### objectEntries
 
 > Strictly typed version of Object.entries. Returns an array of key-value pairs of the object.
 
@@ -695,7 +768,7 @@ objectEntries({}); // => []
 
 ---
 
-**merge**
+#### merge
 
 > Deeply merges two or more objects. The last object in the arguments list overwrites previous values.
 
@@ -716,7 +789,7 @@ merge(obj1, obj2, obj3); // => { a: { b: 3 } }
 
 ---
 
-**flip**
+#### flip
 
 > Flips the keys and values of an object. If the object has duplicate values, the last key will be used.
 
@@ -733,7 +806,7 @@ Utility for selecting elements from the DOM. Simplifies the process of working w
 
 ---
 
-**select**
+#### select
 
 > Selects a single element from the DOM,
 > or returns null if no element is found. Can search a parent as well.
@@ -749,7 +822,7 @@ select.style(element, { color: "red" }); // sets the color of the element to red
 
 ---
 
-**select.exists**
+#### select.exists
 
 > Check if an element exists in the DOM. Will default to search in the document.
 
@@ -760,7 +833,7 @@ select.exists("#test", parent); // returns true if element exists within parent
 
 ---
 
-**select.all**
+#### select.all
 
 > Selects all elements from the DOM as an array, or returns an empty array if no elements are found.
 > Can search a parent as well.
@@ -778,7 +851,7 @@ Utilities for working with strings.
 
 ---
 
-**capitalize**
+#### capitalize
 
 > Capitalizes the first letter of a given string and converts the rest of the letters to lowercase.
 
@@ -789,7 +862,7 @@ capitalize("HELLO"); // returns 'Hello'
 
 ---
 
-**isEmptyString**
+#### isEmptyString
 
 > Check if the given value is an empty string.
 
@@ -800,7 +873,7 @@ isEmptyString("hello"); // returns false
 
 ---
 
-**randomString**
+#### randomString
 
 > Generate a random string with the length provided, defaults to 16.
 
@@ -811,7 +884,7 @@ randomString(5); // return 'f5l32'
 
 ---
 
-**wildcardMatch**
+#### wildcardMatch
 
 > Check if a string matches a wildcard pattern. Uses the "wildcard-match" library.
 
@@ -823,7 +896,7 @@ wildcardMatch("/foo/bar", "/foo/bar/*"); // returns false
 
 ---
 
-**ensurePrefix**
+#### ensurePrefix
 
 > Ensure a string starts with a given prefix.
 
@@ -835,7 +908,7 @@ ensurePrefix("hello", "hello"); // returns 'hello'
 
 ---
 
-**ensureSuffix**
+#### ensureSuffix
 
 > Ensure a string ends with a given suffix.
 
@@ -847,7 +920,7 @@ ensureSuffix("hello", "hello"); // returns 'hello'
 
 ---
 
-**template**
+#### template
 
 > Simple templating function that replaces {0}, {1} or {{key}} with the provided arguments.
 
@@ -864,7 +937,7 @@ template("hello {{name}}", { foo: "bar" }); // returns 'hello {{name}}'
 
 ---
 
-**escapeHtml**
+#### escapeHtml
 
 > Escape HTML special characters.
 
@@ -874,7 +947,7 @@ escapeHtml("<div>hello</div>"); // returns '&lt;div&gt;hello&lt;/div&gt;'
 
 ---
 
-**unescapeHtml**
+#### unescapeHtml
 
 > Unescape HTML special characters. Opposite of escapeHtml.
 
@@ -884,7 +957,7 @@ unescapeHtml("&lt;div&gt;hello&lt;/div&gt;"); // returns '<div>hello</div>'
 
 ---
 
-**escapeRegExp**
+#### escapeRegExp
 
 > Escape RegExp special characters.
 
@@ -897,7 +970,7 @@ escapeRegExp("hello(world"); // returns 'hello\\(world'
 
 ---
 
-**slugify**
+#### slugify
 
 > Slugify a string. Converts a string to lowercase, removes non-word characters and replaces spaces with dashes.
 
@@ -910,7 +983,7 @@ slugify("This is a long sentence that should be slugified!!"); // returns 'this-
 
 ---
 
-**truncate**
+#### truncate
 
 > Truncate a string to a given length. Adds an ellipsis to the end of the string if it was truncated.
 

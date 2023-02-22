@@ -27,7 +27,9 @@ function main() {
 
     const docsWithContent = generateContentForEachDoc(docs);
 
-    const markdown = generateMarkdown(docsWithContent);
+    const toc = createToc(docsWithContent);
+
+    const markdown = generateMarkdown(docsWithContent, toc);
 
     const newReadme = readme.replace(placeholder, markdown);
 
@@ -51,11 +53,31 @@ type Docs = {
 
 type DocsWithContent = Docs & { content: string };
 
+function createToc(docs: Docs[]) {
+    let previousFileName = "";
+
+    const createCategory = (doc: Docs) =>
+        `-  [${capitalize(doc.fileName)}](#${doc.fileName})\n`;
+
+    const createUnit = (doc: Docs) => `\t* [${doc.name}](#${doc.name})\n`;
+
+    const toc = docs.map((doc) => {
+        if (doc.fileName !== previousFileName) {
+            previousFileName = doc.fileName;
+            return `${createCategory(doc)}${createUnit(doc)}`;
+        } else {
+            return createUnit(doc);
+        }
+    });
+
+    return `### Table of Contents\n\n${toc.join("")}`;
+}
+
 function addPlaceholders(content: string) {
     return `<!-- DOCS START -->\n${content}\n<!-- DOCS END -->`;
 }
 
-function generateMarkdown(docs: DocsWithContent[]): string {
+function generateMarkdown(docs: DocsWithContent[], toc: string): string {
     const groupedArray = docs.reduce((acc: any, doc) => {
         if (!acc[doc.fileName]) {
             acc[doc.fileName] = [];
@@ -66,7 +88,7 @@ function generateMarkdown(docs: DocsWithContent[]): string {
         return acc;
     }, {});
 
-    let markdown = "";
+    let markdown = toc;
     objectEntries(groupedArray).forEach(([fileName, docs]) => {
         markdown += `### ${capitalize(fileName)}\n\n`;
 
@@ -90,7 +112,7 @@ function generateContentForEachDoc(docs: Docs[]) {
     const content: DocsWithContent[] = docs.map((doc) => {
         return {
             ...doc,
-            content: `**${doc.name}**
+            content: `#### ${doc.name}
 
 > ${doc.description}
 
