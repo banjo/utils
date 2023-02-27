@@ -119,6 +119,8 @@ export const toMilliseconds = (props: Props) => {
  * @param dates - Array of dates.
  * @returns Earliest date.
  * @example
+ * earliestDate([...dates])
+ *
  * const earlyDate = new Date(2020, 0, 1);
  * const lateDate = new Date(2020, 0, 2);
  *
@@ -134,6 +136,8 @@ export const earliestDate = (dates: Date[]) => {
  * @param dates - Array of dates.
  * @returns Latest date.
  * @example
+ * latestDate([...dates])
+ *
  * const earlyDate = new Date(2020, 0, 1);
  * const lateDate = new Date(2020, 0, 2);
  *
@@ -151,6 +155,8 @@ export const latestDate = (dates: Date[]) => {
  * @param latestDate - Latest date.
  * @returns True if date is between earliestDate and latestDate.
  * @example
+ * isBetweenDates([...dates])
+ *
  * const earlyDate = new Date(2020, 0, 1);
  * const dateInBetween = new Date(2020, 0, 2);
  * const lateDate = new Date(2020, 0, 3);

@@ -425,6 +425,8 @@ toMilliseconds({ seconds: 10, minutes: 10, hours: 10 }); // returns 3610000
 > Returns the earliest date in an array of dates.
 
 ```ts
+earliestDate([...dates]);
+
 const earlyDate = new Date(2020, 0, 1);
 const lateDate = new Date(2020, 0, 2);
 
@@ -438,6 +440,8 @@ earliestDate([earlyDate, lateDate]); // returns earlyDate
 > Returns the latest date in an array of dates.
 
 ```ts
+latestDate([...dates]);
+
 const earlyDate = new Date(2020, 0, 1);
 const lateDate = new Date(2020, 0, 2);
 
@@ -451,6 +455,8 @@ latestDate([earlyDate, lateDate]); // returns lateDate
 > Returns true if a date is between two other dates.
 
 ```ts
+isBetweenDates([...dates]);
+
 const earlyDate = new Date(2020, 0, 1);
 const dateInBetween = new Date(2020, 0, 2);
 const lateDate = new Date(2020, 0, 3);
