@@ -63,9 +63,9 @@ Auto generated from TSDocs.
     -   [getMonths](#getMonths)
     -   [getDays](#getDays)
     -   [toMilliseconds](#toMilliseconds)
-    -   [Date](#Date)
-    -   [Date](#Date)
-    -   [Date](#Date)
+    -   [earliestDate](#earliestDate)
+    -   [latestDate](#latestDate)
+    -   [isBetweenDates](#isBetweenDates)
 -   [Fetch](#fetch)
     -   [fetchJson](#fetchJson)
 -   [Function](#function)
@@ -420,7 +420,7 @@ toMilliseconds({ seconds: 10, minutes: 10, hours: 10 }); // returns 3610000
 
 ---
 
-#### Date
+#### earliestDate
 
 > Returns the earliest date in an array of dates.
 
@@ -435,7 +435,7 @@ earliestDate([earlyDate, lateDate]); // returns earlyDate
 
 ---
 
-#### Date
+#### latestDate
 
 > Returns the latest date in an array of dates.
 
@@ -450,7 +450,7 @@ latestDate([earlyDate, lateDate]); // returns lateDate
 
 ---
 
-#### Date
+#### isBetweenDates
 
 > Returns true if a date is between two other dates.
 
