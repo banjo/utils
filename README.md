@@ -63,6 +63,9 @@ Auto generated from TSDocs.
     -   [getMonths](#getMonths)
     -   [getDays](#getDays)
     -   [toMilliseconds](#toMilliseconds)
+    -   [Date](#Date)
+    -   [Date](#Date)
+    -   [Date](#Date)
 -   [Fetch](#fetch)
     -   [fetchJson](#fetchJson)
 -   [Function](#function)
@@ -413,6 +416,46 @@ toMilliseconds({ hours: 10 }); // returns 36000000
 
 toMilliseconds({ seconds: 10, minutes: 10 }); // returns 610000
 toMilliseconds({ seconds: 10, minutes: 10, hours: 10 }); // returns 3610000
+```
+
+---
+
+#### Date
+
+> Returns the earliest date in an array of dates.
+
+```ts
+const earlyDate = new Date(2020, 0, 1);
+const lateDate = new Date(2020, 0, 2);
+
+earliestDate([earlyDate, lateDate]); // returns earlyDate
+```
+
+---
+
+#### Date
+
+> Returns the latest date in an array of dates.
+
+```ts
+const earlyDate = new Date(2020, 0, 1);
+const lateDate = new Date(2020, 0, 2);
+
+latestDate([earlyDate, lateDate]); // returns lateDate
+```
+
+---
+
+#### Date
+
+> Returns true if a date is between two other dates.
+
+```ts
+const earlyDate = new Date(2020, 0, 1);
+const dateInBetween = new Date(2020, 0, 2);
+const lateDate = new Date(2020, 0, 3);
+
+isBetweenDates(dateInBetween, earlyDate, lateDate); // returns true
 ```
 
 ---

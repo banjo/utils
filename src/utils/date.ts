@@ -1,4 +1,4 @@
-import { range } from "./array";
+import { range, sortBy } from "./array";
 
 /**
  * Utility functions for date and time.
@@ -112,4 +112,63 @@ export const toMilliseconds = (props: Props) => {
         hours * 1000 * 60 * 60 +
         days * 1000 * 60 * 60 * 24
     );
+};
+
+/**
+ * Returns the earliest date in an array of dates.
+ * @param dates - Array of dates.
+ * @returns Earliest date.
+ * @example
+ * const earlyDate = new Date(2020, 0, 1);
+ * const lateDate = new Date(2020, 0, 2);
+ *
+ * earliestDate([earlyDate, lateDate]); // returns earlyDate
+ */
+export const earliestDate = (dates: Date[]) => {
+    const sortedDates = sortBy(dates, (v) => v.getTime());
+    return sortedDates[0];
+};
+
+/**
+ * Returns the latest date in an array of dates.
+ * @param dates - Array of dates.
+ * @returns Latest date.
+ * @example
+ * const earlyDate = new Date(2020, 0, 1);
+ * const lateDate = new Date(2020, 0, 2);
+ *
+ * latestDate([earlyDate, lateDate]); // returns lateDate
+ */
+export const latestDate = (dates: Date[]) => {
+    const sortedDates = sortBy(dates, (v) => v.getTime(), "desc");
+    return sortedDates[0];
+};
+
+/**
+ * Returns true if a date is between two other dates.
+ * @param date - Date to check.
+ * @param earliestDate - Earliest date.
+ * @param latestDate - Latest date.
+ * @returns True if date is between earliestDate and latestDate.
+ * @example
+ * const earlyDate = new Date(2020, 0, 1);
+ * const dateInBetween = new Date(2020, 0, 2);
+ * const lateDate = new Date(2020, 0, 3);
+ *
+ * isBetweenDates(dateInBetween, earlyDate, lateDate); // returns true
+ */
+export const isBetweenDates = (
+    date: string | Date,
+    earliestDate: string | Date,
+    latestDate: string | Date
+) => {
+    const dateAsDate = new Date(date);
+    const earliestDateAsDate = new Date(earliestDate);
+    const latestDateAsDate = new Date(latestDate);
+
+    if (dateAsDate >= earliestDateAsDate && dateAsDate <= latestDateAsDate) {
+        return true;
+    }
+
+    return false;
 };
