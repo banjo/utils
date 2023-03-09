@@ -5,6 +5,7 @@ import {
     isDate,
     isDateObject,
     isDefined,
+    isEmpty,
     isFunction,
     isNil,
     isNull,
@@ -193,5 +194,26 @@ describe("is", () => {
         expect(isArray(undefined)).toBe(false);
         expect(isArray(new Date())).toBe(false);
         expect(isArray(() => {})).toBe(false);
+    });
+
+    it("isEmpty", () => {
+        expect(isEmpty([])).toBe(true);
+        expect(isEmpty({})).toBe(true);
+        expect(isEmpty(1)).toBe(false);
+        expect(isEmpty("1")).toBe(false);
+        expect(isEmpty(true)).toBe(false);
+        expect(isEmpty(null)).toBe(true);
+        expect(isEmpty(undefined)).toBe(true);
+        expect(isEmpty(() => {})).toBe(false);
+        expect(isEmpty([1])).toBe(false);
+        expect(isEmpty({ a: 1 })).toBe(false);
+        expect(isEmpty(" ")).toBe(true);
+        expect(isEmpty("")).toBe(true);
+        expect(isEmpty(new Map())).toBe(true);
+        expect(isEmpty(new Map([["a", 1]]))).toBe(false);
+        expect(isEmpty(new WeakMap())).toBe(true);
+        expect(isEmpty(new WeakMap([[{}, 1]]))).toBe(true);
+        expect(isEmpty(new Set())).toBe(true);
+        expect(isEmpty(new Set([1]))).toBe(false);
     });
 });

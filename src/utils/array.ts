@@ -6,17 +6,6 @@ import { getProperty } from "./object";
  */
 
 /**
- * Check if the given value is an empty array.
- * @param value - The value to check.
- * @returns true if the value is an empty array, false otherwise.
- * @example
- * isEmptyArray([]); // returns true
- * isEmptyArray([1, 2, 3]); // returns false
- */
-export const isEmptyArray = (value: any): value is Array<any> =>
-    isArray(value) && value.length === 0;
-
-/**
  * Convert a single value or array of values into an array.
  * @param value - The value to convert.
  * @returns An array containing the input value.

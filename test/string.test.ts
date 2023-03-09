@@ -3,7 +3,6 @@ import {
     capitalize,
     escapeHtml,
     escapeRegExp,
-    isEmptyString,
     slugify,
     truncate,
     unescapeHtml,
@@ -20,12 +19,6 @@ describe("string", () => {
         expect(capitalize("hello")).toBe("Hello");
         expect(capitalize("hello world")).toBe("Hello world");
         expect(capitalize("HELLO WORLD!")).toBe("Hello world!");
-    });
-
-    it("isEmptyString", () => {
-        expect(isEmptyString("")).toBe(true);
-        expect(isEmptyString(" ")).toBe(false);
-        expect(isEmptyString("hello")).toBe(false);
     });
 
     it("randomString", () => {

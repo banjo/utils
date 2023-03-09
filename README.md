@@ -42,7 +42,6 @@ Auto generated from TSDocs.
 ### Table of Contents
 
 -   [Array](#array)
-    -   [isEmptyArray](#isEmptyArray)
     -   [toArray](#toArray)
     -   [uniq](#uniq)
     -   [shuffle](#shuffle)
@@ -88,6 +87,7 @@ Auto generated from TSDocs.
     -   [isArray](#isArray)
     -   [isElement](#isElement)
     -   [isEqual](#isEqual)
+    -   [isEmpty](#isEmpty)
 -   [Object](#object)
     -   [getProperty](#getProperty)
     -   [hasProperty](#hasProperty)
@@ -103,7 +103,6 @@ Auto generated from TSDocs.
     -   [select.all](#select.all)
 -   [String](#string)
     -   [capitalize](#capitalize)
-    -   [isEmptyString](#isEmptyString)
     -   [randomString](#randomString)
     -   [wildcardMatch](#wildcardMatch)
     -   [ensurePrefix](#ensurePrefix)
@@ -118,17 +117,6 @@ Auto generated from TSDocs.
 ### Array
 
 Utility functions for working with arrays.
-
----
-
-#### isEmptyArray
-
-> Check if the given value is an empty array.
-
-```ts
-isEmptyArray([]); // returns true
-isEmptyArray([1, 2, 3]); // returns false
-```
 
 ---
 
@@ -732,6 +720,25 @@ isEqual([1, 2, 3], [1, 2, 3]); // true
 
 ---
 
+#### isEmpty
+
+> Check if the given value is empty. Works with strings, arrays, objects, and maps. Trims strings before checking.
+
+```ts
+isEmpty(""); // true
+isEmpty(" "); // true
+isEmpty("hello world"); // false
+isEmpty(1); // false
+isEmpty([]); // true
+isEmpty([1, 2, 3]); // false
+isEmpty({}); // true
+isEmpty({ a: 1 }); // false
+isEmpty(new Map()); // true
+isEmpty(new Map([["a", 1]])); // false
+```
+
+---
+
 ### Object
 
 Utility functions for working with objects. Both wrappers and custom functions.
@@ -907,17 +914,6 @@ Utilities for working with strings.
 ```ts
 capitalize("hello"); // returns 'Hello'
 capitalize("HELLO"); // returns 'Hello'
-```
-
----
-
-#### isEmptyString
-
-> Check if the given value is an empty string.
-
-```ts
-isEmptyString(""); // returns true
-isEmptyString("hello"); // returns false
 ```
 
 ---

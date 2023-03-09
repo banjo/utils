@@ -217,6 +217,44 @@ export const isEqual = (a: any, b: any): boolean => {
 };
 
 /**
+ * Check if the given value is empty. Works with strings, arrays, objects, and maps. Trims strings before checking.
+ * @param value - The value to check.
+ * @returns true if the value is empty, false otherwise.
+ * @example
+ * isEmpty(""); // true
+ * isEmpty(" "); // true
+ * isEmpty("hello world"); // false
+ * isEmpty(1); // false
+ * isEmpty([]); // true
+ * isEmpty([1, 2, 3]); // false
+ * isEmpty({}); // true
+ * isEmpty({ a: 1 }); // false
+ * isEmpty(new Map()); // true
+ * isEmpty(new Map([["a", 1]])); // false
+ */
+export const isEmpty = (value: any): boolean => {
+    // check for maps
+    if (value?.size !== undefined) {
+        return value.size === 0;
+    }
+
+    if (isNil(value)) {
+        return true;
+    }
+    if (isArray(value)) {
+        return value.length === 0;
+    }
+    if (isObject(value)) {
+        return Object.keys(value).length === 0;
+    }
+    if (isString(value)) {
+        return value.trim().length === 0;
+    }
+
+    return false;
+};
+
+/**
  * Check if the code is running in a browser environment.
  * @returns true if the code is running in a browser environment, false otherwise.
  */
