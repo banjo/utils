@@ -119,14 +119,14 @@ export const toMilliseconds = (props: Props) => {
  * @param dates - Array of dates.
  * @returns Earliest date.
  * @example
- * earliestDate([...dates]);
+ * earliest([...dates]);
  *
  * const earlyDate = new Date(2020, 0, 1);
  * const lateDate = new Date(2020, 0, 2);
  *
- * earliestDate([earlyDate, lateDate]); // returns earlyDate
+ * earliest([earlyDate, lateDate]); // returns earlyDate
  */
-export const earliestDate = (dates: Date[]) => {
+export const earliest = (dates: Date[]) => {
     const sortedDates = sortBy(dates, (v) => v.getTime());
     return sortedDates[0];
 };
@@ -136,14 +136,14 @@ export const earliestDate = (dates: Date[]) => {
  * @param dates - Array of dates.
  * @returns Latest date.
  * @example
- * latestDate([...dates]);
+ * latest([...dates]);
  *
  * const earlyDate = new Date(2020, 0, 1);
  * const lateDate = new Date(2020, 0, 2);
  *
- * latestDate([earlyDate, lateDate]); // returns lateDate
+ * latest([earlyDate, lateDate]); // returns lateDate
  */
-export const latestDate = (dates: Date[]) => {
+export const latest = (dates: Date[]) => {
     const sortedDates = sortBy(dates, (v) => v.getTime(), "desc");
     return sortedDates[0];
 };
@@ -151,9 +151,9 @@ export const latestDate = (dates: Date[]) => {
 /**
  * Returns true if a date is between two other dates.
  * @param date - Date to check.
- * @param earliestDate - Earliest date.
- * @param latestDate - Latest date.
- * @returns True if date is between earliestDate and latestDate.
+ * @param earliest - Earliest date.
+ * @param latest - Latest date.
+ * @returns True if date is between earliest and latest.
  * @example
  * isBetweenDates([...dates]);
  *
@@ -165,14 +165,14 @@ export const latestDate = (dates: Date[]) => {
  */
 export const isBetweenDates = (
     date: string | Date,
-    earliestDate: string | Date,
-    latestDate: string | Date
+    earliest: string | Date,
+    latest: string | Date
 ) => {
     const dateAsDate = new Date(date);
-    const earliestDateAsDate = new Date(earliestDate);
-    const latestDateAsDate = new Date(latestDate);
+    const earliestAsDate = new Date(earliest);
+    const latestAsDate = new Date(latest);
 
-    if (dateAsDate >= earliestDateAsDate && dateAsDate <= latestDateAsDate) {
+    if (dateAsDate >= earliestAsDate && dateAsDate <= latestAsDate) {
         return true;
     }
 

@@ -62,8 +62,8 @@ Auto generated from TSDocs.
     -   [getMonths](#getMonths)
     -   [getDays](#getDays)
     -   [toMilliseconds](#toMilliseconds)
-    -   [earliestDate](#earliestDate)
-    -   [latestDate](#latestDate)
+    -   [earliest](#earliest)
+    -   [latest](#latest)
     -   [isBetweenDates](#isBetweenDates)
 -   [Fetch](#fetch)
     -   [fetchJson](#fetchJson)
@@ -408,32 +408,32 @@ toMilliseconds({ seconds: 10, minutes: 10, hours: 10 }); // returns 3610000
 
 ---
 
-#### earliestDate
+#### earliest
 
 > Returns the earliest date in an array of dates.
 
 ```ts
-earliestDate([...dates]);
+earliest([...dates]);
 
 const earlyDate = new Date(2020, 0, 1);
 const lateDate = new Date(2020, 0, 2);
 
-earliestDate([earlyDate, lateDate]); // returns earlyDate
+earliest([earlyDate, lateDate]); // returns earlyDate
 ```
 
 ---
 
-#### latestDate
+#### latest
 
 > Returns the latest date in an array of dates.
 
 ```ts
-latestDate([...dates]);
+latest([...dates]);
 
 const earlyDate = new Date(2020, 0, 1);
 const lateDate = new Date(2020, 0, 2);
 
-latestDate([earlyDate, lateDate]); // returns lateDate
+latest([earlyDate, lateDate]); // returns lateDate
 ```
 
 ---

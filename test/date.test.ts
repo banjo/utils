@@ -1,10 +1,10 @@
 import { describe, expect, it } from "vitest";
 import {
-    earliestDate,
+    earliest,
     getDays,
     getMonths,
     isBetweenDates,
-    latestDate,
+    latest,
     toMilliseconds,
 } from "../src/utils/date";
 
@@ -155,26 +155,26 @@ describe("date", () => {
         );
     });
 
-    it("earliestDate", () => {
+    it("earliest", () => {
         const date1 = new Date("2021-01-01");
         const date2 = new Date("2021-01-02");
 
-        expect(earliestDate([date1, date2])).toBe(date1);
-        expect(earliestDate([date2, date1])).toBe(date1);
+        expect(earliest([date1, date2])).toBe(date1);
+        expect(earliest([date2, date1])).toBe(date1);
 
         const date3 = new Date("2021-01-03");
-        expect(earliestDate([date1, date2, date3])).toBe(date1);
+        expect(earliest([date1, date2, date3])).toBe(date1);
     });
 
-    it("latestDate", () => {
+    it("latest", () => {
         const date1 = new Date("2021-01-01");
         const date2 = new Date("2021-01-02");
 
-        expect(latestDate([date1, date2])).toBe(date2);
-        expect(latestDate([date2, date1])).toBe(date2);
+        expect(latest([date1, date2])).toBe(date2);
+        expect(latest([date2, date1])).toBe(date2);
 
         const date3 = new Date("2021-01-03");
-        expect(latestDate([date1, date2, date3])).toBe(date3);
+        expect(latest([date1, date2, date3])).toBe(date3);
     });
     it("isBetweenDates", () => {
         const date1 = new Date("2021-01-01");
