@@ -9,3 +9,4 @@ export * from "./utils/number";
 export * from "./utils/object";
 export * from "./utils/select";
 export * from "./utils/string";
+export * from "./utils/types";
