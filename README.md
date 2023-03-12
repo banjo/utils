@@ -1,8 +1,8 @@
 # @banjoanton/utils
 
-[![NPM version](https://img.shields.io/npm/v/@banjoanton/utils?color=%23c53635&label=%20)](https://www.npmjs.com/package/@banjoanton/utils)
-
 A collection of some of my most used JavaScript / TypeScript utility functions.
+
+[![NPM version](https://img.shields.io/npm/v/@banjoanton/utils?color=%23c53635&label=%20)](https://www.npmjs.com/package/@banjoanton/utils)
 
 -   :palm_tree: - Three-shakable ESM modules.
 -   :speech_balloon: - Fully typed TSDocs with examples
