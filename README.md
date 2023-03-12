@@ -56,6 +56,7 @@ Auto generated from TSDocs.
     -   [difference](#difference)
     -   [intersection](#intersection)
     -   [sortBy](#sortBy)
+    -   [includes](#includes)
 -   [Cache](#cache)
     -   [cache](#cache)
 -   [Date](#date)
@@ -310,6 +311,23 @@ sortBy([a, b, c], ["name", "age"]); // returns [b, a, c]
 // sort by a custom function
 sortBy([a, b, c], item => item.name); // returns [a, b, c]
 sortBy([a, b, c], item => item.age); // returns [c, b, a]
+```
+
+---
+
+#### includes
+
+> Type guard to check if a value is included in an array. Useful for filtering arrays.
+
+```ts
+const values = ["a", "b", "c"] as const;
+const valueToCheck: unknown = "a";
+
+includes(values, valueToCheck); // returns true
+
+if (includes(values, valueToCheck)) {
+    // valueToCheck is now of type "a" | "b" | "c"
+}
 ```
 
 ---

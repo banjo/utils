@@ -322,6 +322,8 @@ export const sortBy = <T>(
  * const values = ["a", "b", "c"] as const;
  * const valueToCheck: unknown = "a";
  *
+ * includes(values, valueToCheck); // returns true
+ *
  * if (includes(values, valueToCheck)) {
  *    // valueToCheck is now of type "a" | "b" | "c"
  * }
