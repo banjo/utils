@@ -308,8 +308,8 @@ sortBy([a, b, c], "age"); // returns [c, b, a]
 sortBy([a, b, c], ["name", "age"]); // returns [b, a, c]
 
 // sort by a custom function
-sortBy([a, b, c], (item) => item.name); // returns [a, b, c]
-sortBy([a, b, c], (item) => item.age); // returns [c, b, a]
+sortBy([a, b, c], item => item.name); // returns [a, b, c]
+sortBy([a, b, c], item => item.age); // returns [c, b, a]
 ```
 
 ---

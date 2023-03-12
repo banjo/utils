@@ -124,20 +124,14 @@ describe("array", () => {
         expect(difference(["a", "b", "c"], ["a", "b", "c", "d"])).toEqual([]);
         expect(difference(["a", "b", "c"], ["d"])).toEqual(["a", "b", "c"]);
 
+        expect(difference([{ a: 1 }, { a: 2 }, { a: 3 }], [{ a: 1 }, { a: 2 }])).toEqual([
+            { a: 3 },
+        ]);
+        expect(difference([{ a: 1 }, { a: 2 }, { a: 3 }], [{ a: 1 }, { a: 2 }, { a: 3 }])).toEqual(
+            []
+        );
         expect(
-            difference([{ a: 1 }, { a: 2 }, { a: 3 }], [{ a: 1 }, { a: 2 }])
-        ).toEqual([{ a: 3 }]);
-        expect(
-            difference(
-                [{ a: 1 }, { a: 2 }, { a: 3 }],
-                [{ a: 1 }, { a: 2 }, { a: 3 }]
-            )
-        ).toEqual([]);
-        expect(
-            difference(
-                [{ a: 1 }, { a: 2 }, { a: 3 }],
-                [{ a: 1 }, { a: 2 }, { a: 3 }, { a: 4 }]
-            )
+            difference([{ a: 1 }, { a: 2 }, { a: 3 }], [{ a: 1 }, { a: 2 }, { a: 3 }, { a: 4 }])
         ).toEqual([]);
         expect(difference([{ a: 1 }, { a: 2 }, { a: 3 }], [{ a: 4 }])).toEqual([
             { a: 1 },
@@ -153,36 +147,21 @@ describe("array", () => {
         expect(intersection([1, 2, 3], [4])).toEqual([]);
 
         expect(intersection(["a", "b", "c"], ["a", "b"])).toEqual(["a", "b"]);
-        expect(intersection(["a", "b", "c"], ["a", "b", "c"])).toEqual([
-            "a",
-            "b",
-            "c",
-        ]);
-        expect(intersection(["a", "b", "c"], ["a", "b", "c", "d"])).toEqual([
-            "a",
-            "b",
-            "c",
-        ]);
+        expect(intersection(["a", "b", "c"], ["a", "b", "c"])).toEqual(["a", "b", "c"]);
+        expect(intersection(["a", "b", "c"], ["a", "b", "c", "d"])).toEqual(["a", "b", "c"]);
         expect(intersection(["a", "b", "c"], ["d"])).toEqual([]);
 
+        expect(intersection([{ a: 1 }, { a: 2 }, { a: 3 }], [{ a: 1 }, { a: 2 }])).toEqual([
+            { a: 1 },
+            { a: 2 },
+        ]);
         expect(
-            intersection([{ a: 1 }, { a: 2 }, { a: 3 }], [{ a: 1 }, { a: 2 }])
-        ).toEqual([{ a: 1 }, { a: 2 }]);
-        expect(
-            intersection(
-                [{ a: 1 }, { a: 2 }, { a: 3 }],
-                [{ a: 1 }, { a: 2 }, { a: 3 }]
-            )
+            intersection([{ a: 1 }, { a: 2 }, { a: 3 }], [{ a: 1 }, { a: 2 }, { a: 3 }])
         ).toEqual([{ a: 1 }, { a: 2 }, { a: 3 }]);
         expect(
-            intersection(
-                [{ a: 1 }, { a: 2 }, { a: 3 }],
-                [{ a: 1 }, { a: 2 }, { a: 3 }, { a: 4 }]
-            )
+            intersection([{ a: 1 }, { a: 2 }, { a: 3 }], [{ a: 1 }, { a: 2 }, { a: 3 }, { a: 4 }])
         ).toEqual([{ a: 1 }, { a: 2 }, { a: 3 }]);
-        expect(
-            intersection([{ a: 1 }, { a: 2 }, { a: 3 }], [{ a: 4 }])
-        ).toEqual([]);
+        expect(intersection([{ a: 1 }, { a: 2 }, { a: 3 }], [{ a: 4 }])).toEqual([]);
     });
 
     it("sortBy", () => {
@@ -197,42 +176,17 @@ describe("array", () => {
         expect(sortBy([a, b, c, d], ["name", "age"])).toEqual([a, b, c, d]);
         expect(sortBy([a, b, c, d], ["age", "name"])).toEqual([a, c, b, d]);
         expect(sortBy([b, c, d, a], ["name", "age"])).toEqual([a, b, c, d]);
-        expect(sortBy([a, b, c, d], (x) => x.name)).toEqual([a, b, c, d]);
-        expect(sortBy([a, b, c, d], (x) => x.age)).toEqual([a, c, b, d]);
+        expect(sortBy([a, b, c, d], x => x.name)).toEqual([a, b, c, d]);
+        expect(sortBy([a, b, c, d], x => x.age)).toEqual([a, c, b, d]);
 
         // desc
         expect(sortBy([a, b, c, d], "name", "desc")).toEqual([c, d, a, b]);
         expect(sortBy([a, b, c, d], "age", "desc")).toEqual([b, d, a, c]);
-        expect(sortBy([a, b, c, d], ["name", "age"], "desc")).toEqual([
-            d,
-            c,
-            b,
-            a,
-        ]);
-        expect(sortBy([a, b, c, d], ["age", "name"], "desc")).toEqual([
-            d,
-            b,
-            c,
-            a,
-        ]);
-        expect(sortBy([b, c, d, a], ["name", "age"], "desc")).toEqual([
-            d,
-            c,
-            b,
-            a,
-        ]);
-        expect(sortBy([a, b, c, d], (x) => x.name, "desc")).toEqual([
-            c,
-            d,
-            a,
-            b,
-        ]);
-        expect(sortBy([a, b, c, d], (x) => x.age, "desc")).toEqual([
-            b,
-            d,
-            a,
-            c,
-        ]);
+        expect(sortBy([a, b, c, d], ["name", "age"], "desc")).toEqual([d, c, b, a]);
+        expect(sortBy([a, b, c, d], ["age", "name"], "desc")).toEqual([d, b, c, a]);
+        expect(sortBy([b, c, d, a], ["name", "age"], "desc")).toEqual([d, c, b, a]);
+        expect(sortBy([a, b, c, d], x => x.name, "desc")).toEqual([c, d, a, b]);
+        expect(sortBy([a, b, c, d], x => x.age, "desc")).toEqual([b, d, a, c]);
 
         const a1 = { name: "Alex", age: 20 };
         const b1 = { name: "Alex", age: 15 };

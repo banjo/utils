@@ -12,8 +12,7 @@ import equal from "fast-deep-equal/es6";
  * isBoolean(true); // true
  * isBoolean("hello world"); // false
  */
-export const isBoolean = (value: any): value is boolean =>
-    typeof value === "boolean";
+export const isBoolean = (value: any): value is boolean => typeof value === "boolean";
 
 /**
  * Check if the given value is a number.
@@ -23,8 +22,7 @@ export const isBoolean = (value: any): value is boolean =>
  * isNumber(1); // true
  * isNumber("hello world"); // false
  */
-export const isNumber = (value: any): value is number =>
-    typeof value === "number";
+export const isNumber = (value: any): value is number => typeof value === "number";
 
 /**
  * Check if the given value is a string.
@@ -34,8 +32,7 @@ export const isNumber = (value: any): value is number =>
  * isString("hello world"); // true
  * isString(1); // false
  */
-export const isString = (value: any): value is string =>
-    typeof value === "string";
+export const isString = (value: any): value is string => typeof value === "string";
 
 /**
  * Check if the given value is a function.
@@ -46,8 +43,7 @@ export const isString = (value: any): value is string =>
  * isFunction("hello world"); // false
  * isFunction(1); // false
  */
-export const isFunction = (value: any): value is Function =>
-    typeof value === "function";
+export const isFunction = (value: any): value is Function => typeof value === "function";
 
 /**
  * Check if the given value is an object.
@@ -71,8 +67,7 @@ export const isObject = (value: any): value is object =>
  * isDateObject(1); // false
  * isDateObject(new Date("hello world")); // true
  */
-export const isDateObject = (value: any): value is Date =>
-    value instanceof Date;
+export const isDateObject = (value: any): value is Date => value instanceof Date;
 
 /**
  * Check if the given value is a valid date. Cannot be used to check if a value is a Date object.
@@ -104,8 +99,7 @@ export const isDate = (value: any) => {
  * isRegExp(1); // false
  * isRegExp(new RegExp("hello world")); // true
  */
-export const isRegExp = (value: any): value is RegExp =>
-    value instanceof RegExp;
+export const isRegExp = (value: any): value is RegExp => value instanceof RegExp;
 
 /**
  * Check if the given value is null.
@@ -129,8 +123,7 @@ export const isNull = (value: any): value is null => value === null;
  * isUndefined(1); // false
  * isUndefined(null); // false
  */
-export const isUndefined = (value: any): value is undefined =>
-    value === undefined;
+export const isUndefined = (value: any): value is undefined => value === undefined;
 
 /**
  * Check if the given value is null or undefined.
@@ -142,8 +135,7 @@ export const isUndefined = (value: any): value is undefined =>
  * isNil("hello world"); // false
  * isNil(1); // false
  */
-export const isNil = (value: any): value is null | undefined =>
-    isNull(value) || isUndefined(value);
+export const isNil = (value: any): value is null | undefined => isNull(value) || isUndefined(value);
 
 /**
  * Check if the given value exists (is not null or undefined). Also type guards against null and undefined. Previously named `exists`.
@@ -184,8 +176,7 @@ export const isPrimitive = (value: any): boolean =>
  * isArray(1); // false
  * isArray(new Array(1, 2, 3)); // true
  */
-export const isArray = (value: any): value is Array<any> =>
-    Array.isArray(value);
+export const isArray = (value: any): value is Array<any> => Array.isArray(value);
 
 /**
  *  Check if the value is a DOM element.
@@ -195,8 +186,7 @@ export const isArray = (value: any): value is Array<any> =>
  * isElement(document.body); // true
  * isElement("hello world"); // false
  */
-export const isElement = (value: any): value is Element =>
-    value instanceof Element;
+export const isElement = (value: any): value is Element => value instanceof Element;
 
 /**
  * Check whether the two values are equal. Uses the fast-deep-equal package. Works with all types.

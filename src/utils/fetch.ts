@@ -30,7 +30,7 @@ export const fetchJson = async <T = any>(
     options: RequestInit & FetchSettings = { throws: false, debug: false }
 ): Promise<T | null> => {
     try {
-        const response = await fetch(url, options).then((res) => res.json());
+        const response = await fetch(url, options).then(res => res.json());
         return response;
     } catch (error) {
         if (options?.throws) throw error;

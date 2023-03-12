@@ -20,9 +20,7 @@ function main() {
     const readme = readFileSync("./README.md", "utf8");
     if (!readme) throw new Error("No readme found");
 
-    const placeholder = readme.match(
-        /<!-- DOCS START -->[\s\S]*<!-- DOCS END -->/
-    )?.[0];
+    const placeholder = readme.match(/<!-- DOCS START -->[\s\S]*<!-- DOCS END -->/)?.[0];
     if (!placeholder) throw new Error("No placeholder found");
 
     const docsWithContent = generateContentForEachDoc(docs);
@@ -56,12 +54,11 @@ type DocsWithContent = Docs & { content: string };
 function createToc(docs: Docs[]) {
     let previousFileName = "";
 
-    const createCategory = (doc: Docs) =>
-        `-  [${capitalize(doc.fileName)}](#${doc.fileName})\n`;
+    const createCategory = (doc: Docs) => `-  [${capitalize(doc.fileName)}](#${doc.fileName})\n`;
 
     const createUnit = (doc: Docs) => `\t* [${doc.name}](#${doc.name})\n`;
 
-    const toc = docs.map((doc) => {
+    const toc = docs.map(doc => {
         if (doc.fileName !== previousFileName) {
             previousFileName = doc.fileName;
             return `${createCategory(doc)}${createUnit(doc)}`;
@@ -92,15 +89,13 @@ function generateMarkdown(docs: DocsWithContent[], toc: string): string {
     objectEntries(groupedArray).forEach(([fileName, docs]) => {
         markdown += `### ${capitalize(fileName)}\n\n`;
 
-        const fileDesc = (<DocsWithContent[]>docs)?.[0].fileContent.match(
-            TS_DOCS_REGEX
-        )?.[0];
+        const fileDesc = (<DocsWithContent[]>docs)?.[0].fileContent.match(TS_DOCS_REGEX)?.[0];
 
         if (fileDesc) {
             markdown += cleanComment(fileDesc) + "\n\n---\n";
         }
 
-        (<DocsWithContent[]>docs).forEach((doc) => {
+        (<DocsWithContent[]>docs).forEach(doc => {
             markdown += doc.content;
         });
     });
@@ -109,7 +104,7 @@ function generateMarkdown(docs: DocsWithContent[], toc: string): string {
 }
 
 function generateContentForEachDoc(docs: Docs[]) {
-    const content: DocsWithContent[] = docs.map((doc) => {
+    const content: DocsWithContent[] = docs.map(doc => {
         return {
             ...doc,
             content: `#### ${doc.name}
@@ -129,23 +124,16 @@ ${doc.example}
 }
 
 function cleanComment(comment: string) {
-    return comment
-        .replace("/**", "")
-        .replace("*/", "")
-        .replaceAll(" * ", "")
-        .trim();
+    return comment.replace("/**", "").replace("*/", "").replaceAll(" * ", "").trim();
 }
 
-function parseComments(
-    comments: string[],
-    file: { content: string; fileName: string }
-): Docs[] {
+function parseComments(comments: string[], file: { content: string; fileName: string }): Docs[] {
     const docs: Docs[] = [];
 
     for (const comment of comments) {
         const formattedDoc = cleanComment(comment);
 
-        if (!shouldInclude.every((s) => formattedDoc.includes(s))) {
+        if (!shouldInclude.every(s => formattedDoc.includes(s))) {
             continue;
         }
 
@@ -192,7 +180,7 @@ function getExample(doc: string) {
 
     let final = "";
     const lines = example.split("\n");
-    lines.forEach((line) => {
+    lines.forEach(line => {
         if (line.startsWith(" *")) {
             final += line.replace(" *", "").trim() + "\n";
         } else {

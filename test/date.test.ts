@@ -92,15 +92,7 @@ describe("date", () => {
             "Sun",
         ]);
 
-        expect(getDays({ format: "narrow" })).toEqual([
-            "M",
-            "T",
-            "W",
-            "T",
-            "F",
-            "S",
-            "S",
-        ]);
+        expect(getDays({ format: "narrow" })).toEqual(["M", "T", "W", "T", "F", "S", "S"]);
 
         expect(getDays({ startOnMonday: false })).toEqual([
             "Sunday",
@@ -150,9 +142,7 @@ describe("date", () => {
         expect(toMilliseconds({ days: 10 })).toBe(864000000);
 
         expect(toMilliseconds({ seconds: 10, minutes: 10 })).toBe(610000);
-        expect(toMilliseconds({ seconds: 10, minutes: 10, hours: 10 })).toBe(
-            36610000
-        );
+        expect(toMilliseconds({ seconds: 10, minutes: 10, hours: 10 })).toBe(36610000);
     });
 
     it("earliest", () => {

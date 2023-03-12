@@ -16,6 +16,7 @@
     "main": "dist/index.esm.js",
     "module": "dist/index.esm.js",
     "types": "dist/index.d.ts",
+    "prettier": "@banjoanton/prettier-config",
     "exports": {
         ".": {
             "types": "./dist/index.d.ts",

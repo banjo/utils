@@ -29,7 +29,7 @@ const defaultMonthOptions = {
  */
 export const getMonths = (options?: MonthOptions): string[] => {
     const { locales, format } = { ...defaultMonthOptions, ...options };
-    return range(12).map((i) => {
+    return range(12).map(i => {
         const date = new Date(0, i);
         return date.toLocaleString(locales, { month: format });
     });
@@ -67,7 +67,7 @@ export const getDays = (options?: DayOptions): string[] => {
         ...options,
     };
 
-    return range(7).map((i) => {
+    return range(7).map(i => {
         const date = new Date(0, 0, startOnMonday ? i + 1 : i);
         return date.toLocaleString(locales, { weekday: format });
     });
@@ -107,10 +107,7 @@ export const toMilliseconds = (props: Props) => {
     const { seconds, minutes, hours, days } = { ...defaultProps, ...props };
 
     return (
-        seconds * 1000 +
-        minutes * 1000 * 60 +
-        hours * 1000 * 60 * 60 +
-        days * 1000 * 60 * 60 * 24
+        seconds * 1000 + minutes * 1000 * 60 + hours * 1000 * 60 * 60 + days * 1000 * 60 * 60 * 24
     );
 };
 
@@ -127,7 +124,7 @@ export const toMilliseconds = (props: Props) => {
  * earliest([earlyDate, lateDate]); // returns earlyDate
  */
 export const earliest = (dates: Date[]) => {
-    const sortedDates = sortBy(dates, (v) => v.getTime());
+    const sortedDates = sortBy(dates, v => v.getTime());
     return sortedDates[0];
 };
 
@@ -144,7 +141,7 @@ export const earliest = (dates: Date[]) => {
  * latest([earlyDate, lateDate]); // returns lateDate
  */
 export const latest = (dates: Date[]) => {
-    const sortedDates = sortBy(dates, (v) => v.getTime(), "desc");
+    const sortedDates = sortBy(dates, v => v.getTime(), "desc");
     return sortedDates[0];
 };
 

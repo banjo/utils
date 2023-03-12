@@ -80,7 +80,7 @@ export const throttle: Throttle = (callback, wait, options) => {
  * batchInvoke([() => console.log('hello'), undefined, () => console.log('world')]); // logs 'hello' and 'world'
  */
 export const batchInvoke = <T extends () => void>(array: T[]): void => {
-    array.forEach((fn) => fn && fn());
+    array.forEach(fn => fn && fn());
 };
 
 /**

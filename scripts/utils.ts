@@ -15,10 +15,7 @@ export function getUtilFiles() {
 
     return utilFiles.map((file: string) => {
         const fileName = file.replace(".ts", "");
-        const content = fs.readFileSync(
-            path.join(srcUtilsDir, `${fileName}.ts`),
-            "utf8"
-        );
+        const content = fs.readFileSync(path.join(srcUtilsDir, `${fileName}.ts`), "utf8");
 
         return {
             fileName,

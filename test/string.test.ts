@@ -7,12 +7,7 @@ import {
     truncate,
     unescapeHtml,
 } from "../src/utils/string";
-import {
-    ensurePrefix,
-    ensureSuffix,
-    randomString,
-    template,
-} from "./../src/utils/string";
+import { ensurePrefix, ensureSuffix, randomString, template } from "./../src/utils/string";
 
 describe("string", () => {
     it("capitalize", () => {
@@ -93,32 +88,24 @@ describe("string", () => {
         expect(template("hello {0}, my name is {1}", "world", "Kent")).toBe(
             "hello world, my name is Kent"
         );
-        expect(template("hello {0}, my name is {1}", "world")).toBe(
-            "hello world, my name is {1}"
+        expect(template("hello {0}, my name is {1}", "world")).toBe("hello world, my name is {1}");
+        expect(template("hello {0}, my name is {1}", "world", "Kent", "20")).toBe(
+            "hello world, my name is Kent"
         );
-        expect(
-            template("hello {0}, my name is {1}", "world", "Kent", "20")
-        ).toBe("hello world, my name is Kent");
     });
 
     it("escape html", () => {
-        expect(escapeHtml("<div>hello</div>")).toBe(
-            "&lt;div&gt;hello&lt;/div&gt;"
-        );
+        expect(escapeHtml("<div>hello</div>")).toBe("&lt;div&gt;hello&lt;/div&gt;");
         expect(escapeHtml("<div><span>hello</span></div>")).toBe(
             "&lt;div&gt;&lt;span&gt;hello&lt;/span&gt;&lt;/div&gt;"
         );
     });
 
     it("unescape html", () => {
-        expect(unescapeHtml("&lt;div&gt;hello&lt;/div&gt;")).toBe(
-            "<div>hello</div>"
+        expect(unescapeHtml("&lt;div&gt;hello&lt;/div&gt;")).toBe("<div>hello</div>");
+        expect(unescapeHtml("&lt;div&gt;&lt;span&gt;hello&lt;/span&gt;&lt;/div&gt;")).toBe(
+            "<div><span>hello</span></div>"
         );
-        expect(
-            unescapeHtml(
-                "&lt;div&gt;&lt;span&gt;hello&lt;/span&gt;&lt;/div&gt;"
-            )
-        ).toBe("<div><span>hello</span></div>");
     });
 
     it("escape regexep", () => {
@@ -144,9 +131,9 @@ describe("string", () => {
         expect(slugify("hello world, this is a long sentence")).toBe(
             "hello-world-this-is-a-long-sentence"
         );
-        expect(
-            slugify("a lot of % signs and things !! and spaces!* and so on")
-        ).toBe("a-lot-of-signs-and-things-and-spaces-and-so-on");
+        expect(slugify("a lot of % signs and things !! and spaces!* and so on")).toBe(
+            "a-lot-of-signs-and-things-and-spaces-and-so-on"
+        );
     });
 
     it("truncate", () => {

@@ -16,8 +16,7 @@ import { flip } from "./object";
 export const capitalize = (str: string): string =>
     str.charAt(0).toUpperCase() + str.slice(1).toLowerCase();
 
-const randomDictionary =
-    "0123456789abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ-_";
+const randomDictionary = "0123456789abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ-_";
 /**
  * Generate a random string with the length provided, defaults to 16.
  * @param length - length of string
@@ -127,7 +126,7 @@ const htmlEscapes: Record<string, string> = {
  * escapeHtml('<div>hello</div>'); // returns '&lt;div&gt;hello&lt;/div&gt;'
  */
 export const escapeHtml = (str: string): string => {
-    return str.replace(/[&<>"']/g, (match) => {
+    return str.replace(/[&<>"']/g, match => {
         const escape = htmlEscapes[match];
         if (!escape) return match;
         return escape;
@@ -144,7 +143,7 @@ const htmlUnescapes: Record<string, string> = flip(htmlEscapes);
  * unescapeHtml('&lt;div&gt;hello&lt;/div&gt;'); // returns '<div>hello</div>'
  */
 export const unescapeHtml = (str: string): string => {
-    return str.replace(/&(?:amp|lt|gt|quot|#39);/g, (match) => {
+    return str.replace(/&(?:amp|lt|gt|quot|#39);/g, match => {
         const unescape = htmlUnescapes[match];
         if (!unescape) return match;
         return unescape;

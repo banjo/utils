@@ -86,9 +86,7 @@ export const deleteProperty = (obj: any, path: string) => {
  * objectKeys(obj); // => ["a", "b", "c"]
  * objectKeys({}); // => []
  */
-export const objectKeys = <T extends object>(
-    obj: T
-): Array<keyof typeof obj> => {
+export const objectKeys = <T extends object>(obj: T): Array<keyof typeof obj> => {
     return Object.keys(obj) as any;
 };
 
@@ -122,9 +120,7 @@ export const objectEntries = <T extends object>(obj: T): Entries<T> => {
     return Object.entries(obj) as any;
 };
 
-type MergeInsertions<T> = T extends object
-    ? { [K in keyof T]: MergeInsertions<T[K]> }
-    : T;
+type MergeInsertions<T> = T extends object ? { [K in keyof T]: MergeInsertions<T[K]> } : T;
 
 type DeepMerge<F, S> = MergeInsertions<{
     [K in keyof F | keyof S]: K extends keyof S & keyof F
@@ -169,7 +165,7 @@ export const merge = <T extends object = object, S extends object = T>(
     if (source === undefined) return target as any;
 
     if (isMergableObject(target) && isMergableObject(source)) {
-        objectKeys(source).forEach((key) => {
+        objectKeys(source).forEach(key => {
             if (isMergableObject(source[key])) {
                 // @ts-expect-error
                 if (!target[key])
@@ -198,7 +194,7 @@ export const merge = <T extends object = object, S extends object = T>(
  */
 export const flip = <T extends object>(obj: T): T => {
     const ret: any = {};
-    objectKeys(obj).forEach((key) => {
+    objectKeys(obj).forEach(key => {
         ret[obj[key]] = key;
     });
     return ret;

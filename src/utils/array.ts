@@ -38,7 +38,7 @@ export const uniq = <T>(array: T[]): T[] => Array.from(new Set(array));
  */
 export const shuffle = <T>(array: T[]): T[] => {
     return array
-        .map((value) => ({ value, sort: Math.random() }))
+        .map(value => ({ value, sort: Math.random() }))
         .sort((a, b) => a.sort - b.sort)
         .map(({ value }) => value);
 };
@@ -145,8 +145,7 @@ export const move = <T>(array: T[], from: number, to: number): T[] => {
  * sample([1, 2, 3, 4]); // returns a random element from the array
  * sample(['a', 'b', 'c', 'd']); // returns a random element from the array
  */
-export const sample = <T>(array: T[]): T =>
-    array[Math.floor(Math.random() * array.length)];
+export const sample = <T>(array: T[]): T => array[Math.floor(Math.random() * array.length)];
 
 /**
  * Remove an element from an array.
@@ -158,7 +157,7 @@ export const sample = <T>(array: T[]): T =>
  * remove(['a', 'b', 'c', 'd'], 'b'); // returns ['a', 'c', 'd']
  */
 export const remove = <T>(array: T[], item: T): T[] => {
-    return array.filter((i) => i !== item);
+    return array.filter(i => i !== item);
 };
 
 /**
@@ -198,10 +197,10 @@ export const difference = <T>(
     values: T[],
     comparator?: (a: T, b: T) => boolean
 ): T[] => {
-    return array.filter((x) => {
-        if (comparator) return !values.some((y) => comparator(x, y));
+    return array.filter(x => {
+        if (comparator) return !values.some(y => comparator(x, y));
         if (isPrimitive(x)) return !values.includes(x);
-        return !values.some((y) => isEqual(x, y));
+        return !values.some(y => isEqual(x, y));
     });
 };
 
@@ -232,10 +231,10 @@ export const intersection = <T>(
     values: T[],
     comparator?: (a: T, b: T) => boolean
 ): T[] => {
-    return array.filter((x) => {
-        if (comparator) return values.some((y) => comparator(x, y));
+    return array.filter(x => {
+        if (comparator) return values.some(y => comparator(x, y));
         if (isPrimitive(x)) return values.includes(x);
-        return values.some((y) => isEqual(x, y));
+        return values.some(y => isEqual(x, y));
     });
 };
 

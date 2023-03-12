@@ -34,10 +34,8 @@ const select = <T = HTMLElement>(
  * select.exists("#test"); // returns true if element exists
  * select.exists("#test", parent); // returns true if element exists within parent
  */
-const exists = (
-    selector: string,
-    context: HTMLElement | Document = document
-): boolean => !!select(selector, context);
+const exists = (selector: string, context: HTMLElement | Document = document): boolean =>
+    !!select(selector, context);
 /**
  * Selects all elements from the DOM as an array, or returns an empty array if no elements are found.
  * Can search a parent as well.
@@ -48,10 +46,8 @@ const exists = (
  * select.all(".test"); // [element1, element2, ...]
  * select.all(".test", parent); // [element1, element2, ...]
  */
-const all = <T = HTMLElement>(
-    selector: string,
-    context: HTMLElement | Document = document
-): T[] => <T[]>Array.from(context.querySelectorAll(selector));
+const all = <T = HTMLElement>(selector: string, context: HTMLElement | Document = document): T[] =>
+    <T[]>Array.from(context.querySelectorAll(selector));
 
 /**
  * Set the style of an element. Can set multiple styles at once. Will not overwrite existing styles.
@@ -63,7 +59,7 @@ const all = <T = HTMLElement>(
  * select.style(element, { color: "red", backgroundColor: "blue", display: "block" });
  */
 const style = (element: HTMLElement, styles: Record<string, string>) =>
-    objectKeys(styles).forEach((name) => {
+    objectKeys(styles).forEach(name => {
         // @ts-ignore
         return (element.style[name] = styles[name]);
     });

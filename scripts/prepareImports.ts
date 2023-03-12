@@ -5,8 +5,8 @@ const main = () => {
     const files = getUtilFiles();
 
     const exportStatements = files
-        .filter((file) => !file.fileName.includes("node"))
-        .map((file) => {
+        .filter(file => !file.fileName.includes("node"))
+        .map(file => {
             return `export * from "./utils/${file.fileName}";`;
         })
         .join("\n");

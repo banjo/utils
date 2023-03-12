@@ -1,11 +1,5 @@
 import { describe, expect, it } from "vitest";
-import {
-    flip,
-    merge,
-    objectEntries,
-    objectKeys,
-    objectValues,
-} from "../src/utils/object";
+import { flip, merge, objectEntries, objectKeys, objectValues } from "../src/utils/object";
 
 describe("object", () => {
     it("objectKeys", () => {
