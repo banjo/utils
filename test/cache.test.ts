@@ -66,7 +66,7 @@ describe("cache", () => {
 
     it("can be used with expires", () => {
         const time = 1000;
-        const c = cache({ expires: time });
+        const c = cache({ ttl: time });
         const key = "key";
         const value = "value";
 
@@ -82,7 +82,7 @@ describe("cache", () => {
 
     it("can be used with expires and clear", () => {
         const time = 1000;
-        const c = cache({ expires: time });
+        const c = cache({ ttl: time });
         const key = "key";
         const value = "value";
 

@@ -10,7 +10,7 @@ type Options = {
      * The time in milliseconds after which the cache expires. Defaults to 5 minutes.
      * @default 300000
      */
-    expires?: number;
+    ttl?: number;
 
     /**
      * If true, the cache is persisted in local storage. Defaults to false.
@@ -26,14 +26,14 @@ type Options = {
 };
 
 const defaultOptions = {
-    expires: toMilliseconds({ minutes: 5 }),
+    ttl: toMilliseconds({ minutes: 5 }),
     persistant: false,
     key: "banjo-cache",
 };
 
 type CacheObject<T> = {
     data: T;
-    expires: number;
+    ttl: number;
 };
 
 const isExpired = (expires: number) => Date.now() > expires;
@@ -58,8 +58,17 @@ const initMap = <T>(key: string, persistant: boolean) => {
         return cache;
     }
 
-    cache = new Map(JSON.parse(previusCache));
-    return cache;
+    try {
+        const parsed = JSON.parse(previusCache);
+        if (!Array.isArray(parsed)) {
+            cache = new Map();
+        }
+        cache = new Map(parsed);
+        return cache;
+    } catch (e) {
+        cache = new Map();
+        return cache;
+    }
 };
 
 /**
@@ -92,7 +101,7 @@ const initMap = <T>(key: string, persistant: boolean) => {
  * const cache = cache({ expires: 1000 });
  */
 export const cache = <T>(options: Options = defaultOptions) => {
-    const { expires, key, persistant } = { ...defaultOptions, ...options };
+    const { ttl, key, persistant } = { ...defaultOptions, ...options };
     const cache = initMap<T>(key, persistant);
 
     const persist = () => {
@@ -110,7 +119,7 @@ export const cache = <T>(options: Options = defaultOptions) => {
                 return undefined;
             }
 
-            if (isExpired(cacheObject.expires)) {
+            if (isExpired(cacheObject.ttl)) {
                 cache.delete(key);
                 persist();
                 return undefined;
@@ -121,7 +130,7 @@ export const cache = <T>(options: Options = defaultOptions) => {
         set: (key: string | symbol, value: T) => {
             cache.set(key, {
                 data: value,
-                expires: new Date().getTime() + expires,
+                ttl: new Date().getTime() + ttl,
             });
             persist();
         },
@@ -131,7 +140,7 @@ export const cache = <T>(options: Options = defaultOptions) => {
                 return false;
             }
 
-            if (isExpired(cacheObject.expires)) {
+            if (isExpired(cacheObject.ttl)) {
                 cache.delete(key);
                 persist();
                 return false;
@@ -145,7 +154,7 @@ export const cache = <T>(options: Options = defaultOptions) => {
                 return true;
             }
 
-            if (isExpired(cacheObject.expires)) {
+            if (isExpired(cacheObject.ttl)) {
                 cache.delete(key);
                 persist();
                 return true;
