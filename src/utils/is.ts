@@ -222,7 +222,12 @@ export const isEqual = (a: any, b: any): boolean => {
  * isEmpty(new Map()); // true
  * isEmpty(new Map([["a", 1]])); // false
  */
-export const isEmpty = (value: any): boolean => {
+export function isEmpty(array: readonly unknown[]): array is readonly [];
+export function isEmpty(array: unknown[]): array is [];
+export function isEmpty(array: readonly unknown[]): array is [] | readonly [];
+export function isEmpty(string: string): string is "";
+export function isEmpty(value: any): boolean;
+export function isEmpty(value: any): boolean {
     // check for maps
     if (value?.size !== undefined) {
         return value.size === 0;
@@ -242,7 +247,7 @@ export const isEmpty = (value: any): boolean => {
     }
 
     return false;
-};
+}
 
 /**
  * Check if the code is running in a browser environment.

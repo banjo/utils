@@ -1,9 +1,10 @@
-import { describe, expect, it } from "vitest";
+import { describe, expect, expectTypeOf, it } from "vitest";
 import {
     chunk,
     compact,
     difference,
     first,
+    includes,
     intersection,
     last,
     move,
@@ -193,5 +194,18 @@ describe("array", () => {
         const c1 = { name: "Bony", age: 5 };
 
         expect(sortBy([a1, b1, c1], ["name", "age"])).toEqual([b1, a1, c1]); // returns [a, c, b]
+    });
+
+    it("includes", () => {
+        const values = ["a", "b", "c"] as const;
+        expect(includes(values, "a")).toBe(true);
+
+        const values2 = [1, 2, 3] as const;
+        const expectedValue: unknown = 1;
+
+        expectTypeOf(expectedValue).toEqualTypeOf<unknown>();
+        if (includes(values2, expectedValue)) {
+            expectTypeOf(expectedValue).toEqualTypeOf<(typeof values2)[number]>();
+        }
     });
 });

@@ -312,3 +312,23 @@ export const sortBy = <T>(
 
     return [...array].sort(comparator);
 };
+
+/**
+ * Type guard to check if a value is included in an array. Useful for filtering arrays.
+ * @param array - The array to check.
+ * @param value - The value to check.
+ * @returns - True if the value is included in the array.
+ * @example
+ * const values = ["a", "b", "c"] as const;
+ * const valueToCheck: unknown = "a";
+ *
+ * if (includes(values, valueToCheck)) {
+ *    // valueToCheck is now of type "a" | "b" | "c"
+ * }
+ */
+export const includes = <Type extends SuperType, SuperType = unknown>(
+    array: Type[] | readonly Type[],
+    value: SuperType
+): value is Type => {
+    return array.includes(value as Type);
+};
