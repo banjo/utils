@@ -98,3 +98,31 @@ export const batchInvoke = <T extends () => void>(array: T[]): void => {
  * func(); // does nothing
  */
 export const noop = (): void => {};
+
+/**
+ * Creates a function that memoizes the result of `fn`. If `fn` is called multiple times with the same arguments, the cached result for that set of arguments is returned.
+ * @param fn - The function to memoize.
+ * @returns The memoized function.
+ * @example
+ * const add = (a: number, b: number) => a + b;
+ * const memoizedAdd = memoize(add);
+ *
+ * memoizedAdd(1, 2); // returns 3 and caches the result
+ * memoizedAdd(1, 2); // returns 3 from the cache
+ * memoizedAdd(1, 2); // returns 3 from the cache
+ *
+ * memoizedAdd(1, 3); // returns 4 and caches the result
+ * memoizedAdd(1, 3); // returns 4 from the cache
+ */
+export const memoize = <T extends (...args: any[]) => any>(fn: T): T => {
+    const cache = new Map();
+    return ((...args: any[]) => {
+        const key = JSON.stringify(args);
+        if (cache.has(key)) {
+            return cache.get(key);
+        }
+        const result = fn(...args);
+        cache.set(key, result);
+        return result;
+    }) as T;
+};

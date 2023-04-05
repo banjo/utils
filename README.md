@@ -71,6 +71,7 @@ Auto generated from TSDocs.
 -   [Function](#function)
     -   [debounce](#debounce)
     -   [throttle](#throttle)
+    -   [memoize](#memoize)
 -   [Is](#is)
     -   [isBoolean](#isBoolean)
     -   [isNumber](#isNumber)
@@ -521,6 +522,24 @@ element.addEventListener("mousemove", throttled);
 
 // cancel the throttled function
 throttled.cancel();
+```
+
+---
+
+#### memoize
+
+> Creates a function that memoizes the result of `fn`. If `fn` is called multiple times with the same arguments, the cached result for that set of arguments is returned.
+
+```ts
+const add = (a: number, b: number) => a + b;
+const memoizedAdd = memoize(add);
+
+memoizedAdd(1, 2); // returns 3 and caches the result
+memoizedAdd(1, 2); // returns 3 from the cache
+memoizedAdd(1, 2); // returns 3 from the cache
+
+memoizedAdd(1, 3); // returns 4 and caches the result
+memoizedAdd(1, 3); // returns 4 from the cache
 ```
 
 ---

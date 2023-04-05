@@ -1,5 +1,5 @@
 import { describe, expect, it, vi } from "vitest";
-import { batchInvoke, noop } from "../src";
+import { batchInvoke, memoize, noop } from "../src";
 
 describe("function", () => {
     it("batchInvoke", () => {
@@ -14,5 +14,18 @@ describe("function", () => {
 
     it("noop", () => {
         expect(noop()).toBe(undefined);
+    });
+
+    it("memoize", () => {
+        const fn = vi.fn();
+        const memoized = memoize(fn);
+        memoized();
+        memoized();
+        memoized();
+        expect(fn).toHaveBeenCalledTimes(1);
+        memoized(1);
+        memoized(1);
+        memoized(1);
+        expect(fn).toHaveBeenCalledTimes(2);
     });
 });
