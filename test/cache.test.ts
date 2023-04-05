@@ -135,4 +135,20 @@ describe("cache", () => {
         const value3 = loadValue(valueFromLocalStorage2!, key);
         expect(value3).toBeUndefined();
     });
+
+    it("can be used with local expires", () => {
+        const time = 1000;
+        const c = cache();
+        const key = "key";
+        const value = "value";
+
+        c.set(key, value, { ttl: time });
+        expect(c.get(key)).toBe(value);
+        expect(c.has(key)).toBe(true);
+
+        vi.advanceTimersByTime(time + 1);
+
+        expect(c.has(key)).toBe(false);
+        expect(c.get(key)).toBeUndefined();
+    });
 });

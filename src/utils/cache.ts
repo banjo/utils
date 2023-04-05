@@ -7,7 +7,7 @@ import { isBrowser } from "./is";
 
 type Options = {
     /**
-     * The time in milliseconds after which the cache expires. Defaults to 5 minutes.
+     * The time in milliseconds after which the cache expires for each object. Defaults to 5 minutes.
      * @default 300000
      */
     ttl?: number;
@@ -23,6 +23,19 @@ type Options = {
      * @default "banjo-cache"
      */
     key?: string;
+};
+
+type SingleOptions = {
+    /**
+     * The time in milliseconds after which the cache expires for the object. Defaults to the global ttl.
+     */
+    ttl?: number;
+
+    /**
+     * If true, the cache is persisted in local storage. Defaults to the global persistant value.
+     * @default false
+     */
+    persist?: boolean;
 };
 
 const defaultOptions = {
@@ -101,12 +114,12 @@ const initMap = <T>(key: string, persistant: boolean) => {
  * const cache = cache({ expires: 1000 });
  */
 export const cache = <T>(options: Options = defaultOptions) => {
-    const { ttl, key, persistant } = { ...defaultOptions, ...options };
-    const cache = initMap<T>(key, persistant);
+    const { ttl: globalTtl, key, persistant: globalPersist } = { ...defaultOptions, ...options };
+    const cache = initMap<T>(key, globalPersist);
 
-    const persist = () => {
+    const doPersist = (persist = globalPersist) => {
         if (!isBrowser()) return;
-        if (!persistant) return;
+        if (!persist) return;
 
         const str = JSON.stringify(Array.from(cache.entries()));
         localStorage.setItem(key, str);
@@ -121,18 +134,21 @@ export const cache = <T>(options: Options = defaultOptions) => {
 
             if (isExpired(cacheObject.ttl)) {
                 cache.delete(key);
-                persist();
+                doPersist();
                 return undefined;
             }
 
             return cacheObject.data;
         },
-        set: (key: string | symbol, value: T) => {
+        set: (key: string | symbol, value: T, options?: SingleOptions) => {
+            const { persist, ttl } = options ?? {};
+            const localPersist = persist ?? globalPersist;
+            const localTtl = ttl ?? globalTtl;
             cache.set(key, {
                 data: value,
-                ttl: new Date().getTime() + ttl,
+                ttl: new Date().getTime() + localTtl,
             });
-            persist();
+            doPersist(localPersist);
         },
         has: (key: string | symbol) => {
             const cacheObject = cache.get(key);
@@ -142,7 +158,7 @@ export const cache = <T>(options: Options = defaultOptions) => {
 
             if (isExpired(cacheObject.ttl)) {
                 cache.delete(key);
-                persist();
+                doPersist();
                 return false;
             }
 
@@ -156,17 +172,17 @@ export const cache = <T>(options: Options = defaultOptions) => {
 
             if (isExpired(cacheObject.ttl)) {
                 cache.delete(key);
-                persist();
+                doPersist();
                 return true;
             }
 
             cache.delete(key);
-            persist();
+            doPersist();
             return true;
         },
         clear: () => {
             cache.clear();
-            persist();
+            doPersist();
         },
     };
 };
