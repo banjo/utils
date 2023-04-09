@@ -1,5 +1,5 @@
-import { range, sortBy } from "./array";
 import currentWeekNumber from "current-week-number";
+import { range, sortBy } from "./array";
 
 /**
  * Utility functions for date and time.
@@ -200,8 +200,8 @@ export const formatDate = (date: Date): string => {
  * @param date - Date to format, defaults to today.
  * @returns - Date for start of week
  * @example
- * getFirstDayOfWeek() // returns previous monday
- * getFirstDayOfWeek(new Date("2022-02-02")) // returns previous monday from specified date
+ * getFirstDayOfWeek(); // returns previous monday
+ * getFirstDayOfWeek(new Date("2022-02-02")); // returns previous monday from specified date
  */
 export const getFirstDayOfWeek = (date = new Date()) => {
     const dateMonday = new Date(date);
@@ -217,8 +217,8 @@ export const getFirstDayOfWeek = (date = new Date()) => {
  * @param date - The date of which to look for a week number. Defaults to today.
  * @returns - The week number as a number
  * @example
- * getWeekNumber() // returns 5 (if in week 5)
- * getWeekNumber("2020-01-04") // returns 1
+ * getWeekNumber(); // returns 5 (if in week 5)
+ * getWeekNumber("2020-01-04"); // returns 1
  */
 export const getWeekNumber = (date = new Date()): number => {
     return currentWeekNumber(date);

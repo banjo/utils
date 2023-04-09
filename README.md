@@ -66,6 +66,9 @@ Auto generated from TSDocs.
     -   [earliest](#earliest)
     -   [latest](#latest)
     -   [isBetweenDates](#isBetweenDates)
+    -   [formatDate](#formatDate)
+    -   [getFirstDayOfWeek](#getFirstDayOfWeek)
+    -   [getWeekNumber](#getWeekNumber)
 -   [Fetch](#fetch)
     -   [fetchJson](#fetchJson)
 -   [Function](#function)
@@ -469,6 +472,38 @@ const dateInBetween = new Date(2020, 0, 2);
 const lateDate = new Date(2020, 0, 3);
 
 isBetweenDates(dateInBetween, earlyDate, lateDate); // returns true
+```
+
+---
+
+#### formatDate
+
+> Format date to YYYY-MM-DD format.
+
+```ts
+formatDate(new Date(2020, 0, 1)); // returns '2020-01-01'
+```
+
+---
+
+#### getFirstDayOfWeek
+
+> Get the first day (monday) of the week. Defaults to today if nothing is passed.
+
+```ts
+getFirstDayOfWeek(); // returns previous monday
+getFirstDayOfWeek(new Date("2022-02-02")); // returns previous monday from specified date
+```
+
+---
+
+#### getWeekNumber
+
+> Get the week number of the specified date. Defaults to today. Wrapper around "current-week-number".
+
+```ts
+getWeekNumber(); // returns 5 (if in week 5)
+getWeekNumber("2020-01-04"); // returns 1
 ```
 
 ---
