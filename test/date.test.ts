@@ -1,8 +1,11 @@
 import { describe, expect, it } from "vitest";
 import {
     earliest,
+    formatDate,
     getDays,
+    getFirstDayOfWeek,
     getMonths,
+    getWeekNumber,
     isBetweenDates,
     latest,
     toMilliseconds,
@@ -173,5 +176,20 @@ describe("date", () => {
 
         expect(isBetweenDates(date2, date1, date3)).toBe(true);
         expect(isBetweenDates(date1, date2, date3)).toBe(false);
+    });
+
+    it("formatDate", () => {
+        expect(formatDate(new Date(2022, 0, 1))).toBe("2022-01-01");
+        expect(formatDate(new Date(2022, 2, 10))).toBe("2022-03-10");
+    });
+
+    it("getFirstDayOfWeek", () => {
+        expect(getFirstDayOfWeek(new Date("2023-04-09"))).toStrictEqual(new Date("2023-04-03"));
+        expect(getFirstDayOfWeek(new Date("2023-03-09"))).toStrictEqual(new Date("2023-03-06"));
+    });
+
+    it("getWeekNumber", () => {
+        expect(getWeekNumber(new Date("2023-04-09"))).toBe(14);
+        expect(getWeekNumber(new Date("2023-03-09"))).toBe(10);
     });
 });

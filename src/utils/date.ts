@@ -1,4 +1,5 @@
 import { range, sortBy } from "./array";
+import currentWeekNumber from "current-week-number";
 
 /**
  * Utility functions for date and time.
@@ -174,4 +175,51 @@ export const isBetweenDates = (
     }
 
     return false;
+};
+
+/**
+ * Format date to YYYY-MM-DD format.
+ * @param date - Date to format.
+ * @returns - Formatted date as a string.
+ * @example
+ * formatDate(new Date(2020, 0, 1)); // returns '2020-01-01'
+ */
+export const formatDate = (date: Date): string => {
+    const year = date.getFullYear();
+    const month = date.getMonth() + 1;
+    const day = date.getDate();
+
+    const paddedMonth = month.toString().padStart(2, "0");
+    const paddedDay = day.toString().padStart(2, "0");
+
+    return `${year}-${paddedMonth}-${paddedDay}`;
+};
+
+/**
+ * Get the first day (monday) of the week.  Defaults to today if nothing is passed.
+ * @param date - Date to format, defaults to today.
+ * @returns - Date for start of week
+ * @example
+ * getFirstDayOfWeek() // returns previous monday
+ * getFirstDayOfWeek(new Date("2022-02-02")) // returns previous monday from specified date
+ */
+export const getFirstDayOfWeek = (date = new Date()) => {
+    const dateMonday = new Date(date);
+    const day = dateMonday.getDay();
+    const diff = dateMonday.getDate() - day + (day === 0 ? -6 : 1);
+    dateMonday.setDate(diff);
+
+    return dateMonday;
+};
+
+/**
+ * Get the week number of the specified date. Defaults to today. Wrapper around "current-week-number".
+ * @param date - The date of which to look for a week number. Defaults to today.
+ * @returns - The week number as a number
+ * @example
+ * getWeekNumber() // returns 5 (if in week 5)
+ * getWeekNumber("2020-01-04") // returns 1
+ */
+export const getWeekNumber = (date = new Date()): number => {
+    return currentWeekNumber(date);
 };
