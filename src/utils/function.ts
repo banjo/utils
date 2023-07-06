@@ -85,6 +85,7 @@ export const batchInvoke = <T extends () => void>(array: T[]): void => {
 
 /**
  * A no-op function. Useful for default values.
+ * @returns undefined
  * @example
  * noop(); // does nothing
  *
@@ -98,6 +99,21 @@ export const batchInvoke = <T extends () => void>(array: T[]): void => {
  * func(); // does nothing
  */
 export const noop = (): void => {};
+
+/**
+ * A no-op async function. Useful for default values.
+ * @returns undefined
+ * @example
+ * noopAsync(); // does nothing
+ *
+ * const myFunction = async (callback = noopAsync) => {
+ *   await callback();
+ * };
+ *
+ * await myFunction(); // does nothing
+ *
+ */
+export const noopAsync = async (): Promise<void> => {};
 
 /**
  * Creates a function that memoizes the result of `fn`. If `fn` is called multiple times with the same arguments, the cached result for that set of arguments is returned.

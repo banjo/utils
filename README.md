@@ -74,6 +74,8 @@ Auto generated from TSDocs.
 -   [Function](#function)
     -   [debounce](#debounce)
     -   [throttle](#throttle)
+    -   [noop](#noop)
+    -   [noopAsync](#noopAsync)
     -   [memoize](#memoize)
 -   [Is](#is)
     -   [isBoolean](#isBoolean)
@@ -557,6 +559,41 @@ element.addEventListener("mousemove", throttled);
 
 // cancel the throttled function
 throttled.cancel();
+```
+
+---
+
+#### noop
+
+> A no-op function. Useful for default values.
+
+```ts
+noop(); // does nothing
+
+const myFunction = (callback = noop) => {
+    callback();
+};
+
+myFunction(); // does nothing
+
+const func = noop;
+func(); // does nothing
+```
+
+---
+
+#### noopAsync
+
+> A no-op async function. Useful for default values.
+
+```ts
+noopAsync(); // does nothing
+
+const myFunction = async (callback = noopAsync) => {
+    await callback();
+};
+
+await myFunction(); // does nothing
 ```
 
 ---
