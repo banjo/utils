@@ -1,5 +1,12 @@
 import { describe, expect, it } from "vitest";
-import { flip, merge, objectEntries, objectKeys, objectValues } from "../src/utils/object";
+import {
+    createMockCreator,
+    flip,
+    merge,
+    objectEntries,
+    objectKeys,
+    objectValues,
+} from "../src/utils/object";
 
 describe("object", () => {
     it("objectKeys", () => {
@@ -49,5 +56,23 @@ describe("object", () => {
         const obj2 = { a: 1, b: 2, c: 3, d: 1 };
         const res2 = flip(obj2);
         expect(res2).toEqual({ 1: "d", 2: "b", 3: "c" });
+    });
+
+    it("createMockCreator", () => {
+        // normal
+        const numbersMock = { a: 1, b: 2, c: 3 };
+        const updatedData = { a: 2 };
+        const createNumbersMock = createMockCreator(numbersMock);
+
+        const mock = createNumbersMock(updatedData);
+        expect(mock).toEqual({ a: 2, b: 2, c: 3 });
+
+        // deep
+        const numbersMock2 = { a: 1, b: 2, c: { d: 3 } };
+        const updatedData2 = { a: 2, c: { d: 4 } };
+        const createNumbersMock2 = createMockCreator(numbersMock2);
+
+        const mock2 = createNumbersMock2(updatedData2);
+        expect(mock2).toEqual({ a: 2, b: 2, c: { d: 4 } });
     });
 });

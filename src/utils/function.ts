@@ -142,3 +142,16 @@ export const memoize = <T extends (...args: any[]) => any>(fn: T): T => {
         return result;
     }) as T;
 };
+
+/**
+ * Creates a function that raises and error with the provided message. Makes it a bit easier to use in some cases.
+ * @param message - The message to raise.
+ * @returns - never
+ * @example
+ * raise("Something went wrong");
+ *
+ * const data = somethingThatMightExist ?? raise("Data does not exist");
+ */
+export const raise = (message: string): never => {
+    throw new Error(message);
+};

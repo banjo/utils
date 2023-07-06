@@ -1,5 +1,5 @@
 import { describe, expect, it, vi } from "vitest";
-import { batchInvoke, memoize, noop } from "../src";
+import { batchInvoke, memoize, noop, raise } from "../src";
 
 describe("function", () => {
     it("batchInvoke", () => {
@@ -27,5 +27,14 @@ describe("function", () => {
         memoized(1);
         memoized(1);
         expect(fn).toHaveBeenCalledTimes(2);
+    });
+
+    it("raise", () => {
+        expect(() => raise("test")).toThrow("test");
+        expect(() => {
+            const variable = null;
+
+            const test = variable ?? raise("variable is null");
+        }).toThrow("variable is null");
     });
 });

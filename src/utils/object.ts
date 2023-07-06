@@ -4,7 +4,6 @@ import {
     hasProperty as hp,
     setProperty as sp,
 } from "dot-prop";
-import { isArray, isObject } from "./is";
 
 /**
  * Utility functions for working with objects. Both wrappers and custom functions.
@@ -120,20 +119,12 @@ export const objectEntries = <T extends object>(obj: T): Entries<T> => {
     return Object.entries(obj) as any;
 };
 
-type MergeInsertions<T> = T extends object ? { [K in keyof T]: MergeInsertions<T[K]> } : T;
+export type DeepPartial<T> = {
+    [P in keyof T]?: T[P] extends object ? DeepPartial<T[P]> : T[P];
+};
 
-type DeepMerge<F, S> = MergeInsertions<{
-    [K in keyof F | keyof S]: K extends keyof S & keyof F
-        ? DeepMerge<F[K], S[K]>
-        : K extends keyof S
-        ? S[K]
-        : K extends keyof F
-        ? F[K]
-        : never;
-}>;
-
-const isMergableObject = (item: any): item is Object => {
-    return isObject(item) && !isArray(item);
+const isMergableObject = (item: any): item is Record<string, any> => {
+    return item !== null && typeof item === "object";
 };
 
 /**
@@ -155,32 +146,30 @@ const isMergableObject = (item: any): item is Object => {
  * const obj3 = { a: { b: 3 } };
  * merge(obj1, obj2, obj3); // => { a: { b: 3 } }
  */
-export const merge = <T extends object = object, S extends object = T>(
-    target: T,
-    ...sources: S[]
-): DeepMerge<T, S> => {
-    if (!sources.length) return target as any;
+export const merge = <T extends object = object, S extends object = DeepPartial<T>>(
+    _target: T | S,
+    ...sources: Array<S | undefined>
+): T | S => {
+    let target = _target as T & S;
+    if (!sources.length) return target;
 
     const source = sources.shift();
-    if (source === undefined) return target as any;
+    if (source === undefined) return target;
 
     if (isMergableObject(target) && isMergableObject(source)) {
-        objectKeys(source).forEach(key => {
-            if (isMergableObject(source[key])) {
+        Object.keys(source).forEach(key => {
+            // @ts-expect-error
+            if (isMergableObject((source as S)[key])) {
                 // @ts-expect-error
-                if (!target[key])
-                    // @ts-expect-error
-                    target[key] = {};
-
+                if (!target[key]) target[key] = {} as any;
                 // @ts-expect-error
-                merge(target[key], source[key]);
+                merge(target[key] as S, (source as S)[key]);
             } else {
                 // @ts-expect-error
-                target[key] = source[key];
+                target[key] = (source as S)[key] as T[keyof T];
             }
         });
     }
-
     return merge(target, ...sources);
 };
 
@@ -199,3 +188,22 @@ export const flip = <T extends object>(obj: T): T => {
     });
     return ret;
 };
+
+/**
+ * Create a new create mock function to update the base mock with the partial mock.
+ * @param baseMock - base object to use
+ * @param partialMock - partial object to use
+ * @returns The merged object.
+ * @example
+ * const numbersMock = { a: 1, b: 2, c: 3 };
+ * const updatedData = { a: 2 };
+ *
+ * export const createNumbersMock = createMockCreator(numbersMock);
+ *
+ * createNumbersMock(updatedData); // => { a: 2, b: 2, c: 3 }
+ */
+export const createMockCreator =
+    <T extends object>(baseMock: DeepPartial<T>) =>
+    (partialMock: DeepPartial<T> = {}): T => {
+        return merge(baseMock, partialMock) as T;
+    };

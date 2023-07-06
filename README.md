@@ -77,6 +77,7 @@ Auto generated from TSDocs.
     -   [noop](#noop)
     -   [noopAsync](#noopAsync)
     -   [memoize](#memoize)
+    -   [raise](#raise)
 -   [Is](#is)
     -   [isBoolean](#isBoolean)
     -   [isNumber](#isNumber)
@@ -104,6 +105,7 @@ Auto generated from TSDocs.
     -   [objectEntries](#objectEntries)
     -   [merge](#merge)
     -   [flip](#flip)
+    -   [createMockCreator](#createMockCreator)
 -   [Select](#select)
     -   [select](#select)
     -   [select.exists](#select.exists)
@@ -616,6 +618,18 @@ memoizedAdd(1, 3); // returns 4 from the cache
 
 ---
 
+#### raise
+
+> Creates a function that raises and error with the provided message. Makes it a bit easier to use in some cases.
+
+```ts
+raise("Something went wrong");
+
+const data = somethingThatMightExist ?? raise("Data does not exist");
+```
+
+---
+
 ### Is
 
 Utility functions for checking the type of a value.
@@ -961,6 +975,21 @@ merge(obj1, obj2, obj3); // => { a: { b: 3 } }
 ```ts
 const obj = { a: 1, b: 2, c: 3 };
 flip(obj); // => { 1: "a", 2: "b", 3: "c" }
+```
+
+---
+
+#### createMockCreator
+
+> Create a new create mock function to update the base mock with the partial mock.
+
+```ts
+const numbersMock = { a: 1, b: 2, c: 3 };
+const updatedData = { a: 2 };
+
+export const createNumbersMock = createMockCreator(numbersMock);
+
+createNumbersMock(updatedData); // => { a: 2, b: 2, c: 3 }
 ```
 
 ---
