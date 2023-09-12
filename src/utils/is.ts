@@ -149,7 +149,7 @@ export const isNil = (value: any): value is null | undefined => isNull(value) ||
  * isDefined(false); // true
  * isDefined([]); // true
  */
-export const isDefined = <T>(value: T | null | undefined): value is T => value !== undefined;
+export const isDefined = <T>(value: T | undefined): value is T => value !== undefined;
 
 /**
  * Check if the given value is a primitive type (string, number, boolean).
