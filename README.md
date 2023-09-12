@@ -776,11 +776,11 @@ isNil(1); // false
 
 #### isDefined
 
-> Check if the given value exists (is not null or undefined). Also type guards against null and undefined. Previously named `exists`.
+> Check if the given value exists (is not undefined). Also type guards against undefined. Previously named `exists`.
 
 ```ts
-isDefined(null); // false
 isDefined(undefined); // false
+isDefined(null); // true
 isDefined("hello world"); // true
 isDefined(1); // true
 isDefined(false); // true

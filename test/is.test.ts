@@ -152,7 +152,7 @@ describe("is", () => {
         expect(isDefined(true)).toBe(true);
         expect(isDefined(false)).toBe(true);
         expect(isDefined(true)).toBe(true);
-        expect(isDefined(null)).toBe(false);
+        expect(isDefined(null)).toBe(true);
         expect(isDefined(undefined)).toBe(false);
         expect(isDefined({})).toBe(true);
         expect(isDefined([])).toBe(true);
