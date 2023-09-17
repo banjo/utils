@@ -106,6 +106,8 @@ Auto generated from TSDocs.
     -   [merge](#merge)
     -   [flip](#flip)
     -   [createMockCreator](#createMockCreator)
+-   [Result](#result)
+    -   [result](#result)
 -   [Select](#select)
     -   [select](#select)
     -   [select.exists](#select.exists)
@@ -990,6 +992,32 @@ const updatedData = { a: 2 };
 export const createNumbersMock = createMockCreator(numbersMock);
 
 createNumbersMock(updatedData); // => { a: 2, b: 2, c: 3 }
+```
+
+---
+
+### Result
+
+A result type that can be used to return a value or an error.
+
+---
+
+#### result
+
+> A simple result type that can be used to return a value or an error. Much like Rust's Result type.
+
+```ts
+*
+// result();
+
+const result = Result.ok(1); // or Result.okEmpty, or Result.error, etc;
+if (result.success) {
+console.log(result.data);
+} else {
+console.log(result.message);
+}
+
+
 ```
 
 ---
