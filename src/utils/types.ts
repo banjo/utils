@@ -22,7 +22,7 @@ export type CallbackWithArgs<T, U = void> = (arg: T) => U;
 /**
  * A type that represents an async function that returns a value of type T or void.
  */
-export type AsyncCallback<T> = () => Promise<T>;
+export type AsyncCallback<T = void> = () => Promise<T>;
 /**
  * A type that represents an async callback with an argument of type T and returns U.
  */
