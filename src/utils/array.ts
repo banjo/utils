@@ -314,6 +314,34 @@ export const sortBy = <T>(
 };
 
 /**
+ * Group an array by a key. Can also take a custom function that receives the item to choose the value to group by.
+ * @param array - The array to group.
+ * @param key - The key to group by. Can be a string or a function that receives the item and returns the value to group by.
+ * @returns - An object with the grouped items.
+ * @example
+ * const a = {name: "Alex", age: 20};
+ * const b = {name: "Alex", age: 15};
+ * const c = {name: "Bony", age: 5};
+ *
+ * groupBy([a, b, c], "name"); // returns {Alex: [a, b], Bony: [c]}
+ * groupBy([a, b, c], "age"); // returns {5: [c], 15: [b], 20: [a]}
+ *
+ * groupBy([a, b, c], (item) => item.name); // returns {Alex: [a, b], Bony: [c]}
+ * groupBy([a, b, c], (item) => item.age); // returns {5: [c], 15: [b], 20: [a]}
+ */
+export const groupBy = <T>(array: T[], key: string | ((item: T) => any)): Record<string, T[]> => {
+    const groups: Record<string, T[]> = {};
+
+    array.forEach(item => {
+        const value = typeof key === "string" ? getProperty(item, key) : key(item);
+        if (!groups[value]) groups[value] = [];
+        groups[value].push(item);
+    });
+
+    return groups;
+};
+
+/**
  * Type guard to check if a value is included in an array. Useful for filtering arrays.
  * @param array - The array to check.
  * @param value - The value to check.

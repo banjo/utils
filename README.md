@@ -56,6 +56,7 @@ Auto generated from TSDocs.
     -   [difference](#difference)
     -   [intersection](#intersection)
     -   [sortBy](#sortBy)
+    -   [groupBy](#groupBy)
     -   [includes](#includes)
 -   [Cache](#cache)
     -   [cache](#cache)
@@ -321,6 +322,24 @@ sortBy([a, b, c], ["name", "age"]); // returns [b, a, c]
 // sort by a custom function
 sortBy([a, b, c], item => item.name); // returns [a, b, c]
 sortBy([a, b, c], item => item.age); // returns [c, b, a]
+```
+
+---
+
+#### groupBy
+
+> Group an array by a key. Can also take a custom function that receives the item to choose the value to group by.
+
+```ts
+const a = { name: "Alex", age: 20 };
+const b = { name: "Alex", age: 15 };
+const c = { name: "Bony", age: 5 };
+
+groupBy([a, b, c], "name"); // returns {Alex: [a, b], Bony: [c]}
+groupBy([a, b, c], "age"); // returns {5: [c], 15: [b], 20: [a]}
+
+groupBy([a, b, c], item => item.name); // returns {Alex: [a, b], Bony: [c]}
+groupBy([a, b, c], item => item.age); // returns {5: [c], 15: [b], 20: [a]}
 ```
 
 ---

@@ -4,6 +4,7 @@ import {
     compact,
     difference,
     first,
+    groupBy,
     includes,
     intersection,
     last,
@@ -194,6 +195,34 @@ describe("array", () => {
         const c1 = { name: "Bony", age: 5 };
 
         expect(sortBy([a1, b1, c1], ["name", "age"])).toEqual([b1, a1, c1]); // returns [a, c, b]
+    });
+
+    it("groupBy", () => {
+        const a = { name: "a", age: 10 };
+        const b = { name: "a", age: 20 };
+        const c = { name: "b", age: 10 };
+        const d = { name: "b", age: 20 };
+
+        // group by string
+        expect(groupBy([a, b, c, d], "name")).toEqual({
+            a: [a, b],
+            b: [c, d],
+        });
+        expect(groupBy([a, b, c, d], "age")).toEqual({
+            10: [a, c],
+            20: [b, d],
+        });
+
+        // group by function
+        expect(groupBy([a, b, c, d], x => x.name)).toEqual({
+            a: [a, b],
+            b: [c, d],
+        });
+
+        expect(groupBy([a, b, c, d], x => x.age)).toEqual({
+            10: [a, c],
+            20: [b, d],
+        });
     });
 
     it("includes", () => {
