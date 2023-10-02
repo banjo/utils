@@ -36,3 +36,10 @@ export type Predicate<T> = (value: T) => boolean;
  * A type that represents a primitive value.
  */
 export type Primitive = string | number | boolean | symbol | null | undefined;
+
+/**
+ * Prettify nested and extended types to be more readable.
+ */
+export type Prettify<T> = {
+    [K in keyof T]: T[K];
+} & {};
