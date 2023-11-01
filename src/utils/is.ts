@@ -35,6 +35,16 @@ export const isNumber = (value: any): value is number => typeof value === "numbe
 export const isString = (value: any): value is string => typeof value === "string";
 
 /**
+ *  Check if the given value is a symbol.
+ * @param value - The value to check.
+ * @returns true if the value is a symbol, false otherwise.
+ * @example
+ * isSymbol(Symbol("hello world")); // true
+ * isSymbol("hello world"); // false
+ */
+export const isSymbol = (value: any): value is symbol => typeof value === "symbol";
+
+/**
  * Check if the given value is a function.
  * @param value - The value to check.
  * @returns true if the value is a function, false otherwise.

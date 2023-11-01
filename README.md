@@ -83,6 +83,7 @@ Auto generated from TSDocs.
     -   [isBoolean](#isBoolean)
     -   [isNumber](#isNumber)
     -   [isString](#isString)
+    -   [isSymbol](#isSymbol)
     -   [isFunction](#isFunction)
     -   [isObject](#isObject)
     -   [isDateObject](#isDateObject)
@@ -686,6 +687,17 @@ isNumber("hello world"); // false
 ```ts
 isString("hello world"); // true
 isString(1); // false
+```
+
+---
+
+#### isSymbol
+
+> Check if the given value is a symbol.
+
+```ts
+isSymbol(Symbol("hello world")); // true
+isSymbol("hello world"); // false
 ```
 
 ---

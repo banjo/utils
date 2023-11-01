@@ -14,6 +14,7 @@ import {
     isPrimitive,
     isRegExp,
     isString,
+    isSymbol,
     isUndefined,
 } from "../src/utils/is";
 
@@ -53,6 +54,14 @@ describe("is", () => {
         expect(isString([])).toBe(false);
         expect(isString(new Date())).toBe(false);
         expect(isString(() => {})).toBe(false);
+    });
+
+    it("isSymbol", () => {
+        expect(isSymbol(Symbol())).toBe(true);
+        expect(isSymbol(Symbol("1"))).toBe(true);
+        expect(isSymbol(Symbol(1))).toBe(true);
+        expect(isSymbol("1")).toBe(false);
+        expect(isSymbol(1)).toBe(false);
     });
 
     it("isFunction", () => {
