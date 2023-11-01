@@ -127,26 +127,7 @@ const isMergableObject = (item: any): item is Record<string, any> => {
     return item !== null && typeof item === "object";
 };
 
-/**
- * Deeply merges two or more objects. The last object in the arguments list overwrites previous values.
- * @param target - object to merge into
- * @param sources - objects to merge from
- * @returns The merged object.
- * @example
- * const obj1 = { a: 1};
- * const obj2 = { a: 2};
- * merge(obj1, obj2); // => { a: 2 }
- *
- * const obj1 = { a: { b: 1 } };
- * const obj2 = { a: { c: 2 } };
- * merge(obj1, obj2); // => { a: { b: 1, c: 2 } }
- *
- * const obj1 = { a: { b: 1 } };
- * const obj2 = { a: { b: 2 } };
- * const obj3 = { a: { b: 3 } };
- * merge(obj1, obj2, obj3); // => { a: { b: 3 } }
- */
-export const merge = <T extends object = object, S extends object = DeepPartial<T>>(
+const _merge = <T extends object = object, S extends object = DeepPartial<T>>(
     _target: T | S,
     ...sources: Array<S | undefined>
 ): T | S => {
@@ -163,14 +144,57 @@ export const merge = <T extends object = object, S extends object = DeepPartial<
                 // @ts-expect-error
                 if (!target[key]) target[key] = {} as any;
                 // @ts-expect-error
-                merge(target[key] as S, (source as S)[key]);
+                _merge(target[key] as S, (source as S)[key]);
             } else {
                 // @ts-expect-error
                 target[key] = (source as S)[key] as T[keyof T];
             }
         });
     }
-    return merge(target, ...sources);
+    return _merge(target, ...sources);
+};
+
+/**
+ * Deeply merges two or more objects. The last object in the arguments list overwrites previous values. No mutation.
+ * @param target - object to merge into
+ * @param sources - objects to merge from
+ * @returns A new merged object.
+ * @example
+ * const obj1 = { a: 1};
+ * const obj2 = { a: 2};
+ * merge(obj1, obj2); // => { a: 2 }
+ *
+ * const obj1 = { a: { b: 1 } };
+ * const obj2 = { a: { c: 2 } };
+ * merge(obj1, obj2); // => { a: { b: 1, c: 2 } }
+ *
+ * const obj1 = { a: { b: 1 } };
+ * const obj2 = { a: { b: 2 } };
+ * const obj3 = { a: { b: 3 } };
+ * merge(obj1, obj2, obj3); // => { a: { b: 3 } }
+ */
+export const merge = <T extends object = object, S extends object = DeepPartial<T>>(
+    target: T | S,
+    ...sources: Array<S | undefined>
+): T | S => {
+    return _merge({} as T & S, target, ...sources);
+};
+
+/**
+ * Used for setting default values. Deeply merges two or more objects. The first objects in the arguments list overwrites previous values. No mutation. Works almost the same as merge, but the first object is the one that is preserved.
+ * @param obj - the settings object from the user
+ * @param defaultsList - the default settings objects
+ * @returns - A new merged object.
+ * @example
+ * const obj1 = { a: 1};
+ * const obj2 = { a: 2};
+ * defaults(obj1, obj2); // => { a: 1 }
+ * defaults(obj2, obj1); // => { a: 2 }
+ *
+ */
+export const defaults = (obj: any, ...defaultsList: any[]) => {
+    const defaultsListReversed = [...defaultsList].reverse();
+    return merge({}, ...defaultsListReversed, obj);
 };
 
 /**
@@ -188,22 +212,3 @@ export const flip = <T extends object>(obj: T): T => {
     });
     return ret;
 };
-
-/**
- * Create a new create mock function to update the base mock with the partial mock.
- * @param baseMock - base object to use
- * @param partialMock - partial object to use
- * @returns The merged object.
- * @example
- * const numbersMock = { a: 1, b: 2, c: 3 };
- * const updatedData = { a: 2 };
- *
- * export const createNumbersMock = createMockCreator(numbersMock);
- *
- * createNumbersMock(updatedData); // => { a: 2, b: 2, c: 3 }
- */
-export const createMockCreator =
-    <T extends object>(baseMock: DeepPartial<T>) =>
-    (partialMock: DeepPartial<T> = {}): T => {
-        return merge(baseMock, partialMock) as T;
-    };

@@ -106,8 +106,8 @@ Auto generated from TSDocs.
     -   [objectValues](#objectValues)
     -   [objectEntries](#objectEntries)
     -   [merge](#merge)
+    -   [defaults](#defaults)
     -   [flip](#flip)
-    -   [createMockCreator](#createMockCreator)
 -   [Result](#result)
     -   [result](#result)
 -   [Select](#select)
@@ -126,6 +126,10 @@ Auto generated from TSDocs.
     -   [escapeRegExp](#escapeRegExp)
     -   [slugify](#slugify)
     -   [truncate](#truncate)
+-   [Test](#test)
+    -   [tryOrDefault](#tryOrDefault)
+    -   [tryOrDefaultAsync](#tryOrDefaultAsync)
+    -   [createMockCreator](#createMockCreator)
 
 ### Array
 
@@ -982,7 +986,7 @@ objectEntries({}); // => []
 
 #### merge
 
-> Deeply merges two or more objects. The last object in the arguments list overwrites previous values.
+> Deeply merges two or more objects. The last object in the arguments list overwrites previous values. No mutation.
 
 ```ts
 const obj1 = { a: 1 };
@@ -1001,6 +1005,19 @@ merge(obj1, obj2, obj3); // => { a: { b: 3 } }
 
 ---
 
+#### defaults
+
+> Used for setting default values. Deeply merges two or more objects. The first objects in the arguments list overwrites previous values. No mutation. Works almost the same as merge, but the first object is the one that is preserved.
+
+```ts
+const obj1 = { a: 1 };
+const obj2 = { a: 2 };
+defaults(obj1, obj2); // => { a: 1 }
+defaults(obj2, obj1); // => { a: 2 }
+```
+
+---
+
 #### flip
 
 > Flips the keys and values of an object. If the object has duplicate values, the last key will be used.
@@ -1008,21 +1025,6 @@ merge(obj1, obj2, obj3); // => { a: { b: 3 } }
 ```ts
 const obj = { a: 1, b: 2, c: 3 };
 flip(obj); // => { 1: "a", 2: "b", 3: "c" }
-```
-
----
-
-#### createMockCreator
-
-> Create a new create mock function to update the base mock with the partial mock.
-
-```ts
-const numbersMock = { a: 1, b: 2, c: 3 };
-const updatedData = { a: 2 };
-
-export const createNumbersMock = createMockCreator(numbersMock);
-
-createNumbersMock(updatedData); // => { a: 2, b: 2, c: 3 }
 ```
 
 ---
@@ -1235,6 +1237,79 @@ truncate("hello world", 5, "...more"); // returns 'hello...more'
 truncate("hello world", 100); // returns 'hello world'
 truncate("hello world", 5, ""); // returns 'hello'
 truncate("hello world", 5, "..."); // returns 'hello...'
+```
+
+---
+
+### Test
+
+Simple utility function for tests
+
+---
+
+#### tryOrDefault
+
+> Try to run a function, and return a fallback value if it throws an error. Defaults to undefined if nothing is provided.
+
+```ts
+tryOrDefault(() => 1); // 1
+tryOrDefault(() => {
+    throw new Error("test");
+}); // undefined
+
+tryOrDefault(
+    () => {
+        throw new Error("test");
+    },
+    { fallbackValue: 1 }
+); // 1
+tryOrDefault(
+    () => {
+        throw new Error("test");
+    },
+    { fallbackValue: 1, logError: true }
+); // 1, logs error to console
+```
+
+---
+
+#### tryOrDefaultAsync
+
+> Try to run an async function, and return a fallback value if it throws an error. Defaults to undefined if nothing is provided.
+
+```ts
+await tryOrDefaultAsync(() => 1); // 1
+await tryOrDefaultAsync(() => {
+    throw new Error("test");
+}); // undefined
+
+await tryOrDefaultAsync(
+    () => {
+        throw new Error("test");
+    },
+    { fallbackValue: 1 }
+); // 1
+await tryOrDefaultAsync(
+    () => {
+        throw new Error("test");
+    },
+    { fallbackValue: 1, logError: true }
+); // 1, logs error to console
+```
+
+---
+
+#### createMockCreator
+
+> Create a new create mock function to update the base mock with the partial mock.
+
+```ts
+const numbersMock = { a: 1, b: 2, c: 3 };
+const updatedData = { a: 2 };
+
+export const createNumbersMock = createMockCreator(numbersMock);
+
+createNumbersMock(updatedData); // => { a: 2, b: 2, c: 3 }
 ```
 
 ---

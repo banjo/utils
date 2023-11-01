@@ -1,6 +1,6 @@
 import { describe, expect, it } from "vitest";
 import {
-    createMockCreator,
+    defaults,
     flip,
     merge,
     objectEntries,
@@ -35,17 +35,34 @@ describe("object", () => {
 
     it("merge", () => {
         const obj = { a: 1, b: 2, c: 3 };
+        const unaffectedObj = structuredClone(obj);
         const obj2 = { a: 2, d: 4 };
         const obj3 = { a: 2, d: 5, e: { f: 5 } };
 
         const res = merge(obj, obj2);
+
+        expect(obj).toEqual(unaffectedObj);
         expect(res).toEqual({ a: 2, b: 2, c: 3, d: 4 });
 
         const res2 = merge(obj, obj3);
+        expect(obj).toEqual(unaffectedObj);
         expect(res2).toEqual({ a: 2, b: 2, c: 3, d: 5, e: { f: 5 } });
 
         const res3 = merge(obj, obj2, obj3);
+        expect(obj).toEqual(unaffectedObj);
         expect(res3).toEqual({ a: 2, b: 2, c: 3, d: 5, e: { f: 5 } });
+    });
+
+    it("defaults", () => {
+        const obj = { a: 1, b: 2, c: 3 };
+        const obj2 = { a: 2, d: 4 };
+        const obj3 = { a: 2, d: 5, e: { f: 5 } };
+
+        expect(defaults(obj, obj2)).toEqual({ a: 1, b: 2, c: 3, d: 4 });
+        expect(defaults(obj, obj3)).toEqual({ a: 1, b: 2, c: 3, d: 5, e: { f: 5 } });
+        expect(defaults(obj, obj2, obj3)).toEqual({ a: 1, b: 2, c: 3, d: 4, e: { f: 5 } });
+
+        expect(obj).toEqual({ a: 1, b: 2, c: 3 });
     });
 
     it("flip", () => {
@@ -56,23 +73,5 @@ describe("object", () => {
         const obj2 = { a: 1, b: 2, c: 3, d: 1 };
         const res2 = flip(obj2);
         expect(res2).toEqual({ 1: "d", 2: "b", 3: "c" });
-    });
-
-    it("createMockCreator", () => {
-        // normal
-        const numbersMock = { a: 1, b: 2, c: 3 };
-        const updatedData = { a: 2 };
-        const createNumbersMock = createMockCreator(numbersMock);
-
-        const mock = createNumbersMock(updatedData);
-        expect(mock).toEqual({ a: 2, b: 2, c: 3 });
-
-        // deep
-        const numbersMock2 = { a: 1, b: 2, c: { d: 3 } };
-        const updatedData2 = { a: 2, c: { d: 4 } };
-        const createNumbersMock2 = createMockCreator(numbersMock2);
-
-        const mock2 = createNumbersMock2(updatedData2);
-        expect(mock2).toEqual({ a: 2, b: 2, c: { d: 4 } });
     });
 });
