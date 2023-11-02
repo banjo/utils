@@ -60,6 +60,11 @@ Auto generated from TSDocs.
     -   [includes](#includes)
 -   [Cache](#cache)
     -   [cache](#cache)
+-   [Crypto](#crypto)
+    -   [uuid](#uuid)
+    -   [encrypt](#encrypt)
+    -   [decrypt](#decrypt)
+    -   [hash](#hash)
 -   [Date](#date)
     -   [getMonths](#getMonths)
     -   [getDays](#getDays)
@@ -402,6 +407,55 @@ const cache = cache({ persistant: true, key: "my-cache" });
 // custom expiration time in ms
 const cache = cache({ expires: 1000 });
 
+```
+
+---
+
+### Crypto
+
+Utility functions for crypto.
+
+---
+
+#### uuid
+
+> Create a new UUID. Based on the "uncrypto" library.
+
+```ts
+uuid(); // returns a random UUID
+uuid(); // returns another random UUID
+```
+
+---
+
+#### encrypt
+
+> Encrypt a string with a key. Based on the "uncrypto" library. Uses AES-CBC with a random IV. Returns a string with the IV prepended. Use decrypt to decrypt the string.
+
+```ts
+await encrypt("hello world", "key"); // returns "IV:encryptedData"
+```
+
+---
+
+#### decrypt
+
+> Decrypt a string with a key. Based on the "uncrypto" library. Expects a string in the format of "IV:encryptedData" in base64 format. Use encrypt to encrypt a string.
+
+```ts
+await decrypt("IV:encryptedData", "key"); // returns "hello world"
+```
+
+---
+
+#### hash
+
+> Hash an object or string with SHA-256. From the `ohash` library.
+
+```ts
+await hash("hello world"); // returns "hashedString"
+await hash({ foo: "bar" }); // returns "hashedString"
+await hash({ foo: "bar" }); // returns the same "hashedString" as before
 ```
 
 ---

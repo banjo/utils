@@ -1,6 +1,7 @@
 export * from "./utils/array";
 export * from "./utils/base";
 export * from "./utils/cache";
+export * from "./utils/crypto";
 export * from "./utils/date";
 export * from "./utils/fetch";
 export * from "./utils/function";
