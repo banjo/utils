@@ -43,7 +43,9 @@ Auto generated from TSDocs.
 
 -   [Array](#array)
     -   [toArray](#toArray)
+    -   [take](#take)
     -   [uniq](#uniq)
+    -   [uniqBy](#uniqBy)
     -   [shuffle](#shuffle)
     -   [chunk](#chunk)
     -   [last](#last)
@@ -55,9 +57,11 @@ Auto generated from TSDocs.
     -   [compact](#compact)
     -   [difference](#difference)
     -   [intersection](#intersection)
+    -   [union](#union)
     -   [sortBy](#sortBy)
     -   [groupBy](#groupBy)
     -   [includes](#includes)
+    -   [zip](#zip)
 -   [Cache](#cache)
     -   [cache](#cache)
 -   [Crypto](#crypto)
@@ -153,6 +157,17 @@ toArray([1, 2, 3]); // returns [1, 2, 3]
 
 ---
 
+#### take
+
+> Take the first n elements of an array.
+
+```ts
+take([1, 2, 3, 4, 5], 2); // returns [1, 2]
+take(["a", "b", "c", "d", "e"], 3); // returns ['a', 'b', 'c']
+```
+
+---
+
 #### uniq
 
 > Remove duplicate values from an array.
@@ -160,6 +175,25 @@ toArray([1, 2, 3]); // returns [1, 2, 3]
 ```ts
 uniq([1, 2, 2, 3, 4, 4]); // returns [1, 2, 3, 4]
 uniq(["a", "a", "b", "c"]); // returns ['a', 'b', 'c']
+```
+
+---
+
+#### uniqBy
+
+> Remove duplicate values from an array by a key. Can also take a custom function that receives the item to choose the value to compare by.
+
+```ts
+const a = { name: "Alex", age: 20 };
+const b = { name: "Alex", age: 15 };
+
+// compare by a single key
+uniqBy([a, b], "name"); // returns [a]
+uniqBy([a, b], "age"); // returns [a, b]
+
+// compare by a custom function
+uniqBy([a, b], item => item.name); // returns [a]
+uniqBy([a, b], item => item.age); // returns [a, b]
 ```
 
 ---
@@ -313,6 +347,20 @@ intersection(["a", "b", "c", "d"], ["b", "d"], comparator); // returns ['b', 'd'
 
 ---
 
+#### union
+
+> Union multiple arrays. Objects are compared by value, meaning that two objects with the same properties will be considered equal.
+
+```ts
+union([1, 2, 3], [2, 4]); // returns [1, 2, 3, 4]
+union(["a", "b", "c"], ["b", "d"]); // returns ['a', 'b', 'c', 'd']
+
+// multiple arrays
+union([1, 2, 3], [2, 4], [5, 6]); // returns [1, 2, 3, 4, 5, 6]
+```
+
+---
+
 #### sortBy
 
 > Sort an array. Can sort by a single key or multiple keys. Can also take a custom function that receives the item to choose the value to sort by.
@@ -367,6 +415,17 @@ includes(values, valueToCheck); // returns true
 if (includes(values, valueToCheck)) {
     // valueToCheck is now of type "a" | "b" | "c"
 }
+```
+
+---
+
+#### zip
+
+> Zip multiple arrays into a single array of arrays. The first element of the result array will contain the first element of all the input arrays, the second element of the result array will contain the second element of all the input arrays, and so on.
+
+```ts
+zip([1, 2, 3], [4, 5, 6]); // returns [[1, 4], [2, 5], [3, 6]]
+zip([1, 2, 3], ["a", "b", "c"]); // returns [[1, "a"], [2, "b"], [3, "c"]]
 ```
 
 ---

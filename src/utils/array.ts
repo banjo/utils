@@ -19,6 +19,19 @@ export const toArray = <T>(value: T | T[]): T[] => {
 };
 
 /**
+ * Take the first n elements of an array.
+ * @param array - The array to take elements from.
+ * @param count - The number of elements to take.
+ * @returns - A new array with the first n elements.
+ * @example
+ * take([1, 2, 3, 4, 5], 2); // returns [1, 2]
+ * take(['a', 'b', 'c', 'd', 'e'], 3); // returns ['a', 'b', 'c']
+ */
+export const take = <T>(array: T[], count: number): T[] => {
+    return array.slice(0, count);
+};
+
+/**
  * Remove duplicate values from an array.
  * @param array - The array to remove duplicates from.
  * @returns A new array with duplicate values removed.
@@ -27,6 +40,33 @@ export const toArray = <T>(value: T | T[]): T[] => {
  * uniq(['a', 'a', 'b', 'c']); // returns ['a', 'b', 'c']
  */
 export const uniq = <T>(array: T[]): T[] => Array.from(new Set(array));
+
+/**
+ * Remove duplicate values from an array by a key. Can also take a custom function that receives the item to choose the value to compare by.
+ * @param array - The array to remove duplicates from.
+ * @param key - The key to compare by. Can be a string or a function that receives the item and returns the value to compare by.
+ * @returns - A new array with duplicate values removed.
+ * @example
+ * const a = {name: "Alex", age: 20};
+ * const b = {name: "Alex", age: 15};
+ *
+ * // compare by a single key
+ * uniqBy([a, b], "name"); // returns [a]
+ * uniqBy([a, b], "age"); // returns [a, b]
+ *
+ * // compare by a custom function
+ * uniqBy([a, b], (item) => item.name); // returns [a]
+ * uniqBy([a, b], (item) => item.age); // returns [a, b]
+ */
+export const uniqBy = <T>(array: T[], key: string | ((item: T) => any)): T[] => {
+    const keys = new Set();
+    return array.filter(item => {
+        const value = typeof key === "string" ? getProperty(item, key) : key(item);
+        if (keys.has(value)) return false;
+        keys.add(value);
+        return true;
+    });
+};
 
 /**
  * Shuffle the elements of an array. Creates a new array with the elements of the original array in a random order.
@@ -239,6 +279,21 @@ export const intersection = <T>(
 };
 
 /**
+ * Union multiple arrays. Objects are compared by value, meaning that two objects with the same properties will be considered equal.
+ * @param arrays - The arrays to union.
+ * @returns A new array with the values included.
+ * @example
+ * union([1, 2, 3], [2, 4]); // returns [1, 2, 3, 4]
+ * union(['a', 'b', 'c'], ['b', 'd']); // returns ['a', 'b', 'c', 'd']
+ *
+ * // multiple arrays
+ * union([1, 2, 3], [2, 4], [5, 6]); // returns [1, 2, 3, 4, 5, 6]
+ */
+export const union = <T>(...arrays: T[]) => {
+    return uniq(arrays.flat());
+};
+
+/**
  * Sort an array. Can sort by a single key or multiple keys. Can also take a custom function that receives the item to choose the value to sort by.
  * @param array - The array to sort.
  * @param key - The key to sort by. Can be a string, an array of strings, or a function that receives the item and returns the value to sort by.
@@ -362,3 +417,20 @@ export const includes = <Type extends SuperType, SuperType = unknown>(
 ): value is Type => {
     return array.includes(value as Type);
 };
+
+/**
+ * Zip multiple arrays into a single array of arrays. The first element of the result array will contain the first element of all the input arrays, the second element of the result array will contain the second element of all the input arrays, and so on.
+ * @param arrays - The arrays to zip.
+ * @returns - An array of arrays with the zipped values.
+ * @example
+ * zip([1, 2, 3], [4, 5, 6]); // returns [[1, 4], [2, 5], [3, 6]]
+ * zip([1, 2, 3], ["a", "b", "c"]); // returns [[1, "a"], [2, "b"], [3, "c"]]
+ */
+export function zip<T extends any[]>(...arrays: [...T]): any[] {
+    const length = Math.max(...arrays.map(array => array.length));
+    const result = [];
+    for (let i = 0; i < length; i++) {
+        result.push(arrays.map(array => array[i]));
+    }
+    return result;
+}

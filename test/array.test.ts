@@ -14,8 +14,12 @@ import {
     sample,
     shuffle,
     sortBy,
+    take,
     toArray,
+    union,
     uniq,
+    uniqBy,
+    zip,
 } from "../src/utils/array";
 
 describe("array", () => {
@@ -29,6 +33,14 @@ describe("array", () => {
         expect(last([1, 2, 3])).toBe(3);
         expect(last([1])).toBe(1);
         expect(last([])).toBe(undefined);
+    });
+
+    it("take", () => {
+        expect(take([1, 2, 3], 1)).toEqual([1]);
+        expect(take([1, 2, 3], 2)).toEqual([1, 2]);
+        expect(take([1, 2, 3], 3)).toEqual([1, 2, 3]);
+        expect(take([1, 2, 3], 4)).toEqual([1, 2, 3]);
+        expect(take([1, 2, 3], 0)).toEqual([]);
     });
 
     it("toArray", () => {
@@ -46,6 +58,20 @@ describe("array", () => {
         expect(uniq([])).toEqual([]);
         expect(uniq([1])).toEqual([1]);
         expect(uniq([1, 1])).toEqual([1]);
+    });
+
+    it("uniqBy", () => {
+        expect(uniqBy([1, 2, 3, 1, 2, 3], x => x)).toEqual([1, 2, 3]);
+
+        const a = { age: 10, name: "jack" };
+        const b = { age: 20, name: "jack" };
+        const c = { age: 10, name: "john" };
+
+        expect(uniqBy([a, b, c], x => x.age)).toEqual([a, b]);
+        expect(uniqBy([a, b, c], x => x.name)).toEqual([a, c]);
+
+        expect(uniqBy([a, b, c], "age")).toEqual([a, b]);
+        expect(uniqBy([a, b, c], "name")).toEqual([a, c]);
     });
 
     it("shuffle", () => {
@@ -166,6 +192,21 @@ describe("array", () => {
         expect(intersection([{ a: 1 }, { a: 2 }, { a: 3 }], [{ a: 4 }])).toEqual([]);
     });
 
+    it("union", () => {
+        expect(union([1, 2, 3], [1, 2])).toEqual([1, 2, 3]);
+        expect(union([1, 2, 3], [1, 2, 3])).toEqual([1, 2, 3]);
+        expect(union([1, 2, 3], [1, 2, 3, 4])).toEqual([1, 2, 3, 4]);
+
+        const a = { a: 1 };
+        const b = { a: 2 };
+        const c = { a: 3 };
+        const d = { a: 3 };
+
+        expect(union([a, b, c], [a, b])).toEqual([a, b, c]);
+        expect(union([a, b, c], [a, b, c])).toEqual([a, b, c]);
+        expect(union([a, b, c], [a, b, c, d])).toEqual([a, b, c, d]);
+    });
+
     it("sortBy", () => {
         const a = { name: "a", age: 10 };
         const b = { name: "a", age: 20 };
@@ -236,5 +277,28 @@ describe("array", () => {
         if (includes(values2, expectedValue)) {
             expectTypeOf(expectedValue).toEqualTypeOf<(typeof values2)[number]>();
         }
+    });
+
+    it("zip", () => {
+        const a = [1, 2, 3];
+        const b = ["a", "b", "c"];
+
+        expect(zip(a, b)).toEqual([
+            [1, "a"],
+            [2, "b"],
+            [3, "c"],
+        ]);
+
+        expect(zip(a, b, [true, false, true])).toEqual([
+            [1, "a", true],
+            [2, "b", false],
+            [3, "c", true],
+        ]);
+
+        expect(zip(a, b, [true, false, true], [1, 2, 3])).toEqual([
+            [1, "a", true, 1],
+            [2, "b", false, 2],
+            [3, "c", true, 3],
+        ]);
     });
 });
