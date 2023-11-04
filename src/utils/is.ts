@@ -15,12 +15,13 @@ import equal from "fast-deep-equal/es6";
 export const isBoolean = (value: any): value is boolean => typeof value === "boolean";
 
 /**
- * Check if the given value is a number.
+ * Check if the given value is a number. NaN is not considered a number. A string containing a number is not considered a number.
  * @param value - The value to check.
  * @returns true if the value is a number, false otherwise.
  * @example
  * isNumber(1); // true
  * isNumber("hello world"); // false
+ * isNumber(NaN); // false
  */
 export const isNumber = (value: any): value is number => typeof value === "number";
 

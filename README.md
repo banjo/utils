@@ -788,11 +788,12 @@ isBoolean("hello world"); // false
 
 #### isNumber
 
-> Check if the given value is a number.
+> Check if the given value is a number. NaN is not considered a number. A string containing a number is not considered a number.
 
 ```ts
 isNumber(1); // true
 isNumber("hello world"); // false
+isNumber(NaN); // false
 ```
 
 ---
