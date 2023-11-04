@@ -62,6 +62,8 @@ Auto generated from TSDocs.
     -   [groupBy](#groupBy)
     -   [includes](#includes)
     -   [zip](#zip)
+-   [Base](#base)
+    -   [sleep](#sleep)
 -   [Cache](#cache)
     -   [cache](#cache)
 -   [Crypto](#crypto)
@@ -107,6 +109,10 @@ Auto generated from TSDocs.
     -   [isElement](#isElement)
     -   [isEqual](#isEqual)
     -   [isEmpty](#isEmpty)
+    -   [isBrowser](#isBrowser)
+    -   [isNode](#isNode)
+-   [Number](#number)
+    -   [random](#random)
 -   [Object](#object)
     -   [getProperty](#getProperty)
     -   [hasProperty](#hasProperty)
@@ -426,6 +432,23 @@ if (includes(values, valueToCheck)) {
 ```ts
 zip([1, 2, 3], [4, 5, 6]); // returns [[1, 4], [2, 5], [3, 6]]
 zip([1, 2, 3], ["a", "b", "c"]); // returns [[1, "a"], [2, "b"], [3, "c"]]
+```
+
+---
+
+### Base
+
+Base utilities that have no particular classification.
+
+---
+
+#### sleep
+
+> Sleep for a given amount of time.
+
+```ts
+await sleep(1000); // sleep for 1 second
+await sleep(); // sleep for 0 milliseconds
 ```
 
 ---
@@ -1009,6 +1032,51 @@ isEmpty({}); // true
 isEmpty({ a: 1 }); // false
 isEmpty(new Map()); // true
 isEmpty(new Map([["a", 1]])); // false
+```
+
+---
+
+#### isBrowser
+
+> Check if the code is running in a browser environment.
+
+```ts
+isBrowser(); // true
+isBrowser(); // false
+```
+
+---
+
+#### isNode
+
+> Check if the code is running in a Node.js environment.
+
+```ts
+isNode(); // true
+isNode(); // false
+```
+
+---
+
+### Number
+
+Utility functions for working with numbers.
+
+---
+
+#### random
+
+> Produces a random number between min and max (inclusive). If only one argument is provided a number between
+> 0 and the given number is returned. If floating is true, or either min or max are floats, a floating-point
+> number is returned instead of an integer.
+
+-
+
+```ts
+random(0, 5); // 2
+random(5); // 2
+random(5, true); // 2.123876376
+random(0, 5, true); // 2.123876376
 ```
 
 ---

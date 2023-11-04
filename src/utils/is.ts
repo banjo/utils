@@ -262,6 +262,9 @@ export function isEmpty(value: any): boolean {
 /**
  * Check if the code is running in a browser environment.
  * @returns true if the code is running in a browser environment, false otherwise.
+ * @example
+ * isBrowser(); // true
+ * isBrowser(); // false
  */
 // @ts-ignore
 export const isBrowser = (): boolean => typeof window !== "undefined";
@@ -269,5 +272,8 @@ export const isBrowser = (): boolean => typeof window !== "undefined";
 /**
  * Check if the code is running in a Node.js environment.
  * @returns true if the code is running in a Node.js environment, false otherwise.
+ * @example
+ * isNode(); // true
+ * isNode(); // false
  */
 export const isNode = (): boolean => typeof process !== "undefined";

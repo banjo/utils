@@ -5,6 +5,7 @@
 /**
  * Sleep for a given amount of time.
  * @param ms - The amount of time to sleep, in milliseconds. Defaults to 0.
+ * @returns A promise that resolves after the given amount of time.
  * @example
  * await sleep(1000); // sleep for 1 second
  * await sleep(); // sleep for 0 milliseconds

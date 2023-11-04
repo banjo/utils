@@ -133,7 +133,10 @@ function parseComments(comments: string[], file: { content: string; fileName: st
     for (const comment of comments) {
         const formattedDoc = cleanComment(comment);
 
-        if (!shouldInclude.every(s => formattedDoc.includes(s))) {
+        const isValid = shouldInclude.every(s => formattedDoc.includes(s));
+
+        if (!isValid) {
+            console.log(`Missing docs - file: ${file.fileName}`);
             continue;
         }
 
@@ -192,7 +195,7 @@ function getExample(doc: string) {
 }
 
 function getReturns(doc: string) {
-    return doc.split("@returns")[1].trim().split("\n")[0].trim();
+    return doc.split("@returns")?.[1]?.trim()?.split("\n")?.[0]?.trim() ?? "";
 }
 
 function getParams(doc: string) {
