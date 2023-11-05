@@ -418,6 +418,9 @@ export const includes = <Type extends SuperType, SuperType = unknown>(
     return array.includes(value as Type);
 };
 
+type ZipInput<T extends any[]> = { [K in keyof T]: T[K][] };
+type ZipOutput<T extends any[]> = { [K in keyof T]: T[K] }[];
+
 /**
  * Zip multiple arrays into a single array of arrays. The first element of the result array will contain the first element of all the input arrays, the second element of the result array will contain the second element of all the input arrays, and so on.
  * @param arrays - The arrays to zip.
@@ -426,11 +429,11 @@ export const includes = <Type extends SuperType, SuperType = unknown>(
  * zip([1, 2, 3], [4, 5, 6]); // returns [[1, 4], [2, 5], [3, 6]]
  * zip([1, 2, 3], ["a", "b", "c"]); // returns [[1, "a"], [2, "b"], [3, "c"]]
  */
-export function zip<T extends any[]>(...arrays: [...T]): any[] {
+export function zip<T extends any[]>(...arrays: ZipInput<T>): ZipOutput<T> {
     const length = Math.max(...arrays.map(array => array.length));
-    const result = [];
+    const result: any[] = [];
     for (let i = 0; i < length; i++) {
         result.push(arrays.map(array => array[i]));
     }
-    return result;
+    return result as ZipOutput<T>;
 }
