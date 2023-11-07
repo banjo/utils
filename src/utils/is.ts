@@ -266,7 +266,6 @@ export function isEmpty(value: any): boolean {
  * isBrowser(); // true
  * isBrowser(); // false
  */
-// @ts-ignore
 export const isBrowser = (): boolean => typeof window !== "undefined";
 
 /**

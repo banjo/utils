@@ -1,21 +1,19 @@
+import babel from "@babel/core";
+import doctrine from "doctrine";
 import { readFileSync, writeFileSync } from "fs";
+import { last } from "../src";
 import { objectEntries } from "../src/utils/object";
 import { capitalize } from "../src/utils/string";
 import { getUtilFiles } from "./utils";
 
-const shouldInclude = ["@returns", "@example"];
 const TS_DOCS_REGEX = /\/\*\*[\s\S]*?\*\//g;
 
 main();
 function main() {
     const files = getUtilFiles();
-    let docs: Docs[] = [];
 
-    for (const f of files) {
-        const comments = getAllTsDocsComments(f.content);
-        if (!comments) throw new Error(`No comments found in ${f.fileName}`);
-        docs = [...docs, ...parseComments(comments, f)];
-    }
+    const fileOutput = astParseFiles(files);
+    const docs = parseDocs(fileOutput);
 
     const readme = readFileSync("./README.md", "utf8");
     if (!readme) throw new Error("No readme found");
@@ -26,9 +24,7 @@ function main() {
     const docsWithContent = generateContentForEachDoc(docs);
 
     const toc = createToc(docsWithContent);
-
     const markdown = generateMarkdown(docsWithContent, toc);
-
     const newReadme = readme.replace(placeholder, markdown);
 
     writeFileSync("./README.md", newReadme);
@@ -44,18 +40,47 @@ type Docs = {
     description: string;
     fileName: string;
     fileContent: string;
-    example: string;
+    example?: string;
     params: Param[];
-    returns: string;
+    returns?: string;
 };
 
 type DocsWithContent = Docs & { content: string };
+
+function parseDocs(comments: ParsedAstOutput[]) {
+    let docs: Docs[] = [];
+    comments.forEach(c => {
+        const fileName = c.file;
+
+        c.comments.forEach(comment => {
+            const description = comment.comment.description;
+            const params = comment.comment.tags.filter((t: any) => t.title === "param");
+            const returns = comment.comment.tags.find((t: any) => t.title === "returns");
+            const example = comment.comment.tags.find((t: any) => t.title === "example");
+            const name = comment.name;
+
+            docs.push({
+                description,
+                params: params.map(p => ({
+                    name: p.name ?? "",
+                    description: p.description ?? "",
+                })),
+                example: example?.description ?? undefined,
+                name,
+                returns: returns?.description ?? undefined,
+                fileName,
+                fileContent: c.content,
+            });
+        });
+    });
+
+    return docs;
+}
 
 function createToc(docs: Docs[]) {
     let previousFileName = "";
 
     const createCategory = (doc: Docs) => `-  [${capitalize(doc.fileName)}](#${doc.fileName})\n`;
-
     const createUnit = (doc: Docs) => `\t* [${doc.name}](#${doc.name})\n`;
 
     const toc = docs.map(doc => {
@@ -127,97 +152,96 @@ function cleanComment(comment: string) {
     return comment.replace("/**", "").replace("*/", "").replaceAll(" * ", "").trim();
 }
 
-function parseComments(comments: string[], file: { content: string; fileName: string }): Docs[] {
-    const docs: Docs[] = [];
+type ParsedAst = { name: string; comment: string };
+type ParsedAstOutput = {
+    file: string;
+    comments: {
+        comment: doctrine.Annotation;
+        name: string;
+    }[];
+    content: string;
+};
 
-    for (const comment of comments) {
-        const formattedDoc = cleanComment(comment);
-
-        const isValid = shouldInclude.every(s => formattedDoc.includes(s));
-
-        if (!isValid) {
-            console.log(`Missing docs - file: ${file.fileName}`);
-            continue;
-        }
-
-        const description = getDescription(formattedDoc);
-        const params = getParams(formattedDoc);
-        const returns = getReturns(formattedDoc);
-        const example = getExample(formattedDoc);
-
-        const functionName = getFunctionName(example);
-
-        docs.push({
-            name: functionName,
-            description,
-            fileName: file.fileName.replace("-node", ""),
-            example,
-            params,
-            fileContent: file.content,
-            returns,
+function astParseFiles(files: { content: string; fileName: string }[]): ParsedAstOutput[] {
+    const parsedComments = files.map(file => {
+        const ast = babel.parseSync(file.content, {
+            sourceType: "module",
+            plugins: ["@babel/plugin-transform-typescript"],
         });
-    }
 
-    return docs;
-}
+        const fns: ParsedAst[] = [];
 
-function getFunctionName(example: string) {
-    const regexForCalledFunction = /.*(?:\);)/g;
-    const calledFunctions = example.match(regexForCalledFunction);
+        babel.traverse(ast!, {
+            ExportNamedDeclaration(path: any) {
+                if (path.node.declaration?.type === "FunctionDeclaration") {
+                    const name = path.node.declaration.id!.name;
+                    const leadingComments: any[] = path.node.leadingComments;
+                    if (!leadingComments) {
+                        // might have leading comments on another TSDeclareFunction (range, template, etc)
+                        const exportNamedDeclarations: any[] = path.parent.body.filter(
+                            (node: any) => node.type === "ExportNamedDeclaration"
+                        );
 
-    if (!calledFunctions) {
-        throw new Error(`No function called in example, you might need ";". Code: ${example}`);
-    }
+                        const hasTsDeclareFunction = exportNamedDeclarations.filter(
+                            d => d.declaration?.type === "TSDeclareFunction"
+                        );
 
-    let nameBeforeFunction = calledFunctions[0].split("(")[0];
+                        const matchingDeclareFunctions = hasTsDeclareFunction.filter(
+                            (node: any) => node.declaration.id.name === name
+                        );
 
-    // take last word if there are multiple words before function
-    if (nameBeforeFunction.split(" ").length > 1) {
-        nameBeforeFunction = nameBeforeFunction.split(" ").at(-1)!;
-    }
+                        if (matchingDeclareFunctions.length === 0) {
+                            console.log("no matching declare function for " + name);
+                            return;
+                        }
 
-    return nameBeforeFunction;
-}
-function getExample(doc: string) {
-    const example = doc.split("@example")[1].trim();
+                        matchingDeclareFunctions.forEach(node => {
+                            const leadingComments: any[] = node.leadingComments;
+                            if (!leadingComments) return;
 
-    let final = "";
-    const lines = example.split("\n");
-    lines.forEach(line => {
-        if (line.startsWith(" *")) {
-            final += line.replace(" *", "").trim() + "\n";
-        } else {
-            final += line.trim() + "\n";
-        }
+                            const comment =
+                                leadingComments.length > 1
+                                    ? last(leadingComments)?.value
+                                    : leadingComments[0].value;
+
+                            fns.push({ name, comment });
+                        });
+
+                        return;
+                    }
+
+                    const comment =
+                        leadingComments.length > 1
+                            ? last(leadingComments)?.value
+                            : leadingComments[0].value;
+
+                    fns.push({ name, comment });
+                } else if (path.node.declaration?.type === "VariableDeclaration") {
+                    const name = path.node.declaration.declarations[0].id.name;
+                    const leadingComments: any[] = path.node.leadingComments;
+                    if (!leadingComments) return;
+
+                    const comment =
+                        leadingComments.length > 1
+                            ? last(leadingComments)?.value
+                            : leadingComments[0].value;
+
+                    fns.push({ name, comment });
+                }
+            },
+        });
+
+        const jsDocsParsed = fns.map(fn => {
+            const parsed = doctrine.parse(fn.comment, { unwrap: true });
+
+            return {
+                ...fn,
+                comment: parsed,
+            };
+        });
+
+        return { file: file.fileName, comments: jsDocsParsed, content: file.content };
     });
 
-    return final;
-}
-
-function getReturns(doc: string) {
-    return doc.split("@returns")?.[1]?.trim()?.split("\n")?.[0]?.trim() ?? "";
-}
-
-function getParams(doc: string) {
-    const params: Param[] = [];
-    const lines = doc.split("\n");
-
-    for (const line of lines) {
-        if (line.includes("@param")) {
-            const name = line.split(" ")[1];
-            const description = line.split(/-(.*)/s)[1].trim();
-
-            params.push({ name, description });
-        }
-    }
-
-    return params;
-}
-
-function getDescription(doc: string) {
-    return doc.split("@")[0].trim();
-}
-
-function getAllTsDocsComments(content: string): string[] | null {
-    return content.match(TS_DOCS_REGEX);
+    return parsedComments;
 }

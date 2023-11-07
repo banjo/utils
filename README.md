@@ -86,6 +86,7 @@ Auto generated from TSDocs.
 -   [Function](#function)
     -   [debounce](#debounce)
     -   [throttle](#throttle)
+    -   [batchInvoke](#batchInvoke)
     -   [noop](#noop)
     -   [noopAsync](#noopAsync)
     -   [memoize](#memoize)
@@ -115,6 +116,7 @@ Auto generated from TSDocs.
     -   [random](#random)
 -   [Object](#object)
     -   [getProperty](#getProperty)
+    -   [setProperty](#setProperty)
     -   [hasProperty](#hasProperty)
     -   [deleteProperty](#deleteProperty)
     -   [objectKeys](#objectKeys)
@@ -124,11 +126,7 @@ Auto generated from TSDocs.
     -   [defaults](#defaults)
     -   [flip](#flip)
 -   [Result](#result)
-    -   [result](#result)
--   [Select](#select)
-    -   [select](#select)
-    -   [select.exists](#select.exists)
-    -   [select.all](#select.all)
+    -   [Result](#Result)
 -   [String](#string)
     -   [capitalize](#capitalize)
     -   [randomString](#randomString)
@@ -488,7 +486,6 @@ const cache = cache({ persistant: true, key: "my-cache" });
 
 // custom expiration time in ms
 const cache = cache({ expires: 1000 });
-
 ```
 
 ---
@@ -723,6 +720,17 @@ element.addEventListener("mousemove", throttled);
 
 // cancel the throttled function
 throttled.cancel();
+```
+
+---
+
+#### batchInvoke
+
+> Invoke all functions in an array. Will not invoke any functions that are undefined.
+
+```ts
+batchInvoke([() => console.log("hello"), () => console.log("world")]); // logs 'hello' and 'world'
+batchInvoke([() => console.log("hello"), undefined, () => console.log("world")]); // logs 'hello' and 'world'
 ```
 
 ---
@@ -1070,8 +1078,6 @@ Utility functions for working with numbers.
 > 0 and the given number is returned. If floating is true, or either min or max are floats, a floating-point
 > number is returned instead of an integer.
 
--
-
 ```ts
 random(0, 5); // 2
 random(5); // 2
@@ -1099,6 +1105,20 @@ getProperty(obj, "a.b"); // => { c: "d" }
 
 getProperty({ a: [{ b: "c" }] }, "a[0].b"); // => "c"
 getProperty({ a: [{ b: "c" }] }, "a[1].b"); // => undefined
+```
+
+---
+
+#### setProperty
+
+> Sets the value at path of object. If a portion of path doesn't exist, it's created. Arrays are created for missing index properties while objects are created for all other missing properties. Use deleteProperty to remove property values. Wrapper around the "dot-prop" library.
+
+```ts
+const obj = { a: { b: { c: "d" } } };
+
+setProperty(obj, "a.b.c", "hello"); // => { a: { b: { c: "hello" } } }
+setProperty(obj, "a", hello); // => { a: "hello" }
+setProperty({}, "a.b", "hello"); // => { a: { b: "hello" } }
 ```
 
 ---
@@ -1217,67 +1237,19 @@ A result type that can be used to return a value or an error.
 
 ---
 
-#### result
+#### Result
 
 > A simple result type that can be used to return a value or an error. Much like Rust's Result type.
 
 ```ts
-*
 // result();
 
 const result = Result.ok(1); // or Result.okEmpty, or Result.error, etc;
 if (result.success) {
-console.log(result.data);
+    console.log(result.data);
 } else {
-console.log(result.message);
+    console.log(result.message);
 }
-
-
-```
-
----
-
-### Select
-
-Utility for selecting elements from the DOM. Simplifies the process of working with the DOM.
-
----
-
-#### select
-
-> Selects a single element from the DOM,
-> or returns null if no element is found. Can search a parent as well.
-> Can also be used to check if element exists or fetch an array of elements.
-
-```ts
-select("#test"); // returns element
-select("#test", parent); // returns element if it exists within parent
-select.exists("#test"); // returns true if element exists
-select.all(".test"); // returns array of elements
-select.style(element, { color: "red" }); // sets the color of the element to red
-```
-
----
-
-#### select.exists
-
-> Check if an element exists in the DOM. Will default to search in the document.
-
-```ts
-select.exists("#test"); // returns true if element exists
-select.exists("#test", parent); // returns true if element exists within parent
-```
-
----
-
-#### select.all
-
-> Selects all elements from the DOM as an array, or returns an empty array if no elements are found.
-> Can search a parent as well.
-
-```ts
-select.all(".test"); // [element1, element2, ...]
-select.all(".test", parent); // [element1, element2, ...]
 ```
 
 ---
