@@ -1,5 +1,5 @@
 import { describe, expect, it } from "vitest";
-import { decrypt, encrypt, hash, uuid } from "../src/utils/crypto";
+import { decrypt, encrypt, hash, isUUID, uuid } from "../src/utils/crypto";
 
 describe("crypto", () => {
     it("uuid", () => {
@@ -9,6 +9,12 @@ describe("crypto", () => {
         expect(uuid()).toMatch(
             /^[0-9a-f]{8}-[0-9a-f]{4}-[0-9a-f]{4}-[89ab][0-9a-f]{3}-[0-9a-f]{12}$/i
         );
+    });
+
+    it("isUUID", () => {
+        expect(isUUID("hello world")).toBe(false);
+        expect(isUUID("9cea4ab2-beb8-4b02-ab10-48a39c6b91fa")).toBe(true);
+        expect(isUUID(uuid())).toBe(true);
     });
 
     it("encrypt and decrypt", async () => {

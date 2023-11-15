@@ -68,6 +68,7 @@ Auto generated from TSDocs.
     -   [cache](#cache)
 -   [Crypto](#crypto)
     -   [uuid](#uuid)
+    -   [isUUID](#isUUID)
     -   [encrypt](#encrypt)
     -   [decrypt](#decrypt)
     -   [hash](#hash)
@@ -503,6 +504,17 @@ Utility functions for crypto.
 ```ts
 uuid(); // returns a random UUID
 uuid(); // returns another random UUID
+```
+
+---
+
+#### isUUID
+
+> Checks if a string is a valid UUID.
+
+```ts
+isUUID("hello world"); // returns false
+isUUID("9cea4ab2-beb8-4b02-ab10-48a39c6b91fa"); // returns true
 ```
 
 ---

@@ -15,6 +15,19 @@ import { getRandomValues, randomUUID, subtle } from "uncrypto";
 export const uuid = (): string => randomUUID();
 
 /**
+ * Checks if a string is a valid UUID.
+ * @param str - The string to check.
+ * @returns - True if the string is a valid UUID, false otherwise.
+ * @example
+ * isUUID("hello world"); // returns false
+ * isUUID("9cea4ab2-beb8-4b02-ab10-48a39c6b91fa"); // returns true
+ */
+export const isUUID = (str: string): boolean => {
+    const uuidRegex = /^[\da-f]{8}-[\da-f]{4}-[1-5][\da-f]{3}-[89ab][\da-f]{3}-[\da-f]{12}$/i;
+    return uuidRegex.test(str);
+};
+
+/**
  * Encrypt a string with a key. Based on the "uncrypto" library. Uses AES-CBC with a random IV. Returns a string with the IV prepended. Use decrypt to decrypt the string.
  * @param data - The data to encrypt.
  * @param key - The key to use for encryption.
