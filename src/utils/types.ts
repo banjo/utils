@@ -58,7 +58,7 @@ export type AsyncCallback<T = void> = () => Promise<T>;
  *
  * const result = await fn(1); // result is of type string
  */
-export type AsyncCallbackWithArgs<T, U> = (arg: T) => Promise<U>;
+export type AsyncCallbackWithArgs<T, U extends void> = (arg: T) => Promise<U>;
 /**
  * A type that represents a predicate function that returns a boolean.
  * @example
