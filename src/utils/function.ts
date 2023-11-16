@@ -155,3 +155,22 @@ export const memoize = <T extends (...args: any[]) => any>(fn: T): T => {
 export const raise = (message: string): never => {
     throw new Error(message);
 };
+
+/**
+ * Check that a value is of type never. Useful for checking that a switch statement is exhaustive in TypeScript.
+ * @param value - The value to check.
+ * @returns - never
+ * @example
+ * type Foo = "a" | "b";
+ *
+ *  switch (foo) {
+ *    case "a":
+ *      // do something
+ *      break;
+ *    default:
+ *      exhaustiveCheck(foo); // raises an error
+ *  }
+ */
+export const exhaustiveCheck = (value: never): never => {
+    throw new Error(`Unhandled discriminated union member: ${JSON.stringify(value)}`);
+};

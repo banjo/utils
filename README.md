@@ -92,6 +92,7 @@ Auto generated from TSDocs.
     -   [noopAsync](#noopAsync)
     -   [memoize](#memoize)
     -   [raise](#raise)
+    -   [exhaustiveCheck](#exhaustiveCheck)
 -   [Is](#is)
     -   [isBoolean](#isBoolean)
     -   [isNumber](#isNumber)
@@ -808,6 +809,24 @@ memoizedAdd(1, 3); // returns 4 from the cache
 raise("Something went wrong");
 
 const data = somethingThatMightExist ?? raise("Data does not exist");
+```
+
+---
+
+#### exhaustiveCheck
+
+> Check that a value is of type never. Useful for checking that a switch statement is exhaustive in TypeScript.
+
+```ts
+type Foo = "a" | "b";
+
+switch (foo) {
+    case "a":
+        // do something
+        break;
+    default:
+        exhaustiveCheck(foo); // raises an error
+}
 ```
 
 ---
