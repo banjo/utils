@@ -500,7 +500,7 @@ Utility functions for crypto.
 
 #### uuid
 
-> Create a new UUID. Based on the "lukeed/uuid" library.
+> Create a new UUID. Based on the "uncrypto" library.
 
 ```ts
 uuid(); // returns a random UUID

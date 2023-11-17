@@ -6,7 +6,7 @@ import { getRandomValues, randomUUID, subtle } from "uncrypto";
  */
 
 /**
- * Create a new UUID. Based on the "lukeed/uuid" library.
+ * Create a new UUID. Based on the "uncrypto" library.
  * @returns - The generated UUID.
  * @example
  * uuid(); // returns a random UUID
