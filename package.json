@@ -45,6 +45,7 @@
         "@babel/core": "^7.23.2",
         "@babel/plugin-transform-typescript": "^7.22.15",
         "@banjoanton/prettier-config": "^0.1.2",
+        "@lukeed/uuid": "^2.0.1",
         "@rollup/plugin-commonjs": "^24.0.1",
         "@rollup/plugin-json": "^6.0.0",
         "@rollup/plugin-node-resolve": "^15.0.1",

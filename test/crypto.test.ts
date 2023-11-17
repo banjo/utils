@@ -1,15 +1,16 @@
 import { describe, expect, it } from "vitest";
 import { hash, isUUID } from "../legacy/crypto";
+import { uuid } from "../src/utils/crypto";
 
 describe("crypto", () => {
-    // it("uuid", () => {
-    //     expect(uuid()).toHaveLength(36);
-    //     expect(uuid()).toBeTruthy();
-    //     expect(uuid()).not.toBe(uuid());
-    //     expect(uuid()).toMatch(
-    //         /^[0-9a-f]{8}-[0-9a-f]{4}-[0-9a-f]{4}-[89ab][0-9a-f]{3}-[0-9a-f]{12}$/i
-    //     );
-    // });
+    it("uuid", () => {
+        expect(uuid()).toHaveLength(36);
+        expect(uuid()).toBeTruthy();
+        expect(uuid()).not.toBe(uuid());
+        expect(uuid()).toMatch(
+            /^[0-9a-f]{8}-[0-9a-f]{4}-[0-9a-f]{4}-[89ab][0-9a-f]{3}-[0-9a-f]{12}$/i
+        );
+    });
 
     it("isUUID", () => {
         expect(isUUID("hello world")).toBe(false);

@@ -1,3 +1,4 @@
+import { v4 } from "@lukeed/uuid";
 import { hash as ohash } from "ohash";
 
 /**
@@ -5,13 +6,13 @@ import { hash as ohash } from "ohash";
  */
 
 /**
- * Create a new UUID. Based on the "uncrypto" library.
+ * Create a new UUID. Based on the "lukeed/uuid" library.
  * @returns - The generated UUID.
  * @example
  * uuid(); // returns a random UUID
  * uuid(); // returns another random UUID
  */
-// export const uuid = (): string => randomUUID();
+export const uuid = (): string => v4();
 
 /**
  * Checks if a string is a valid UUID.

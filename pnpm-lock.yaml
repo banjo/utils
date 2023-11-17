@@ -25,6 +25,9 @@ devDependencies:
     "@banjoanton/prettier-config":
         specifier: ^0.1.2
         version: 0.1.2(prettier@2.8.4)
+    "@lukeed/uuid":
+        specifier: ^2.0.1
+        version: 2.0.1
     "@rollup/plugin-commonjs":
         specifier: ^24.0.1
         version: 24.0.1(rollup@3.19.1)
@@ -1146,6 +1149,24 @@ packages:
             cross-spawn: 7.0.3
             string-argv: 0.3.1
             type-detect: 4.0.8
+        dev: true
+
+    /@lukeed/csprng@1.1.0:
+        resolution:
+            {
+                integrity: sha512-Z7C/xXCiGWsg0KuKsHTKJxbWhpI3Vs5GwLfOean7MGyVFGqdRgBbAjOCh6u4bbjPc/8MJ2pZmK/0DLdCbivLDA==,
+            }
+        engines: { node: ">=8" }
+        dev: true
+
+    /@lukeed/uuid@2.0.1:
+        resolution:
+            {
+                integrity: sha512-qC72D4+CDdjGqJvkFMMEAtancHUQ7/d/tAiHf64z8MopFDmcrtbcJuerDtFceuAfQJ2pDSfCKCtbqoGBNnwg0w==,
+            }
+        engines: { node: ">=8" }
+        dependencies:
+            "@lukeed/csprng": 1.1.0
         dev: true
 
     /@nodelib/fs.scandir@2.1.5:

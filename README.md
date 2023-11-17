@@ -67,6 +67,7 @@ Auto generated from TSDocs.
 -   [Cache](#cache)
     -   [cache](#cache)
 -   [Crypto](#crypto)
+    -   [uuid](#uuid)
     -   [isUUID](#isUUID)
     -   [hash](#hash)
 -   [Date](#date)
@@ -492,6 +493,17 @@ const cache = cache({ expires: 1000 });
 ### Crypto
 
 Utility functions for crypto.
+
+---
+
+#### uuid
+
+> Create a new UUID. Based on the "lukeed/uuid" library.
+
+```ts
+uuid(); // returns a random UUID
+uuid(); // returns another random UUID
+```
 
 ---
 
