@@ -69,6 +69,8 @@ Auto generated from TSDocs.
 -   [Crypto](#crypto)
     -   [uuid](#uuid)
     -   [isUUID](#isUUID)
+    -   [encrypt](#encrypt)
+    -   [decrypt](#decrypt)
     -   [hash](#hash)
 -   [Date](#date)
     -   [getMonths](#getMonths)
@@ -514,6 +516,26 @@ uuid(); // returns another random UUID
 ```ts
 isUUID("hello world"); // returns false
 isUUID("9cea4ab2-beb8-4b02-ab10-48a39c6b91fa"); // returns true
+```
+
+---
+
+#### encrypt
+
+> Encrypt a string with a key. Based on the "uncrypto" library. Uses AES-CBC with a random IV. Returns a string with the IV prepended. Use decrypt to decrypt the string.
+
+```ts
+await encrypt("hello world", "key"); // returns "IV:encryptedData"
+```
+
+---
+
+#### decrypt
+
+> Decrypt a string with a key. Based on the "uncrypto" library. Expects a string in the format of "IV:encryptedData" in base64 format. Use encrypt to encrypt a string.
+
+```ts
+await decrypt("IV:encryptedData", "key"); // returns "hello world"
 ```
 
 ---

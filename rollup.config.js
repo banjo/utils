@@ -18,6 +18,8 @@ const plugins = [
     }),
 ];
 
+const external = ["uncrypto"];
+
 export default [
     ...entries.map(input => ({
         input,
@@ -33,8 +35,8 @@ export default [
                 sourcemap: true,
             },
         ],
-        external: [],
         plugins,
+        external,
     })),
     ...entries.map(input => ({
         input,
@@ -42,7 +44,7 @@ export default [
             file: input.replace("src/", "dist/").replace(".ts", ".d.ts"),
             format: "esm",
         },
-        external: [],
+        external,
         plugins: [dts({ respectExternal: true })],
     })),
 ];

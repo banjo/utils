@@ -1,5 +1,5 @@
-import { v4 } from "@lukeed/uuid";
 import { hash as ohash } from "ohash";
+import { getRandomValues, randomUUID, subtle } from "uncrypto";
 
 /**
  * Utility functions for crypto.
@@ -12,7 +12,7 @@ import { hash as ohash } from "ohash";
  * uuid(); // returns a random UUID
  * uuid(); // returns another random UUID
  */
-export const uuid = (): string => v4();
+export const uuid = (): string => randomUUID();
 
 /**
  * Checks if a string is a valid UUID.
@@ -35,24 +35,24 @@ export const isUUID = (str: string): boolean => {
  * @example
  * await encrypt("hello world", "key"); // returns "IV:encryptedData"
  */
-// export const encrypt = async (data: string, key: string): Promise<string> => {
-//     const iv = getRandomValues(new Uint8Array(16));
+export const encrypt = async (data: string, key: string): Promise<string> => {
+    const iv = getRandomValues(new Uint8Array(16));
 
-//     // encrypt with subtle
-//     const enc = new TextEncoder();
-//     const encoded = enc.encode(data);
-//     const keyBuffer = enc.encode(key);
-//     const cryptoKey = await subtle.importKey("raw", keyBuffer, "AES-CBC", false, ["encrypt"]);
-//     const encrypted = await subtle.encrypt({ name: "AES-CBC", iv }, cryptoKey, encoded);
+    // encrypt with subtle
+    const enc = new TextEncoder();
+    const encoded = enc.encode(data);
+    const keyBuffer = enc.encode(key);
+    const cryptoKey = await subtle.importKey("raw", keyBuffer, "AES-CBC", false, ["encrypt"]);
+    const encrypted = await subtle.encrypt({ name: "AES-CBC", iv }, cryptoKey, encoded);
 
-//     // return as string from buffer with IV prepended
-//     const uint8Array = new Uint8Array(encrypted);
-//     const buffer = Buffer.from(uint8Array);
-//     const encryptedString = buffer.toString("base64");
-//     const ivString = Buffer.from(iv).toString("base64");
+    // return as string from buffer with IV prepended
+    const uint8Array = new Uint8Array(encrypted);
+    const buffer = Buffer.from(uint8Array);
+    const encryptedString = buffer.toString("base64");
+    const ivString = Buffer.from(iv).toString("base64");
 
-//     return `${ivString}:${encryptedString}`;
-// };
+    return `${ivString}:${encryptedString}`;
+};
 
 /**
  * Decrypt a string with a key. Based on the "uncrypto" library. Expects a string in the format of "IV:encryptedData" in base64 format. Use encrypt to encrypt a string.
@@ -62,26 +62,26 @@ export const isUUID = (str: string): boolean => {
  * @example
  * await decrypt("IV:encryptedData", "key"); // returns "hello world"
  */
-// export const decrypt = async (cipher: string, key: string): Promise<string> => {
-//     // Split the IV from the ciphertext
-//     const [ivString, cipherString] = cipher.split(":");
+export const decrypt = async (cipher: string, key: string): Promise<string> => {
+    // Split the IV from the ciphertext
+    const [ivString, cipherString] = cipher.split(":");
 
-//     // convert base64 strings to Uint8Array buffers
-//     const iv = Uint8Array.from(Buffer.from(ivString, "base64"));
-//     const encryptedData = Uint8Array.from(Buffer.from(cipherString, "base64"));
+    // convert base64 strings to Uint8Array buffers
+    const iv = Uint8Array.from(Buffer.from(ivString, "base64"));
+    const encryptedData = Uint8Array.from(Buffer.from(cipherString, "base64"));
 
-//     // decode key
-//     const enc = new TextEncoder();
-//     const keyBuffer = enc.encode(key);
-//     const cryptoKey = await subtle.importKey("raw", keyBuffer, "AES-CBC", false, ["decrypt"]);
+    // decode key
+    const enc = new TextEncoder();
+    const keyBuffer = enc.encode(key);
+    const cryptoKey = await subtle.importKey("raw", keyBuffer, "AES-CBC", false, ["decrypt"]);
 
-//     // decrypt with subtle
-//     const decrypted = await subtle.decrypt({ name: "AES-CBC", iv }, cryptoKey, encryptedData);
+    // decrypt with subtle
+    const decrypted = await subtle.decrypt({ name: "AES-CBC", iv }, cryptoKey, encryptedData);
 
-//     // Convert decrypted ArrayBuffer back to String
-//     const dec = new TextDecoder();
-//     return dec.decode(new Uint8Array(decrypted));
-// };
+    // Convert decrypted ArrayBuffer back to String
+    const dec = new TextDecoder();
+    return dec.decode(new Uint8Array(decrypted));
+};
 
 /**
  * Hash an object or string with SHA-256. From the `ohash` library.
