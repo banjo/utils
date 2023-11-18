@@ -1,4 +1,5 @@
 import { debounce as d, throttle as t } from "throttle-debounce";
+import { Callback } from "./types";
 
 /**
  * Utilities for working with functions.
@@ -174,3 +175,24 @@ export const raise = (message: string): never => {
 export const exhaustiveCheck = (value: never): never => {
     throw new Error(`Unhandled discriminated union member: ${JSON.stringify(value)}`);
 };
+
+/**
+ * Check that a value is not falsy. Useful for narrowing types in TypeScript.
+ * @param condition - The condition to check.
+ * @param message - The message to raise if the condition is falsy.
+ * @returns - void
+ * @example
+ * const person: Person | undefined = getPerson();
+ * invariant(person, "Person does not exist"); // person is now of type Person if it exists
+ *
+ * const person: Person | undefined = undefined;
+ * invariant(person, "Person does not exist"); // raises an error
+ */
+export function invariant(condition: any, message?: string | Callback<string>): asserts condition {
+    if (condition) {
+        return;
+    }
+
+    const messageString = typeof message === "function" ? message() : message;
+    throw new Error(messageString ?? "Invariant failed");
+}

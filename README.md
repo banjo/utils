@@ -93,6 +93,7 @@ Auto generated from TSDocs.
     -   [memoize](#memoize)
     -   [raise](#raise)
     -   [exhaustiveCheck](#exhaustiveCheck)
+    -   [invariant](#invariant)
 -   [Is](#is)
     -   [isBoolean](#isBoolean)
     -   [isNumber](#isNumber)
@@ -827,6 +828,20 @@ switch (foo) {
     default:
         exhaustiveCheck(foo); // raises an error
 }
+```
+
+---
+
+#### invariant
+
+> Check that a value is not falsy. Useful for narrowing types in TypeScript.
+
+```ts
+const person: Person | undefined = getPerson();
+invariant(person, "Person does not exist"); // person is now of type Person if it exists
+
+const person: Person | undefined = undefined;
+invariant(person, "Person does not exist"); // raises an error
 ```
 
 ---

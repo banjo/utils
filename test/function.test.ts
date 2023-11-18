@@ -1,5 +1,5 @@
 import { describe, expect, it, vi } from "vitest";
-import { batchInvoke, memoize, noop, raise } from "../src";
+import { batchInvoke, invariant, memoize, noop, raise } from "../src";
 
 describe("function", () => {
     it("batchInvoke", () => {
@@ -36,5 +36,16 @@ describe("function", () => {
 
             const test = variable ?? raise("variable is null");
         }).toThrow("variable is null");
+    });
+
+    it("invariant", () => {
+        expect(() => invariant(true, "test")).not.toThrow();
+        expect(() => invariant(false, "test")).toThrow("test");
+        expect(() => invariant("", "test")).toThrow("test");
+        expect(() => invariant(0, "test")).toThrow("test");
+        expect(() => invariant(null, "test")).toThrow("test");
+        expect(() => invariant(undefined, "test")).toThrow("test");
+        expect(() => invariant(null)).toThrow("Invariant failed");
+        expect(() => invariant(1)).not.toThrow();
     });
 });
