@@ -144,8 +144,8 @@ Auto generated from TSDocs.
     -   [slugify](#slugify)
     -   [truncate](#truncate)
 -   [Test](#test)
-    -   [tryOrDefault](#tryOrDefault)
-    -   [tryOrDefaultAsync](#tryOrDefaultAsync)
+    -   [attempt](#attempt)
+    -   [attemptAsync](#attemptAsync)
     -   [createMockCreator](#createMockCreator)
 
 ### Array
@@ -1486,53 +1486,65 @@ Simple utility function for tests
 
 ---
 
-#### tryOrDefault
+#### attempt
 
 > Try to run a function, and return a fallback value if it throws an error. Defaults to undefined if nothing is provided.
 
 ```ts
-tryOrDefault(() => 1); // 1
-tryOrDefault(() => {
+attempt(() => 1); // 1
+attempt(() => {
     throw new Error("test");
 }); // undefined
 
-tryOrDefault(
+attempt(
     () => {
         throw new Error("test");
     },
     { fallbackValue: 1 }
 ); // 1
-tryOrDefault(
+attempt(
     () => {
         throw new Error("test");
     },
     { fallbackValue: 1, logError: true }
 ); // 1, logs error to console
+attempt(
+    () => {
+        throw new Error("test");
+    },
+    { fallbackValue: 1, handleError: e => console.error(e) }
+); // 1, logs error to console
 ```
 
 ---
 
-#### tryOrDefaultAsync
+#### attemptAsync
 
 > Try to run an async function, and return a fallback value if it throws an error. Defaults to undefined if nothing is provided.
 
 ```ts
-await tryOrDefaultAsync(() => 1); // 1
-await tryOrDefaultAsync(() => {
+await attemptAsync(() => 1); // 1
+await attemptAsync(() => {
     throw new Error("test");
 }); // undefined
 
-await tryOrDefaultAsync(
+await attemptAsync(
     () => {
         throw new Error("test");
     },
     { fallbackValue: 1 }
 ); // 1
-await tryOrDefaultAsync(
+await attemptAsync(
     () => {
         throw new Error("test");
     },
     { fallbackValue: 1, logError: true }
+); // 1, logs error to console
+await attemptAsync(
+    () => {
+        throw new Error("test");
+    },
+    { fallbackValue: 1, handleError: e => console.error(e) }
 ); // 1, logs error to console
 ```
 

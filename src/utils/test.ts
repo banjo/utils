@@ -5,18 +5,22 @@
 import { DeepPartial, defaults, merge } from "./object";
 import { Maybe } from "./types";
 
-type TryOrDefaultOptions = {
+type AttemptOptions = {
     /**
      * If true, will log the error to the console.
      */
     logError?: boolean;
+    /**
+     * Handle error
+     */
+    handleError?: (error: unknown) => void;
     /**
      * The fallback value to return if the function throws an error.
      */
     fallbackValue?: any;
 };
 
-const defaultOptions: TryOrDefaultOptions = {
+const defaultOptions: AttemptOptions = {
     logError: false,
     fallbackValue: undefined,
 };
@@ -27,47 +31,47 @@ const defaultOptions: TryOrDefaultOptions = {
  * @param options - The options to use.
  * @returns - The result of the function, or the fallback value if the function throws an error.
  * @example
- * tryOrDefault(() => 1); // 1
- * tryOrDefault(() => { throw new Error("test"); }); // undefined
+ * attempt(() => 1); // 1
+ * attempt(() => { throw new Error("test"); }); // undefined
  *
- * tryOrDefault(() => { throw new Error("test"); }, { fallbackValue: 1 }); // 1
- * tryOrDefault(() => { throw new Error("test"); }, { fallbackValue: 1, logError: true }); // 1, logs error to console
+ * attempt(() => { throw new Error("test"); }, { fallbackValue: 1 }); // 1
+ * attempt(() => { throw new Error("test"); }, { fallbackValue: 1, logError: true }); // 1, logs error to console
+ * attempt(() => { throw new Error("test"); }, { fallbackValue: 1, handleError: (e) => console.error(e) }); // 1, logs error to console
  */
-export const tryOrDefault = <T>(fn: () => T, options?: TryOrDefaultOptions): Maybe<T> => {
-    const { fallbackValue, logError } = defaults(options, defaultOptions);
+export const attempt = <T>(fn: () => T, options?: AttemptOptions): Maybe<T> => {
+    const { fallbackValue, logError, handleError } = defaults(options, defaultOptions);
     try {
         return fn();
     } catch (e) {
-        if (logError) {
-            console.error(e);
-        }
+        if (handleError) handleError(e);
+        if (logError) console.error(e);
         return fallbackValue;
     }
 };
 
 /**
  * Try to run an async function, and return a fallback value if it throws an error. Defaults to undefined if nothing is provided.
- * @param fn - The async function to run.
+ * @param asyncFn - The async function to run.
  * @param options - The options to use.
  * @returns - The result of the function, or the fallback value if the function throws an error.
  * @example
- * await tryOrDefaultAsync(() => 1); // 1
- * await tryOrDefaultAsync(() => { throw new Error("test"); }); // undefined
+ * await attemptAsync(() => 1); // 1
+ * await attemptAsync(() => { throw new Error("test"); }); // undefined
  *
- * await tryOrDefaultAsync(() => { throw new Error("test"); }, { fallbackValue: 1 }); // 1
- * await tryOrDefaultAsync(() => { throw new Error("test"); }, { fallbackValue: 1, logError: true }); // 1, logs error to console
+ * await attemptAsync(() => { throw new Error("test"); }, { fallbackValue: 1 }); // 1
+ * await attemptAsync(() => { throw new Error("test"); }, { fallbackValue: 1, logError: true }); // 1, logs error to console
+ * await attemptAsync(() => { throw new Error("test"); }, { fallbackValue: 1, handleError: (e) => console.error(e) }); // 1, logs error to console
  */
-export const tryOrDefaultAsync = async <T>(
-    fn: () => Promise<T>,
-    options?: TryOrDefaultOptions
+export const attemptAsync = async <T>(
+    asyncFn: () => Promise<T>,
+    options?: AttemptOptions
 ): Promise<Maybe<T>> => {
-    const { fallbackValue, logError } = defaults(options, defaultOptions);
+    const { fallbackValue, logError, handleError } = defaults(options, defaultOptions);
     try {
-        return await fn();
+        return await asyncFn();
     } catch (e) {
-        if (logError) {
-            console.error(e);
-        }
+        if (handleError) handleError(e);
+        if (logError) console.error(e);
         return fallbackValue;
     }
 };

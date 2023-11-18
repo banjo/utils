@@ -1,16 +1,16 @@
 import { describe, expect, it } from "vitest";
-import { createMockCreator, tryOrDefault, tryOrDefaultAsync } from "../src/utils/test";
+import { attempt, attemptAsync, createMockCreator } from "../src/utils/test";
 
 describe("test", () => {
-    it("tryOrDefault", () => {
-        expect(tryOrDefault(() => 1)).toBe(1);
+    it("attempt", () => {
+        expect(attempt(() => 1)).toBe(1);
         expect(
-            tryOrDefault(() => {
+            attempt(() => {
                 throw new Error("test");
             })
         ).toBe(undefined);
         expect(
-            tryOrDefault(
+            attempt(
                 () => {
                     throw new Error("test");
                 },
@@ -18,7 +18,7 @@ describe("test", () => {
             )
         ).toBe(1);
         expect(
-            tryOrDefault(
+            attempt(
                 () => {
                     throw new Error("test");
                 },
@@ -27,14 +27,14 @@ describe("test", () => {
         ).toBe(1);
     });
 
-    it("tryOrDefaultAsync", async () => {
-        expect(await tryOrDefaultAsync(() => Promise.resolve(1))).toBe(1);
-        expect(await tryOrDefaultAsync(() => Promise.reject(new Error("test")))).toBe(undefined);
+    it("attemptAsync", async () => {
+        expect(await attemptAsync(() => Promise.resolve(1))).toBe(1);
+        expect(await attemptAsync(() => Promise.reject(new Error("test")))).toBe(undefined);
         expect(
-            await tryOrDefaultAsync(() => Promise.reject(new Error("test")), { fallbackValue: 1 })
+            await attemptAsync(() => Promise.reject(new Error("test")), { fallbackValue: 1 })
         ).toBe(1);
         expect(
-            await tryOrDefaultAsync(() => Promise.reject(new Error("test")), {
+            await attemptAsync(() => Promise.reject(new Error("test")), {
                 fallbackValue: 1,
                 logError: true,
             })
