@@ -853,6 +853,7 @@ invariant(person, "Person does not exist"); // raises an error
 > Works with non-primitive types like arrays, maps, sets and objects. A simple version of immer.
 
 ```ts
+// original version
 const person = { name: "John", age: 30 };
 const updatedPerson = produce(person, draft => {
     draft.age = 31;
@@ -860,6 +861,26 @@ const updatedPerson = produce(person, draft => {
 
 console.log(person.age); // 30
 console.log(updatedPerson.age); // 31
+
+// curried version
+const producePerson = produce((draft: Person) => {
+    draft.age = 31;
+});
+
+const person = { name: "John", age: 30 };
+const updatedPerson = producePerson(person);
+
+console.log(person.age); // 30
+console.log(updatedPerson.age); // 31
+
+// curried version in React
+const [person, setPerson] = useState({ name: "John", age: 30 });
+
+setPerson(
+    produce(draft => {
+        draft.age = 31;
+    })
+);
 ```
 
 ---

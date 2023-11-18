@@ -118,5 +118,16 @@ describe("function", () => {
         expect(test.b).toBe(2);
         expect(newTest.a).toBe(1);
         expect(newTest.b).toBe(3);
+
+        // curried
+        type Obj = { a: number };
+        const curried = produce<Obj>(draft => {
+            draft.a = 1;
+        });
+
+        const original = { a: 2 };
+        const curriedResult = curried(original);
+        expect(original.a).toBe(2);
+        expect(curriedResult.a).toBe(1);
     });
 });

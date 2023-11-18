@@ -204,6 +204,7 @@ export function invariant(condition: any, message?: string | Callback<string>): 
  * @param fn - A function that mutates the clone.
  * @returns - The updated clone.
  * @example
+ * // original version
  * const person = { name: "John", age: 30 };
  * const updatedPerson = produce(person, draft => {
  *  draft.age = 31;
@@ -211,9 +212,38 @@ export function invariant(condition: any, message?: string | Callback<string>): 
  *
  * console.log(person.age); // 30
  * console.log(updatedPerson.age); // 31
+ *
+ * // curried version
+ * const producePerson = produce((draft: Person) => {
+ *   draft.age = 31;
+ * });
+ *
+ * const person = { name: "John", age: 30 };
+ * const updatedPerson = producePerson(person);
+ *
+ * console.log(person.age); // 30
+ * console.log(updatedPerson.age); // 31
+ *
+ * // curried version in React
+ * const [person, setPerson] = useState({ name: "John", age: 30 });
+ *
+ * setPerson(produce(draft => {
+ *   draft.age = 31;
+ * }));
  */
-export const produce = <T>(item: T, fn: (draft: T) => void): T => {
-    const clone = structuredClone(item);
-    fn(clone);
-    return clone;
-};
+export function produce<T>(fn: (draft: T) => void): (currentState: T) => T;
+export function produce<T>(item: T, fn: (draft: T) => void): T;
+export function produce<T>(itemOrFn: T | ((draft: T) => void), fn?: (draft: T) => void) {
+    const useCurried = typeof itemOrFn === "function" && !fn;
+    const useOriginal = typeof itemOrFn !== "function" && fn;
+
+    if (useCurried) {
+        return (currentState: T): T => produce(currentState, itemOrFn as (draft: T) => void);
+    } else if (useOriginal) {
+        const clone = structuredClone(itemOrFn);
+        fn(clone);
+        return clone;
+    }
+
+    throw new Error("Invalid arguments passed to produce.");
+}
