@@ -94,6 +94,7 @@ Auto generated from TSDocs.
     -   [raise](#raise)
     -   [exhaustiveCheck](#exhaustiveCheck)
     -   [invariant](#invariant)
+    -   [produce](#produce)
 -   [Is](#is)
     -   [isBoolean](#isBoolean)
     -   [isNumber](#isNumber)
@@ -842,6 +843,23 @@ invariant(person, "Person does not exist"); // person is now of type Person if i
 
 const person: Person | undefined = undefined;
 invariant(person, "Person does not exist"); // raises an error
+```
+
+---
+
+#### produce
+
+> Produce a new object from an existing object without mutating the original object. Uses structured cloning to create a deep clone of the object.
+> Works with non-primitive types like arrays, maps, sets and objects. A simple version of immer.
+
+```ts
+const person = { name: "John", age: 30 };
+const updatedPerson = produce(person, draft => {
+    draft.age = 31;
+});
+
+console.log(person.age); // 30
+console.log(updatedPerson.age); // 31
 ```
 
 ---

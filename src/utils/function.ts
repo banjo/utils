@@ -196,3 +196,24 @@ export function invariant(condition: any, message?: string | Callback<string>): 
     const messageString = typeof message === "function" ? message() : message;
     throw new Error(messageString ?? "Invariant failed");
 }
+
+/**
+ * Produce a new object from an existing object without mutating the original object. Uses structured cloning to create a deep clone of the object.
+ * Works with non-primitive types like arrays, maps, sets and objects. A simple version of immer.
+ * @param item - The item to clone.
+ * @param fn - A function that mutates the clone.
+ * @returns - The updated clone.
+ * @example
+ * const person = { name: "John", age: 30 };
+ * const updatedPerson = produce(person, draft => {
+ *  draft.age = 31;
+ * });
+ *
+ * console.log(person.age); // 30
+ * console.log(updatedPerson.age); // 31
+ */
+export const produce = <T>(item: T, fn: (draft: T) => void): T => {
+    const clone = structuredClone(item);
+    fn(clone);
+    return clone;
+};
