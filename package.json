@@ -1,81 +1,29 @@
 {
-    "name": "@banjoanton/utils",
-    "type": "module",
-    "version": "0.1.63",
-    "description": "",
-    "author": "Anton Ödman <anton.odman@gmail.com>",
+    "name": "@banjoanton/dev-utils",
+    "description": "My dev utils",
+    "repository": "banjo/utils",
+    "version": "0.0.1",
     "license": "MIT",
-    "private": false,
-    "homepage": "https://github.com/banjo/utils#readme",
-    "repository": {
-        "type": "git",
-        "url": "git+https://github.com/banjo/utils.git"
-    },
-    "bugs": "https://github.com/banjo/utils/issues",
-    "keywords": [],
-    "main": "dist/index.esm.js",
-    "module": "dist/index.esm.js",
-    "types": "dist/index.d.ts",
-    "prettier": "@banjoanton/prettier-config",
-    "exports": {
-        ".": {
-            "types": "./dist/index.d.ts",
-            "require": "./dist/index.cjs",
-            "import": "./dist/index.esm.js"
-        }
-    },
-    "files": [
-        "dist/*"
-    ],
-    "scripts": {
-        "build": "rimraf dist && nr prepareImports && rollup --config",
-        "dev": "rollup --config --watch",
-        "prepublishOnly": "nr build",
-        "format": "npx prettier --write .",
-        "release": "bumpp && npm publish",
-        "start": "esno src/index.ts",
-        "test": "vitest",
-        "typecheck": "tsc --noEmit",
-        "prepareImports": "esno ./scripts/prepareImports.ts && npx prettier --write ./src/index.ts",
-        "prepareDocs": "esno ./scripts/addDocsToReadme.ts && npx prettier --write ./README.md",
-        "prepare": "husky install"
-    },
+    "private": "true",
     "devDependencies": {
         "@antfu/ni": "^0.19.0",
         "@babel/core": "^7.23.2",
-        "@babel/plugin-transform-typescript": "^7.22.15",
-        "@banjoanton/prettier-config": "^0.1.2",
-        "@rollup/plugin-commonjs": "^24.0.1",
-        "@rollup/plugin-json": "^6.0.0",
-        "@rollup/plugin-node-resolve": "^15.0.1",
+        "@babel/types": "^7.23.3",
+        "@banjoanton/prettier-config": "^0.1.10",
         "@types/doctrine": "^0.0.9",
         "@types/node": "^18.15.0",
-        "@types/throttle-debounce": "^5.0.0",
-        "bumpp": "^8.2.1",
-        "current-week-number": "^1.0.7",
         "doctrine": "^3.0.0",
-        "dot-prop": "^7.2.0",
-        "esbuild": "^0.17.11",
-        "esno": "^0.16.3",
-        "fast-deep-equal": "^3.1.3",
-        "happy-dom": "^8.9.0",
         "husky": "^8.0.3",
-        "pnpm": "^7.29.1",
-        "prettier": "^2.8.4",
-        "pretty-quick": "^3.1.3",
-        "rimraf": "^4.4.0",
-        "rollup": "^3.19.1",
-        "rollup-plugin-dts": "^5.2.0",
-        "rollup-plugin-esbuild": "^5.0.0",
-        "throttle-debounce": "^5.0.0",
-        "toastler": "^0.0.3",
-        "typescript": "^4.9.5",
-        "vite": "^4.1.4",
-        "vitest": "^0.27.3",
-        "wildcard-match": "^5.1.2"
+        "pnpm": "^7.33.3"
     },
-    "dependencies": {
-        "ohash": "^1.1.3",
-        "uncrypto": "^0.1.3"
-    }
+    "scripts": {
+        "test": "vitest",
+        "addToGit": "git add ./package/utils/README.md ./package/node/README.md",
+        "prepareImports": "tsx ./scripts/prepareImports.ts && npx prettier --write ./package/utils/src/index.ts ./package/node/src/index.ts",
+        "prepareDocs": "tsx ./scripts/addDocsToReadme.ts && npx prettier --write ./package/utils/README.md ./package/node/README.md",
+        "typecheck": "tsc --noEmit",
+        "format": "npx prettier --write .",
+        "prepare": "husky install"
+    },
+    "prettier": "@banjoanton/prettier-config"
 }

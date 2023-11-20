@@ -1,21 +1,28 @@
 import babel from "@babel/core";
 import doctrine from "doctrine";
-import { readFileSync, writeFileSync } from "fs";
-import { last } from "../src";
-import { objectEntries } from "../src/utils/object";
-import { capitalize } from "../src/utils/string";
-import { getUtilFiles } from "./utils";
+import { readFileSync, writeFileSync } from "node:fs";
+import { includes } from "packages/utils/dist";
+import { capitalize, last, objectEntries } from "../packages/utils/src/index";
+import { TYPES, Type, getDirectories, getUtilFiles } from "./utils";
 
 const TS_DOCS_REGEX = /\/\*\*[\s\S]*?\*\//g;
 
-main();
-function main() {
-    const files = getUtilFiles();
+TYPES.forEach(type => {
+    main(type);
+});
+
+function main(type: Type) {
+    if (!includes(TYPES, type)) {
+        throw new Error(`First argument must be one of ${TYPES.join(", ")}`);
+    }
+
+    const files = getUtilFiles(type);
+    const directories = getDirectories(type);
 
     const fileOutput = astParseFiles(files);
     const docs = parseDocs(fileOutput);
 
-    const readme = readFileSync("./README.md", "utf8");
+    const readme = readFileSync(directories.readmeFile, "utf8");
     if (!readme) throw new Error("No readme found");
 
     const placeholder = readme.match(/<!-- DOCS START -->[\s\S]*<!-- DOCS END -->/)?.[0];
@@ -27,7 +34,7 @@ function main() {
     const markdown = generateMarkdown(docsWithContent, toc);
     const newReadme = readme.replace(placeholder, markdown);
 
-    writeFileSync("./README.md", newReadme);
+    writeFileSync(directories.readmeFile, newReadme);
 }
 
 type Param = {

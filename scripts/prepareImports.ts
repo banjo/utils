@@ -1,8 +1,9 @@
 import fs from "fs";
-import { getUtilFiles, srcIndexFile, srcBrowserIndexFile } from "./utils";
+import { TYPES, Type, getDirectories, getUtilFiles } from "./utils";
 
-const main = () => {
-    const files = getUtilFiles();
+const main = (type: Type) => {
+    const files = getUtilFiles(type);
+    const { indexFile } = getDirectories(type);
 
     const exportStatements = files
         .filter(file => !file.fileName.includes("node"))
@@ -11,7 +12,9 @@ const main = () => {
         })
         .join("\n");
 
-    fs.writeFileSync(srcIndexFile, exportStatements);
+    fs.writeFileSync(indexFile, exportStatements);
 };
 
-main();
+TYPES.forEach(type => {
+    main(type);
+});
