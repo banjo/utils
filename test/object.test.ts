@@ -60,7 +60,8 @@ describe("object", () => {
 
         expect(defaults(obj, obj2)).toEqual({ a: 1, b: 2, c: 3, d: 4 });
         expect(defaults(obj, obj3)).toEqual({ a: 1, b: 2, c: 3, d: 5, e: { f: 5 } });
-        expect(defaults(obj, obj2, obj3)).toEqual({ a: 1, b: 2, c: 3, d: 4, e: { f: 5 } });
+        expect(defaults(obj2, obj3)).toEqual({ a: 2, d: 4, e: { f: 5 } });
+        expect(defaults(obj3, obj)).toEqual({ a: 2, b: 2, c: 3, d: 5, e: { f: 5 } });
 
         expect(obj).toEqual({ a: 1, b: 2, c: 3 });
     });

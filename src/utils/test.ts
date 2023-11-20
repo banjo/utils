@@ -11,9 +11,13 @@ type AttemptOptions = {
      */
     logError?: boolean;
     /**
-     * Handle error
+     * On error callback
      */
-    handleError?: (error: unknown) => void;
+    onError?: (error: unknown) => void;
+    /**
+     * On finally callback
+     */
+    onFinally?: () => void;
     /**
      * The fallback value to return if the function throws an error.
      */
@@ -36,16 +40,18 @@ const defaultOptions: AttemptOptions = {
  *
  * attempt(() => { throw new Error("test"); }, { fallbackValue: 1 }); // 1
  * attempt(() => { throw new Error("test"); }, { fallbackValue: 1, logError: true }); // 1, logs error to console
- * attempt(() => { throw new Error("test"); }, { fallbackValue: 1, handleError: (e) => console.error(e) }); // 1, logs error to console
+ * attempt(() => { throw new Error("test"); }, { fallbackValue: 1, onError: (e) => console.error(e) }); // 1, logs error to console
  */
 export const attempt = <T>(fn: () => T, options?: AttemptOptions): Maybe<T> => {
-    const { fallbackValue, logError, handleError } = defaults(options, defaultOptions);
+    const { fallbackValue, logError, onError, onFinally } = defaults(options, defaultOptions);
     try {
         return fn();
     } catch (e) {
-        if (handleError) handleError(e);
+        if (onError) onError(e);
         if (logError) console.error(e);
         return fallbackValue;
+    } finally {
+        if (onFinally) onFinally();
     }
 };
 
@@ -60,19 +66,21 @@ export const attempt = <T>(fn: () => T, options?: AttemptOptions): Maybe<T> => {
  *
  * await attemptAsync(() => { throw new Error("test"); }, { fallbackValue: 1 }); // 1
  * await attemptAsync(() => { throw new Error("test"); }, { fallbackValue: 1, logError: true }); // 1, logs error to console
- * await attemptAsync(() => { throw new Error("test"); }, { fallbackValue: 1, handleError: (e) => console.error(e) }); // 1, logs error to console
+ * await attemptAsync(() => { throw new Error("test"); }, { fallbackValue: 1, onError: (e) => console.error(e) }); // 1, logs error to console
  */
 export const attemptAsync = async <T>(
     asyncFn: () => Promise<T>,
     options?: AttemptOptions
 ): Promise<Maybe<T>> => {
-    const { fallbackValue, logError, handleError } = defaults(options, defaultOptions);
+    const { fallbackValue, logError, onError, onFinally } = defaults(options, defaultOptions);
     try {
         return await asyncFn();
     } catch (e) {
-        if (handleError) handleError(e);
+        if (onError) onError(e);
         if (logError) console.error(e);
         return fallbackValue;
+    } finally {
+        if (onFinally) onFinally();
     }
 };
 

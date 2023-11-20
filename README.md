@@ -1294,7 +1294,7 @@ merge(obj1, obj2, obj3); // => { a: { b: 3 } }
 
 #### defaults
 
-> Used for setting default values. Deeply merges two or more objects. The first objects in the arguments list overwrites previous values. No mutation. Works almost the same as merge, but the first object is the one that is preserved.
+> Used for setting default values. Deeply merges two objects. No mutation. The first object is the partial one, and the second object is the default one. If a value is already set in the partial object, it will not be overwritten.
 
 ```ts
 const obj1 = { a: 1 };
@@ -1512,7 +1512,7 @@ attempt(
     () => {
         throw new Error("test");
     },
-    { fallbackValue: 1, handleError: e => console.error(e) }
+    { fallbackValue: 1, onError: e => console.error(e) }
 ); // 1, logs error to console
 ```
 
@@ -1544,7 +1544,7 @@ await attemptAsync(
     () => {
         throw new Error("test");
     },
-    { fallbackValue: 1, handleError: e => console.error(e) }
+    { fallbackValue: 1, onError: e => console.error(e) }
 ); // 1, logs error to console
 ```
 

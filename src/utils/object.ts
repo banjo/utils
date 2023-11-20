@@ -4,6 +4,7 @@ import {
     hasProperty as hp,
     setProperty as sp,
 } from "dot-prop";
+import { Maybe } from "./types";
 
 /**
  * Utility functions for working with objects. Both wrappers and custom functions.
@@ -181,7 +182,7 @@ export const merge = <T extends object = object, S extends object = DeepPartial<
 };
 
 /**
- * Used for setting default values. Deeply merges two or more objects. The first objects in the arguments list overwrites previous values. No mutation. Works almost the same as merge, but the first object is the one that is preserved.
+ * Used for setting default values. Deeply merges two objects. No mutation. The first object is the partial one, and the second object is the default one. If a value is already set in the partial object, it will not be overwritten.
  * @param obj - the settings object from the user
  * @param defaultsList - the default settings objects
  * @returns - A new merged object.
@@ -192,9 +193,13 @@ export const merge = <T extends object = object, S extends object = DeepPartial<
  * defaults(obj2, obj1); // => { a: 2 }
  *
  */
-export const defaults = (obj: any, ...defaultsList: any[]) => {
-    const defaultsListReversed = [...defaultsList].reverse();
-    return merge({}, ...defaultsListReversed, obj);
+export const defaults = <T extends object, U extends Partial<T>>(
+    obj: Maybe<U>,
+    defaultObj: T
+): T & U => {
+    const safeObj: Partial<T> = obj ?? {};
+    const updated = merge(defaultObj, safeObj);
+    return updated as T & U;
 };
 
 /**
