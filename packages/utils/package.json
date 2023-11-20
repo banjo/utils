@@ -35,7 +35,7 @@
         "start": "esno src/index.ts",
         "test": "vitest",
         "typecheck": "tsc --noEmit",
-        "prepareImports": "tsx "
+        "prepareImports": "tsx ../../scripts/prepareImports.ts"
     },
     "devDependencies": {
         "@antfu/ni": "^0.19.0",

@@ -17,11 +17,12 @@
         "doctrine": "^3.0.0",
         "husky": "^8.0.3",
         "pnpm": "^7.33.3",
+        "rimraf": "^5.0.5",
         "vitest": "^0.27.3"
     },
     "scripts": {
         "test": "vitest",
-        "addToGit": "git add ../package/utils/README.md ../package/node/README.md",
+        "addToGit": "git add ./packages/utils/README.md ./packages/node/README.md",
         "prepareImports": "tsx --no-cache ./scripts/prepareImports.ts",
         "prepareDocs": "tsx --no-cache ./scripts/addDocsToReadme.ts",
         "typecheck": "tsc --noEmit",
