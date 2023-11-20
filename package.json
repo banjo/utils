@@ -5,22 +5,25 @@
     "version": "0.0.1",
     "license": "MIT",
     "private": "true",
+    "type": "module",
     "devDependencies": {
         "@antfu/ni": "^0.19.0",
         "@babel/core": "^7.23.2",
+        "@babel/plugin-transform-typescript": "^7.22.15",
         "@babel/types": "^7.23.3",
         "@banjoanton/prettier-config": "^0.1.10",
         "@types/doctrine": "^0.0.9",
         "@types/node": "^18.15.0",
         "doctrine": "^3.0.0",
         "husky": "^8.0.3",
-        "pnpm": "^7.33.3"
+        "pnpm": "^7.33.3",
+        "vitest": "^0.27.3"
     },
     "scripts": {
         "test": "vitest",
-        "addToGit": "git add ./package/utils/README.md ./package/node/README.md",
-        "prepareImports": "tsx ./scripts/prepareImports.ts && npx prettier --write ./package/utils/src/index.ts ./package/node/src/index.ts",
-        "prepareDocs": "tsx ./scripts/addDocsToReadme.ts && npx prettier --write ./package/utils/README.md ./package/node/README.md",
+        "addToGit": "git add ../package/utils/README.md ../package/node/README.md",
+        "prepareImports": "tsx --no-cache ./scripts/prepareImports.ts",
+        "prepareDocs": "tsx --no-cache ./scripts/addDocsToReadme.ts",
         "typecheck": "tsc --noEmit",
         "format": "npx prettier --write .",
         "prepare": "husky install"

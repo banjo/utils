@@ -1,5 +1,8 @@
+// @ts-ignore
+import options from "@banjoanton/prettier-config";
 import fs from "fs";
 import path from "path";
+import prettier from "prettier";
 import { fileURLToPath } from "url";
 
 export const __filename = fileURLToPath(import.meta.url);
@@ -8,27 +11,30 @@ export const __dirname = path.dirname(__filename);
 export const TYPES = ["utils", "node"] as const;
 export type Type = (typeof TYPES)[number];
 
-const typeData: Record<Type, { dir: string }> = {
+const typeData: Record<Type, { dirName: string }> = {
     utils: {
-        dir: "../packages/utils/src",
+        dirName: "utils",
     },
     node: {
-        dir: "../packages/node/src",
+        dirName: "node",
     },
 };
 
 export const getDirectories = (type: Type) => {
-    const { dir } = typeData[type];
+    const { dirName } = typeData[type];
+
+    const packageDirectory = path.join(__dirname, "../packages", dirName);
+    const srcDir = path.join(packageDirectory, "src");
 
     return {
-        srcDir: path.join(__dirname, dir),
-        utilsDir: path.join(__dirname, dir, "utils"),
-        indexFile: path.join(__dirname, dir, "index.ts"),
-        readmeFile: path.join(__dirname, dir, "README.md"),
+        srcDir: srcDir,
+        utilsDir: path.join(srcDir, "utils"),
+        indexFile: path.join(srcDir, "index.ts"),
+        readmeFile: path.join(packageDirectory, "README.md"),
     };
 };
 
-export function getUtilFiles(type: Type) {
+export const getUtilFiles = (type: Type) => {
     const { utilsDir } = getDirectories(type);
     const utilFiles = fs.readdirSync(utilsDir);
 
@@ -41,4 +47,8 @@ export function getUtilFiles(type: Type) {
             content,
         };
     });
-}
+};
+
+export const format = (text: string, filePath: string) => {
+    return prettier.format(text, { ...options, filepath: filePath });
+};

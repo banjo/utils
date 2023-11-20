@@ -1,7 +1,8 @@
 import fs from "fs";
-import { TYPES, Type, getDirectories, getUtilFiles } from "./utils";
+import { TYPES, Type, format, getDirectories, getUtilFiles } from "./utils";
 
-const main = (type: Type) => {
+const main = async (type: Type) => {
+    console.log(`Preparing imports for ${type}...`);
     const files = getUtilFiles(type);
     const { indexFile } = getDirectories(type);
 
@@ -12,7 +13,10 @@ const main = (type: Type) => {
         })
         .join("\n");
 
-    fs.writeFileSync(indexFile, exportStatements);
+    console.log(`Writing to ${indexFile}...\n`);
+
+    const formatted = await format(exportStatements, indexFile);
+    fs.writeFileSync(indexFile, formatted);
 };
 
 TYPES.forEach(type => {

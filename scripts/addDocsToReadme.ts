@@ -1,9 +1,8 @@
 import babel from "@babel/core";
 import doctrine from "doctrine";
 import { readFileSync, writeFileSync } from "node:fs";
-import { includes } from "packages/utils/dist";
 import { capitalize, last, objectEntries } from "../packages/utils/src/index";
-import { TYPES, Type, getDirectories, getUtilFiles } from "./utils";
+import { TYPES, Type, format, getDirectories, getUtilFiles } from "./utils";
 
 const TS_DOCS_REGEX = /\/\*\*[\s\S]*?\*\//g;
 
@@ -11,11 +10,8 @@ TYPES.forEach(type => {
     main(type);
 });
 
-function main(type: Type) {
-    if (!includes(TYPES, type)) {
-        throw new Error(`First argument must be one of ${TYPES.join(", ")}`);
-    }
-
+async function main(type: Type) {
+    console.log(`Adding docs to ${type}...\n`);
     const files = getUtilFiles(type);
     const directories = getDirectories(type);
 
@@ -33,8 +29,9 @@ function main(type: Type) {
     const toc = createToc(docsWithContent);
     const markdown = generateMarkdown(docsWithContent, toc);
     const newReadme = readme.replace(placeholder, markdown);
+    const formatted = await format(newReadme, directories.readmeFile);
 
-    writeFileSync(directories.readmeFile, newReadme);
+    writeFileSync(directories.readmeFile, formatted);
 }
 
 type Param = {

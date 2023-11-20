@@ -14,6 +14,9 @@ importers:
       '@babel/core':
         specifier: ^7.23.2
         version: 7.23.2
+      '@babel/plugin-transform-typescript':
+        specifier: ^7.22.15
+        version: 7.22.15(@babel/core@7.23.2)
       '@babel/types':
         specifier: ^7.23.3
         version: 7.23.3
@@ -35,6 +38,9 @@ importers:
       pnpm:
         specifier: ^7.33.3
         version: 7.33.6
+      vitest:
+        specifier: ^0.27.3
+        version: 0.27.3(happy-dom@8.9.0)
 
   packages/node:
     devDependencies:

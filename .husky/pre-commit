@@ -1,0 +1,6 @@
+#!/usr/bin/env sh
+. "$(dirname -- "$0")/_/husky.sh"
+
+npm test -- --watch=false
+nr prepareImports
+nr prepareDocs && nr addToGit
