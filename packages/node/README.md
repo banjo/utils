@@ -6,7 +6,6 @@ A collection of some of my most used node-specific JavaScript / TypeScript utili
 
 -   :palm_tree: - Three-shakable ESM modules.
 -   :speech_balloon: - Fully typed TSDocs with examples
--   :star: - No dependencies
 -   :file_folder: - Small size
 -   :bookmark: - Own well-tested utilities or imported from large open source projects.
 
