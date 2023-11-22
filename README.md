@@ -7,7 +7,7 @@ A collection of some of my most used JavaScript / TypeScript utility functions.
 -   :file_folder: - Small size
 -   :bookmark: - Own well-tested utilities or imported from large open source projects.
 
-There are two packages:
+There are two packages (click for docs):
 
--   `@banjoanton/utils` - JS / TS utilities. 
--   `@banjoanton/node-utils` - Node.js specific utilities.
+-   [`@banjoanton/utils`](https://github.com/banjo/utils/tree/main/packages/utils) - JS / TS utilities. 
+-   [`@banjoanton/node-utils`](https://github.com/banjo/utils/tree/main/packages/node) - Node.js specific utilities.
