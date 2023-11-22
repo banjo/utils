@@ -1,7 +1,7 @@
 import consola from "consola";
-import fs from "fs";
-import { attempt, defaults } from "packages/utils/src";
+import { defaults } from "packages/utils/src";
 import pc from "picocolors";
+import { FileKit } from "./file";
 
 /**
  * A simple logger that logs to the console and optionally to a file. Based on consola. Should mainly be used for CLI tools.
@@ -23,7 +23,7 @@ type LoggerConfig = {
 
 const LOGGER_CONFIG: LoggerConfig = {
     debug: false,
-    logFile: "logs.txt",
+    logFile: undefined,
 };
 
 const LOGGER_CONFIG_DEFAULTS = {
@@ -55,7 +55,7 @@ const saveToFile = (message: unknown) => {
     const formattedLogDate = new Date().toISOString().replace(/:/g, "-");
     const formattedMessage = `${formattedLogDate} ${message}\n`;
 
-    attempt(() => fs.appendFileSync(logFile, formattedMessage));
+    FileKit.appendFile(logFile, formattedMessage);
 };
 
 const debug = (message: string | unknown) => {

@@ -12,10 +12,10 @@ import { extname } from "path";
  * @param config - Configurable options.
  * @returns - Boolean
  * @example
- * const fileOrFolderExists = FileUtil.pathExists("file.txt");
- * const explicitFileOrFolderExists = FileUtil.pathExists("file.txt", { type: "all" });
- * const fileExists = FileUtil.pathExists("file.txt", { type: "file" });
- * const folderExists = FileUtil.pathExists("dir", { type: "directory" });
+ * const fileOrFolderExists = FileKit.pathExists("file.txt");
+ * const explicitFileOrFolderExists = FileKit.pathExists("file.txt", { type: "all" });
+ * const fileExists = FileKit.pathExists("file.txt", { type: "file" });
+ * const folderExists = FileKit.pathExists("dir", { type: "directory" });
  */
 const pathExists = (path: string, config?: { type: "file" | "directory" | "all" }) => {
     const { type } = defaults(config, { type: "all" });
@@ -33,13 +33,13 @@ const pathExists = (path: string, config?: { type: "file" | "directory" | "all" 
     }
 };
 
-const assertDirectory = (path: string) => {
+const assureDirectory = (path: string) => {
     const isFilePath = extname(path) !== "";
 
     if (isFilePath) {
         const parentDirectory = path.split("/").slice(0, -1).join("/");
         if (parentDirectory === "") return;
-        assertDirectory(parentDirectory);
+        assureDirectory(parentDirectory);
         return;
     }
 
@@ -48,10 +48,10 @@ const assertDirectory = (path: string) => {
     }
 };
 
-const assertFile = (file: string, content?: string): { created: boolean } => {
+const assureFile = (file: string, content?: string): { created: boolean } => {
     if (!pathExists(file)) {
         const parentDirectory = file.split("/").slice(0, -1).join("/");
-        assertDirectory(parentDirectory);
+        assureDirectory(parentDirectory);
         fs.writeFileSync(file, content ?? "");
         return { created: true };
     }
@@ -79,15 +79,15 @@ type BaseFileConfig = {
  * @param config - Configurable options.
  * @returns - void
  * @example
- * FileUtil.writeFile("file.txt", "Hello world!");
+ * FileKit.writeFile("file.txt", "Hello world!");
  *
  * // With config
- * FileUtil.writeFile("file.txt", "Hello world!", { logError: true });
+ * FileKit.writeFile("file.txt", "Hello world!", { logError: true });
  */
 const writeFile = (file: string, content: string, config?: BaseFileConfig) => {
     attempt(
         () => {
-            const { created } = assertFile(file, content);
+            const { created } = assureFile(file, content);
             if (created) return;
             fs.writeFileSync(file, content);
         },
@@ -105,14 +105,14 @@ const writeFile = (file: string, content: string, config?: BaseFileConfig) => {
  * @param config - Configurable options.
  * @returns - void
  * @example
- * FileUtil.appendFile("file.txt", "Hello world!");
- * FileUtil.appendFile("file.txt", "Hello world!", { logError: true });
- * FileUtil.appendFile("file.txt", "Hello world!", { onError: (error) => console.log(error) });
+ * FileKit.appendFile("file.txt", "Hello world!");
+ * FileKit.appendFile("file.txt", "Hello world!", { logError: true });
+ * FileKit.appendFile("file.txt", "Hello world!", { onError: (error) => console.log(error) });
  */
 const appendFile = (file: string, content: string, config?: BaseFileConfig) => {
     attempt(
         () => {
-            const { created } = assertFile(file, content);
+            const { created } = assureFile(file, content);
             if (created) return;
             fs.appendFileSync(file, content);
         },
@@ -129,10 +129,10 @@ const appendFile = (file: string, content: string, config?: BaseFileConfig) => {
  * @param config - Configurable options.
  * @returns - The file content or undefined.
  * @example
- * const content = FileUtil.readFile("file.txt"); // undefined or string
+ * const content = FileKit.readFile("file.txt"); // undefined or string
  *
- * const content = FileUtil.readFile("file.txt", { logError: true });
- * const content = FileUtil.readFile("file.txt", { onError: (error) => console.log(error) });
+ * const content = FileKit.readFile("file.txt", { logError: true });
+ * const content = FileKit.readFile("file.txt", { onError: (error) => console.log(error) });
  */
 const readFile = (file: string, config?: BaseFileConfig) => {
     return attempt(
@@ -158,9 +158,9 @@ const readFile = (file: string, config?: BaseFileConfig) => {
  * @param config - Configurable options.
  * @returns - void
  * @example
- * FileUtil.deleteFile("file.txt");
- * FileUtil.deleteFile("file.txt", { logError: true });
- * FileUtil.deleteFile("file.txt", { onError: (error) => console.log(error) });
+ * FileKit.deleteFile("file.txt");
+ * FileKit.deleteFile("file.txt", { logError: true });
+ * FileKit.deleteFile("file.txt", { onError: (error) => console.log(error) });
  */
 const deleteFile = (file: string, config?: BaseFileConfig) => {
     return attempt(
@@ -181,9 +181,9 @@ const deleteFile = (file: string, config?: BaseFileConfig) => {
  * @param config - Configurable options.
  * @returns - void
  * @example
- * FileUtil.deleteFiles(["file.txt", "file2.txt"]);
- * FileUtil.deleteFiles(["file.txt", "file2.txt"], { logError: true });
- * FileUtil.deleteFiles(["file.txt", "file2.txt"], { onError: (error) => console.log(error) });
+ * FileKit.deleteFiles(["file.txt", "file2.txt"]);
+ * FileKit.deleteFiles(["file.txt", "file2.txt"], { logError: true });
+ * FileKit.deleteFiles(["file.txt", "file2.txt"], { onError: (error) => console.log(error) });
  */
 const deleteFiles = (files: string[], config?: BaseFileConfig) => {
     return attempt(
@@ -205,9 +205,9 @@ const deleteFiles = (files: string[], config?: BaseFileConfig) => {
  * @param config - Configurable options.
  * @returns - void
  * @example
- * FileUtil.deleteDirectory("dir");
- * FileUtil.deleteDirectory("dir", { logError: true });
- * FileUtil.deleteDirectory("dir", { onError: (error) => console.log(error) });
+ * FileKit.deleteDirectory("dir");
+ * FileKit.deleteDirectory("dir", { logError: true });
+ * FileKit.deleteDirectory("dir", { onError: (error) => console.log(error) });
  */
 const deleteDirectory = (dir: string, config?: BaseFileConfig) => {
     return attempt(
@@ -228,15 +228,15 @@ const deleteDirectory = (dir: string, config?: BaseFileConfig) => {
  * @param config - Configurable options.
  * @returns - void
  * @example
- * FileUtil.createDirectory("dir");
- * FileUtil.createDirectory("dir", { logError: true });
- * FileUtil.createDirectory("dir", { onError: (error) => console.log(error) });
+ * FileKit.createDirectory("dir");
+ * FileKit.createDirectory("dir", { logError: true });
+ * FileKit.createDirectory("dir", { onError: (error) => console.log(error) });
  */
 const createDirectory = (dir: string, config?: BaseFileConfig) => {
     return attempt(
         () => {
             if (pathExists(dir, { type: "directory" })) return;
-            assertDirectory(dir);
+            assureDirectory(dir);
         },
         {
             logError: config?.logError,
@@ -251,9 +251,9 @@ const createDirectory = (dir: string, config?: BaseFileConfig) => {
  * @param config - Configurable options.
  * @returns - Boolean
  * @example
- * const exists = FileUtil.fileExists("file.txt"); // true or false
- * const exists = FileUtil.fileExists("file.txt", { logError: true });
- * const exists = FileUtil.fileExists("file.txt", { onError: (error) => console.log(error) });
+ * const exists = FileKit.fileExists("file.txt"); // true or false
+ * const exists = FileKit.fileExists("file.txt", { logError: true });
+ * const exists = FileKit.fileExists("file.txt", { onError: (error) => console.log(error) });
  */
 const fileExists = (file: string, config?: BaseFileConfig) => {
     return attempt(
@@ -273,9 +273,9 @@ const fileExists = (file: string, config?: BaseFileConfig) => {
  * @param config - Configurable options.
  * @returns - Boolean
  * @example
- * const exists = FileUtil.directoryExists("dir"); // true or false
- * const exists = FileUtil.directoryExists("dir", { logError: true });
- * const exists = FileUtil.directoryExists("dir", { onError: (error) => console.log(error) });
+ * const exists = FileKit.directoryExists("dir"); // true or false
+ * const exists = FileKit.directoryExists("dir", { logError: true });
+ * const exists = FileKit.directoryExists("dir", { onError: (error) => console.log(error) });
  */
 const directoryExists = (dir: string, config?: BaseFileConfig) => {
     return attempt(
@@ -296,14 +296,14 @@ const directoryExists = (dir: string, config?: BaseFileConfig) => {
  * @param config - Configurable options.
  * @returns - void
  * @example
- * FileUtil.copyFile("file.txt", "file2.txt");
- * FileUtil.copyFile("file.txt", "file2.txt", { logError: true });
- * FileUtil.copyFile("file.txt", "file2.txt", { onError: (error) => console.log(error) });
+ * FileKit.copyFile("file.txt", "file2.txt");
+ * FileKit.copyFile("file.txt", "file2.txt", { logError: true });
+ * FileKit.copyFile("file.txt", "file2.txt", { onError: (error) => console.log(error) });
  */
 const copyFile = (source: string, destination: string, config?: BaseFileConfig) => {
     return attempt(
         () => {
-            assertDirectory(destination);
+            assureDirectory(destination);
             fs.copyFileSync(source, destination);
         },
         {
@@ -320,9 +320,9 @@ const copyFile = (source: string, destination: string, config?: BaseFileConfig) 
  * @param config - Configurable options.
  * @returns - void
  * @example
- * FileUtil.copyDirectory("dir", "dir2");
- * FileUtil.copyDirectory("dir", "dir2", { logError: true });
- * FileUtil.copyDirectory("dir", "dir2", { onError: (error) => console.log(error) });
+ * FileKit.copyDirectory("dir", "dir2");
+ * FileKit.copyDirectory("dir", "dir2", { logError: true });
+ * FileKit.copyDirectory("dir", "dir2", { onError: (error) => console.log(error) });
  */
 const copyDirectory = (source: string, destination: string, config?: BaseFileConfig) => {
     return attempt(
@@ -337,7 +337,7 @@ const copyDirectory = (source: string, destination: string, config?: BaseFileCon
             if (isSubdirectoryOfSource)
                 throw new Error("Destination should not be a subdirectory of source.");
 
-            assertDirectory(destination);
+            assureDirectory(destination);
 
             const files = fs.readdirSync(source);
 
@@ -360,9 +360,9 @@ const copyDirectory = (source: string, destination: string, config?: BaseFileCon
 };
 
 /**
- * A file utility for reading and writing files using the fs module.
+ * A file utility for reading and writing files using the fs module. You don't need try/catch blocks, use the `onError` callback instead.
  */
-export const FileUtil = {
+export const FileKit = {
     writeFile,
     appendFile,
     deleteFile,

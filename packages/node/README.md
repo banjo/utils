@@ -68,10 +68,10 @@ A file utility for reading and writing files using the fs module.
 > Check if a path exists. Configurable with the second argument.
 
 ```ts
-const fileOrFolderExists = FileUtil.pathExists("file.txt");
-const explicitFileOrFolderExists = FileUtil.pathExists("file.txt", { type: "all" });
-const fileExists = FileUtil.pathExists("file.txt", { type: "file" });
-const folderExists = FileUtil.pathExists("dir", { type: "directory" });
+const fileOrFolderExists = FileKit.pathExists("file.txt");
+const explicitFileOrFolderExists = FileKit.pathExists("file.txt", { type: "all" });
+const fileExists = FileKit.pathExists("file.txt", { type: "file" });
+const folderExists = FileKit.pathExists("dir", { type: "directory" });
 ```
 
 ---
@@ -81,10 +81,10 @@ const folderExists = FileUtil.pathExists("dir", { type: "directory" });
 > Write to a file with the given content. If it exists, it will be overwritten. Otherwise it will be created. If the directory does not exist, it will be created. Configurable with the third argument.
 
 ```ts
-FileUtil.writeFile("file.txt", "Hello world!");
+FileKit.writeFile("file.txt", "Hello world!");
 
 // With config
-FileUtil.writeFile("file.txt", "Hello world!", { logError: true });
+FileKit.writeFile("file.txt", "Hello world!", { logError: true });
 ```
 
 ---
@@ -94,9 +94,9 @@ FileUtil.writeFile("file.txt", "Hello world!", { logError: true });
 > Append content to a file. If the file does not exist, it will be created. If the directory does not exist, it will be created. Configurable with the third argument.
 
 ```ts
-FileUtil.appendFile("file.txt", "Hello world!");
-FileUtil.appendFile("file.txt", "Hello world!", { logError: true });
-FileUtil.appendFile("file.txt", "Hello world!", { onError: error => console.log(error) });
+FileKit.appendFile("file.txt", "Hello world!");
+FileKit.appendFile("file.txt", "Hello world!", { logError: true });
+FileKit.appendFile("file.txt", "Hello world!", { onError: error => console.log(error) });
 ```
 
 ---
@@ -106,10 +106,10 @@ FileUtil.appendFile("file.txt", "Hello world!", { onError: error => console.log(
 > Read a file. Will return undefined if the file does not exist. Configurable with the second argument.
 
 ```ts
-const content = FileUtil.readFile("file.txt"); // undefined or string
+const content = FileKit.readFile("file.txt"); // undefined or string
 
-const content = FileUtil.readFile("file.txt", { logError: true });
-const content = FileUtil.readFile("file.txt", { onError: error => console.log(error) });
+const content = FileKit.readFile("file.txt", { logError: true });
+const content = FileKit.readFile("file.txt", { onError: error => console.log(error) });
 ```
 
 ---
@@ -119,9 +119,9 @@ const content = FileUtil.readFile("file.txt", { onError: error => console.log(er
 > Delete a file. Will do nothing if the file does not exist. Configurable with the second argument.
 
 ```ts
-FileUtil.deleteFile("file.txt");
-FileUtil.deleteFile("file.txt", { logError: true });
-FileUtil.deleteFile("file.txt", { onError: error => console.log(error) });
+FileKit.deleteFile("file.txt");
+FileKit.deleteFile("file.txt", { logError: true });
+FileKit.deleteFile("file.txt", { onError: error => console.log(error) });
 ```
 
 ---
@@ -131,9 +131,9 @@ FileUtil.deleteFile("file.txt", { onError: error => console.log(error) });
 > Delete multiple files. Will do nothing if the file does not exist. Configurable with the second argument.
 
 ```ts
-FileUtil.deleteFiles(["file.txt", "file2.txt"]);
-FileUtil.deleteFiles(["file.txt", "file2.txt"], { logError: true });
-FileUtil.deleteFiles(["file.txt", "file2.txt"], { onError: error => console.log(error) });
+FileKit.deleteFiles(["file.txt", "file2.txt"]);
+FileKit.deleteFiles(["file.txt", "file2.txt"], { logError: true });
+FileKit.deleteFiles(["file.txt", "file2.txt"], { onError: error => console.log(error) });
 ```
 
 ---
@@ -143,9 +143,9 @@ FileUtil.deleteFiles(["file.txt", "file2.txt"], { onError: error => console.log(
 > Remove a directory. Will do nothing if the directory does not exist. Configurable with the second argument.
 
 ```ts
-FileUtil.deleteDirectory("dir");
-FileUtil.deleteDirectory("dir", { logError: true });
-FileUtil.deleteDirectory("dir", { onError: error => console.log(error) });
+FileKit.deleteDirectory("dir");
+FileKit.deleteDirectory("dir", { logError: true });
+FileKit.deleteDirectory("dir", { onError: error => console.log(error) });
 ```
 
 ---
@@ -155,9 +155,9 @@ FileUtil.deleteDirectory("dir", { onError: error => console.log(error) });
 > Create a directory. Will do nothing if the directory already exists. Configurable with the second argument.
 
 ```ts
-FileUtil.createDirectory("dir");
-FileUtil.createDirectory("dir", { logError: true });
-FileUtil.createDirectory("dir", { onError: error => console.log(error) });
+FileKit.createDirectory("dir");
+FileKit.createDirectory("dir", { logError: true });
+FileKit.createDirectory("dir", { onError: error => console.log(error) });
 ```
 
 ---
@@ -167,9 +167,9 @@ FileUtil.createDirectory("dir", { onError: error => console.log(error) });
 > Will return true if the file exists. Does not work for directories. Configurable with the second argument.
 
 ```ts
-const exists = FileUtil.fileExists("file.txt"); // true or false
-const exists = FileUtil.fileExists("file.txt", { logError: true });
-const exists = FileUtil.fileExists("file.txt", { onError: error => console.log(error) });
+const exists = FileKit.fileExists("file.txt"); // true or false
+const exists = FileKit.fileExists("file.txt", { logError: true });
+const exists = FileKit.fileExists("file.txt", { onError: error => console.log(error) });
 ```
 
 ---
@@ -179,9 +179,9 @@ const exists = FileUtil.fileExists("file.txt", { onError: error => console.log(e
 > Check if a directory exists. Does not work for files. Configurable with the second argument.
 
 ```ts
-const exists = FileUtil.directoryExists("dir"); // true or false
-const exists = FileUtil.directoryExists("dir", { logError: true });
-const exists = FileUtil.directoryExists("dir", { onError: error => console.log(error) });
+const exists = FileKit.directoryExists("dir"); // true or false
+const exists = FileKit.directoryExists("dir", { logError: true });
+const exists = FileKit.directoryExists("dir", { onError: error => console.log(error) });
 ```
 
 ---
@@ -191,9 +191,9 @@ const exists = FileUtil.directoryExists("dir", { onError: error => console.log(e
 > Copy a file. Overwrites the destination by default. Error if source file does not exists. If the destination is a file it should have an extension. Configurable with the third argument.
 
 ```ts
-FileUtil.copyFile("file.txt", "file2.txt");
-FileUtil.copyFile("file.txt", "file2.txt", { logError: true });
-FileUtil.copyFile("file.txt", "file2.txt", { onError: error => console.log(error) });
+FileKit.copyFile("file.txt", "file2.txt");
+FileKit.copyFile("file.txt", "file2.txt", { logError: true });
+FileKit.copyFile("file.txt", "file2.txt", { onError: error => console.log(error) });
 ```
 
 ---
@@ -203,9 +203,9 @@ FileUtil.copyFile("file.txt", "file2.txt", { onError: error => console.log(error
 > Copy a directory. Overwrites the destination by default. Error if source does not exist or destination is a file name. Handle with `onError` callback. Configurable with the third argument.
 
 ```ts
-FileUtil.copyDirectory("dir", "dir2");
-FileUtil.copyDirectory("dir", "dir2", { logError: true });
-FileUtil.copyDirectory("dir", "dir2", { onError: error => console.log(error) });
+FileKit.copyDirectory("dir", "dir2");
+FileKit.copyDirectory("dir", "dir2", { logError: true });
+FileKit.copyDirectory("dir", "dir2", { onError: error => console.log(error) });
 ```
 
 ---
