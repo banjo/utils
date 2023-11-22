@@ -43,14 +43,17 @@ Auto generated from TSDocs.
 
 -   [File](#file)
     -   [pathExists](#pathExists)
-    -   [createFile](#createFile)
-    -   [appendToFile](#appendToFile)
+    -   [writeFile](#writeFile)
+    -   [appendFile](#appendFile)
     -   [readFile](#readFile)
     -   [deleteFile](#deleteFile)
+    -   [deleteFiles](#deleteFiles)
     -   [deleteDirectory](#deleteDirectory)
     -   [createDirectory](#createDirectory)
     -   [fileExists](#fileExists)
     -   [directoryExists](#directoryExists)
+    -   [copyFile](#copyFile)
+    -   [copyDirectory](#copyDirectory)
 -   [Logger](#logger)
     -   [Logger](#Logger)
 
@@ -73,27 +76,27 @@ const folderExists = FileUtil.pathExists("dir", { type: "directory" });
 
 ---
 
-#### createFile
+#### writeFile
 
-> Create a file with the given content. If the file already exists, it will be overwritten. If the directory does not exist, it will be created. Configurable with the third argument.
+> Write to a file with the given content. If it exists, it will be overwritten. Otherwise it will be created. If the directory does not exist, it will be created. Configurable with the third argument.
 
 ```ts
-FileUtil.createFile("file.txt", "Hello world!");
+FileUtil.writeFile("file.txt", "Hello world!");
 
 // With config
-FileUtil.createFile("file.txt", "Hello world!", { logError: true });
+FileUtil.writeFile("file.txt", "Hello world!", { logError: true });
 ```
 
 ---
 
-#### appendToFile
+#### appendFile
 
 > Append content to a file. If the file does not exist, it will be created. If the directory does not exist, it will be created. Configurable with the third argument.
 
 ```ts
-FileUtil.appendToFile("file.txt", "Hello world!");
-FileUtil.appendToFile("file.txt", "Hello world!", { logError: true });
-FileUtil.appendToFile("file.txt", "Hello world!", { onError: error => console.log(error) });
+FileUtil.appendFile("file.txt", "Hello world!");
+FileUtil.appendFile("file.txt", "Hello world!", { logError: true });
+FileUtil.appendFile("file.txt", "Hello world!", { onError: error => console.log(error) });
 ```
 
 ---
@@ -119,6 +122,18 @@ const content = FileUtil.readFile("file.txt", { onError: error => console.log(er
 FileUtil.deleteFile("file.txt");
 FileUtil.deleteFile("file.txt", { logError: true });
 FileUtil.deleteFile("file.txt", { onError: error => console.log(error) });
+```
+
+---
+
+#### deleteFiles
+
+> Delete multiple files. Will do nothing if the file does not exist. Configurable with the second argument.
+
+```ts
+FileUtil.deleteFiles(["file.txt", "file2.txt"]);
+FileUtil.deleteFiles(["file.txt", "file2.txt"], { logError: true });
+FileUtil.deleteFiles(["file.txt", "file2.txt"], { onError: error => console.log(error) });
 ```
 
 ---
@@ -167,6 +182,30 @@ const exists = FileUtil.fileExists("file.txt", { onError: error => console.log(e
 const exists = FileUtil.directoryExists("dir"); // true or false
 const exists = FileUtil.directoryExists("dir", { logError: true });
 const exists = FileUtil.directoryExists("dir", { onError: error => console.log(error) });
+```
+
+---
+
+#### copyFile
+
+> Copy a file. Overwrites the destination by default. Error if source file does not exists. If the destination is a file it should have an extension. Configurable with the third argument.
+
+```ts
+FileUtil.copyFile("file.txt", "file2.txt");
+FileUtil.copyFile("file.txt", "file2.txt", { logError: true });
+FileUtil.copyFile("file.txt", "file2.txt", { onError: error => console.log(error) });
+```
+
+---
+
+#### copyDirectory
+
+> Copy a directory. Overwrites the destination by default. Error if source does not exist or destination is a file name. Handle with `onError` callback. Configurable with the third argument.
+
+```ts
+FileUtil.copyDirectory("dir", "dir2");
+FileUtil.copyDirectory("dir", "dir2", { logError: true });
+FileUtil.copyDirectory("dir", "dir2", { onError: error => console.log(error) });
 ```
 
 ---

@@ -41,6 +41,9 @@ importers:
       rimraf:
         specifier: ^5.0.5
         version: 5.0.5
+      vite:
+        specifier: ^4.1.4
+        version: 4.1.4(@types/node@18.15.0)
       vitest:
         specifier: ^0.27.3
         version: 0.27.3(happy-dom@8.9.0)
@@ -77,6 +80,9 @@ importers:
       typescript:
         specifier: ^5.2.2
         version: 5.2.2
+      vite:
+        specifier: ^4.1.4
+        version: 4.1.4(@types/node@18.15.0)
 
   packages/utils:
     dependencies:
