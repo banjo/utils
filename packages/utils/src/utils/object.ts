@@ -196,10 +196,10 @@ export const merge = <T extends object = object, S extends object = DeepPartial<
 export const defaults = <T extends object, U extends Partial<T>>(
     obj: Maybe<U>,
     defaultObj: T
-): T & U => {
+): T => {
     const safeObj: Partial<T> = obj ?? {};
     const updated = merge(defaultObj, safeObj);
-    return updated as T & U;
+    return updated as T;
 };
 
 /**

@@ -7,18 +7,24 @@ import { FileKit } from "./file";
  * A simple logger that logs to the console and optionally to a file. Based on consola. Should mainly be used for CLI tools.
  */
 
+type Type = "error" | "warning" | "info" | "success" | "debug" | "log";
+
 type LoggerConfig = {
     /**
-     * Whether to log debug messages.
+     * Whether to log debug messages. Defaults to false.
      * @default false
      */
     debug: boolean;
 
     /**
-     * A filepath to save logs to.
-     * @default "logs.txt"
+     * A filepath to save logs to. If undefined, logs will not be saved to a file.
      */
     logFile?: string;
+
+    /**
+     * File log handler. A callback to handle how the file logging is structured. Should return a string. Defaults to [<type>] <date>: <message>.
+     */
+    fileLogHandler?: (message: string, type: Type) => string;
 };
 
 const LOGGER_CONFIG: LoggerConfig = {
@@ -26,39 +32,75 @@ const LOGGER_CONFIG: LoggerConfig = {
     logFile: undefined,
 };
 
-const LOGGER_CONFIG_DEFAULTS = {
-    debug: false,
-    logFile: "logs.txt",
+const concatenateMessages = (message: string, ...optionalParams: unknown[]) => {
+    const messages = [message, ...optionalParams].map(m => {
+        if (typeof m === "object") return JSON.stringify(m);
+        return m;
+    });
+
+    return messages.join("\n");
 };
 
-const setLoggerConfig = (config: Partial<LoggerConfig>) => defaults(config, LOGGER_CONFIG_DEFAULTS);
+const setLoggerConfig = (config: Partial<LoggerConfig>) => {
+    const updatedConfig = defaults(config, LOGGER_CONFIG);
+    LOGGER_CONFIG.debug = updatedConfig.debug;
+    LOGGER_CONFIG.logFile = updatedConfig.logFile;
+    LOGGER_CONFIG.fileLogHandler = updatedConfig.fileLogHandler;
+};
 
-const error = (message: string, ...optionalParams: unknown[]) =>
+const error = (message: string, ...optionalParams: unknown[]) => {
     consola.error(message, ...optionalParams);
 
-const warning = (message: string, ...optionalParams: unknown[]) =>
+    const allMessages = concatenateMessages(message, ...optionalParams);
+
+    saveToFile(allMessages, "error");
+};
+
+const warning = (message: string, ...optionalParams: unknown[]) => {
     consola.warn(message, ...optionalParams);
 
-const info = (message: string, ...optionalParams: unknown[]) =>
+    const allMessages = concatenateMessages(message, ...optionalParams);
+    saveToFile(allMessages, "warning");
+};
+const info = (message: string, ...optionalParams: unknown[]) => {
     consola.info(message, ...optionalParams);
 
-const success = (message: string, ...optionalParams: unknown[]) =>
+    const allMessages = concatenateMessages(message, ...optionalParams);
+    saveToFile(allMessages, "info");
+};
+
+const success = (message: string, ...optionalParams: unknown[]) => {
     consola.success(message, ...optionalParams);
 
-const log = (message: string, ...optionalParams: unknown[]) =>
+    const allMessages = concatenateMessages(message, ...optionalParams);
+    saveToFile(allMessages, "success");
+};
+
+const log = (message: string, ...optionalParams: unknown[]) => {
     consola.log(message, ...optionalParams);
 
-const saveToFile = (message: unknown) => {
+    const allMessages = concatenateMessages(message, ...optionalParams);
+    saveToFile(allMessages, "log");
+};
+
+const saveToFile = (message: unknown, type: Type) => {
     const logFile = LOGGER_CONFIG.logFile;
     if (!logFile) return;
 
+    if (LOGGER_CONFIG.fileLogHandler) {
+        const formattedMessage = LOGGER_CONFIG.fileLogHandler(message as string, type);
+        FileKit.appendFile(logFile, formattedMessage);
+        return;
+    }
+
     const formattedLogDate = new Date().toISOString().replace(/:/g, "-");
-    const formattedMessage = `${formattedLogDate} ${message}\n`;
+    const formattedMessage = `[${type.toUpperCase()}] ${formattedLogDate}: ${message}\n`;
 
     FileKit.appendFile(logFile, formattedMessage);
 };
 
 const debug = (message: string | unknown) => {
+    saveToFile(message, "debug");
     if (!LOGGER_CONFIG.debug) return;
 
     if (typeof message === "string") {
@@ -66,8 +108,6 @@ const debug = (message: string | unknown) => {
     } else {
         consola.log(message);
     }
-
-    saveToFile(message);
 };
 
 /**
