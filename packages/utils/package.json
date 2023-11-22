@@ -31,7 +31,7 @@
         "dev": "rollup --config --watch",
         "prepublishOnly": "nr build",
         "format": "npx prettier --write .",
-        "release": "bumpp && npm publish",
+        "release": "bumpp --no-tag && npm publish",
         "start": "esno src/index.ts",
         "test": "vitest",
         "typecheck": "tsc --noEmit",
