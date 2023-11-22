@@ -1,7 +1,6 @@
-import babel from "@babel/core";
-import doctrine from "doctrine";
 import { readFileSync, writeFileSync } from "node:fs";
-import { capitalize, last, objectEntries } from "../packages/utils/src/index";
+import { capitalize, objectEntries } from "../packages/utils/src/index";
+import { astParseFiles } from "./ast";
 import { TYPES, Type, format, getDirectories, getUtilFiles } from "./utils";
 
 const TS_DOCS_REGEX = /\/\*\*[\s\S]*?\*\//g;
@@ -154,98 +153,4 @@ ${doc.example}
 
 function cleanComment(comment: string) {
     return comment.replace("/**", "").replace("*/", "").replaceAll(" * ", "").trim();
-}
-
-type ParsedAst = { name: string; comment: string };
-type ParsedAstOutput = {
-    file: string;
-    comments: {
-        comment: doctrine.Annotation;
-        name: string;
-    }[];
-    content: string;
-};
-
-function astParseFiles(files: { content: string; fileName: string }[]): ParsedAstOutput[] {
-    const parsedComments = files.map(file => {
-        const ast = babel.parseSync(file.content, {
-            sourceType: "module",
-            plugins: ["@babel/plugin-transform-typescript"],
-        });
-
-        const fns: ParsedAst[] = [];
-
-        babel.traverse(ast!, {
-            ExportNamedDeclaration(path: any) {
-                if (path.node.declaration?.type === "FunctionDeclaration") {
-                    const name = path.node.declaration.id!.name;
-                    const leadingComments: any[] = path.node.leadingComments;
-                    if (!leadingComments) {
-                        // might have leading comments on another TSDeclareFunction (range, template, etc)
-                        const exportNamedDeclarations: any[] = path.parent.body.filter(
-                            (node: any) => node.type === "ExportNamedDeclaration"
-                        );
-
-                        const hasTsDeclareFunction = exportNamedDeclarations.filter(
-                            d => d.declaration?.type === "TSDeclareFunction"
-                        );
-
-                        const matchingDeclareFunctions = hasTsDeclareFunction.filter(
-                            (node: any) => node.declaration.id.name === name
-                        );
-
-                        if (matchingDeclareFunctions.length === 0) {
-                            console.log("no matching declare function for " + name);
-                            return;
-                        }
-
-                        matchingDeclareFunctions.forEach(node => {
-                            const leadingComments: any[] = node.leadingComments;
-                            if (!leadingComments) return;
-
-                            const comment =
-                                leadingComments.length > 1
-                                    ? last(leadingComments)?.value
-                                    : leadingComments[0].value;
-
-                            fns.push({ name, comment });
-                        });
-
-                        return;
-                    }
-
-                    const comment =
-                        leadingComments.length > 1
-                            ? last(leadingComments)?.value
-                            : leadingComments[0].value;
-
-                    fns.push({ name, comment });
-                } else if (path.node.declaration?.type === "VariableDeclaration") {
-                    const name = path.node.declaration.declarations[0].id.name;
-                    const leadingComments: any[] = path.node.leadingComments;
-                    if (!leadingComments) return;
-
-                    const comment =
-                        leadingComments.length > 1
-                            ? last(leadingComments)?.value
-                            : leadingComments[0].value;
-
-                    fns.push({ name, comment });
-                }
-            },
-        });
-
-        const jsDocsParsed = fns.map(fn => {
-            const parsed = doctrine.parse(fn.comment, { unwrap: true });
-
-            return {
-                ...fn,
-                comment: parsed,
-            };
-        });
-
-        return { file: file.fileName, comments: jsDocsParsed, content: file.content };
-    });
-
-    return parsedComments;
 }

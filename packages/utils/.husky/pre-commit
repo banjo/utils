@@ -1,7 +1,0 @@
-#!/usr/bin/env sh
-. "$(dirname -- "$0")/_/husky.sh"
-
-npm test -- --watch=false
-nr prepareImports
-nr prepareDocs && git add ./README.md
-npx pretty-quick --staged

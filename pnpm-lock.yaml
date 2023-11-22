@@ -56,12 +56,12 @@ importers:
       bumpp:
         specifier: ^8.2.1
         version: 8.2.1
-      current-week-number:
-        specifier: ^1.0.7
-        version: 1.0.7
-      happy-dom:
-        specifier: ^8.9.0
-        version: 8.9.0
+      consola:
+        specifier: ^3.2.3
+        version: 3.2.3
+      picocolors:
+        specifier: ^1.0.0
+        version: 1.0.0
       pnpm:
         specifier: ^7.29.1
         version: 7.33.6
@@ -1799,6 +1799,11 @@ packages:
 
   /concat-map@0.0.1:
     resolution: {integrity: sha512-/Srv4dswyQNBfohGpz9o6Yb3Gz3SrUDqBH5rTuhGR7ahtlbYKnVxw2bCFMRljaA7EXHaXZ8wsHdodFvbkhKmqg==}
+    dev: true
+
+  /consola@3.2.3:
+    resolution: {integrity: sha512-I5qxpzLv+sJhTVEoLYNcTW+bThDCPsit0vLNKShZx6rLtpilNpmmeTPaeqJb9ZE9dV3DGaeby6Vuhrw38WjeyQ==}
+    engines: {node: ^14.18.0 || >=16.10.0}
     dev: true
 
   /convert-source-map@2.0.0:

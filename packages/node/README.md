@@ -41,4 +41,162 @@ Auto generated from TSDocs.
 
 ### Table of Contents
 
+-   [File](#file)
+    -   [pathExists](#pathExists)
+    -   [createFile](#createFile)
+    -   [appendToFile](#appendToFile)
+    -   [readFile](#readFile)
+    -   [deleteFile](#deleteFile)
+    -   [deleteDirectory](#deleteDirectory)
+    -   [createDirectory](#createDirectory)
+    -   [fileExists](#fileExists)
+    -   [directoryExists](#directoryExists)
+-   [Logger](#logger)
+    -   [Logger](#Logger)
+
+### File
+
+A file utility for reading and writing files using the fs module.
+
+---
+
+#### pathExists
+
+> Check if a path exists. Configurable with the second argument.
+
+```ts
+const fileOrFolderExists = FileUtil.pathExists("file.txt");
+const explicitFileOrFolderExists = FileUtil.pathExists("file.txt", { type: "all" });
+const fileExists = FileUtil.pathExists("file.txt", { type: "file" });
+const folderExists = FileUtil.pathExists("dir", { type: "directory" });
+```
+
+---
+
+#### createFile
+
+> Create a file with the given content. If the file already exists, it will be overwritten. If the directory does not exist, it will be created. Configurable with the third argument.
+
+```ts
+FileUtil.createFile("file.txt", "Hello world!");
+
+// With config
+FileUtil.createFile("file.txt", "Hello world!", { logError: true });
+```
+
+---
+
+#### appendToFile
+
+> Append content to a file. If the file does not exist, it will be created. If the directory does not exist, it will be created. Configurable with the third argument.
+
+```ts
+FileUtil.appendToFile("file.txt", "Hello world!");
+FileUtil.appendToFile("file.txt", "Hello world!", { logError: true });
+FileUtil.appendToFile("file.txt", "Hello world!", { onError: error => console.log(error) });
+```
+
+---
+
+#### readFile
+
+> Read a file. Will return undefined if the file does not exist. Configurable with the second argument.
+
+```ts
+const content = FileUtil.readFile("file.txt"); // undefined or string
+
+const content = FileUtil.readFile("file.txt", { logError: true });
+const content = FileUtil.readFile("file.txt", { onError: error => console.log(error) });
+```
+
+---
+
+#### deleteFile
+
+> Delete a file. Will do nothing if the file does not exist. Configurable with the second argument.
+
+```ts
+FileUtil.deleteFile("file.txt");
+FileUtil.deleteFile("file.txt", { logError: true });
+FileUtil.deleteFile("file.txt", { onError: error => console.log(error) });
+```
+
+---
+
+#### deleteDirectory
+
+> Remove a directory. Will do nothing if the directory does not exist. Configurable with the second argument.
+
+```ts
+FileUtil.deleteDirectory("dir");
+FileUtil.deleteDirectory("dir", { logError: true });
+FileUtil.deleteDirectory("dir", { onError: error => console.log(error) });
+```
+
+---
+
+#### createDirectory
+
+> Create a directory. Will do nothing if the directory already exists. Configurable with the second argument.
+
+```ts
+FileUtil.createDirectory("dir");
+FileUtil.createDirectory("dir", { logError: true });
+FileUtil.createDirectory("dir", { onError: error => console.log(error) });
+```
+
+---
+
+#### fileExists
+
+> Will return true if the file exists. Does not work for directories. Configurable with the second argument.
+
+```ts
+const exists = FileUtil.fileExists("file.txt"); // true or false
+const exists = FileUtil.fileExists("file.txt", { logError: true });
+const exists = FileUtil.fileExists("file.txt", { onError: error => console.log(error) });
+```
+
+---
+
+#### directoryExists
+
+> Check if a directory exists. Does not work for files. Configurable with the second argument.
+
+```ts
+const exists = FileUtil.directoryExists("dir"); // true or false
+const exists = FileUtil.directoryExists("dir", { logError: true });
+const exists = FileUtil.directoryExists("dir", { onError: error => console.log(error) });
+```
+
+---
+
+### Logger
+
+A simple logger that logs to the console and optionally to a file. Based on consola. Should mainly be used for CLI tools.
+
+---
+
+#### Logger
+
+> A simple logger with styled output. Support for debug mode, file logging, and more.
+
+```ts
+// Log to console
+Logger.debug("Hello world!");
+Logger.log("Hello world!");
+Logger.info("Hello world!");
+Logger.success("Hello world!");
+Logger.warning("Hello world!");
+Logger.error("Hello world!");
+
+// Configure logger
+Logger.setLoggerConfig({ debug: true });
+
+// Log to file
+Logger.setLoggerConfig({ logFile: "logs.txt" });
+```
+
+---
+
 <!-- DOCS END -->
