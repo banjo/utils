@@ -31,7 +31,7 @@
         "@antfu/ni": "^0.19.0",
         "@types/node": "^18.15.0",
         "bumpp": "^8.2.1",
-        "consola": "^3.2.3",
+        "fs-extra": "^11.1.1",
         "picocolors": "^1.0.0",
         "pnpm": "^7.29.1",
         "rimraf": "^5.0.5",
@@ -39,5 +39,8 @@
         "tsx": "^4.1.4",
         "typescript": "^5.2.2",
         "vite": "^4.1.4"
+    },
+    "dependencies": {
+        "consola": "^3.2.3"
     }
 }
