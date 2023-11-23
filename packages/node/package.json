@@ -23,7 +23,7 @@
         "build": "rimraf dist && nr prepareImports && tsup",
         "dev": "tsup --watch --clean",
         "prepublishOnly": "nr build",
-        "release": "bumpp && npm publish",
+        "release": "bumpp --no-tag && npm publish",
         "test": "vitest",
         "prepareImports": "tsx ../../scripts/prepareImports.ts"
     },
