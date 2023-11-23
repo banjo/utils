@@ -1,6 +1,5 @@
-import fs from "fs";
+import fs from "fs-extra";
 import { attempt, defaults } from "packages/utils/src";
-import { extname } from "path";
 
 /**
  * A file utility for reading and writing files using the fs module.
@@ -33,31 +32,8 @@ const pathExists = (path: string, config?: { type: "file" | "directory" | "all" 
     }
 };
 
-const assureDirectory = (path: string) => {
-    const isFilePath = extname(path) !== "";
-
-    if (isFilePath) {
-        const parentDirectory = path.split("/").slice(0, -1).join("/");
-        if (parentDirectory === "") return;
-        assureDirectory(parentDirectory);
-        return;
-    }
-
-    if (!pathExists(path, { type: "directory" })) {
-        fs.mkdirSync(path, { recursive: true });
-    }
-};
-
-const assureFile = (file: string, content?: string): { created: boolean } => {
-    if (!pathExists(file)) {
-        const parentDirectory = file.split("/").slice(0, -1).join("/");
-        assureDirectory(parentDirectory);
-        fs.writeFileSync(file, content ?? "");
-        return { created: true };
-    }
-
-    return { created: false };
-};
+const ensureDirectory = (path: string) => attempt(() => fs.ensureDirSync(path));
+const ensureFile = (file: string) => attempt(() => fs.ensureFileSync(file));
 
 type BaseFileConfig = {
     /**
@@ -85,17 +61,10 @@ type BaseFileConfig = {
  * FileKit.writeFile("file.txt", "Hello world!", { logError: true });
  */
 const writeFile = (file: string, content: string, config?: BaseFileConfig) => {
-    attempt(
-        () => {
-            const { created } = assureFile(file, content);
-            if (created) return;
-            fs.writeFileSync(file, content);
-        },
-        {
-            logError: config?.logError,
-            onError: config?.onError,
-        }
-    );
+    attempt(() => fs.outputFileSync(file, content), {
+        logError: config?.logError,
+        onError: config?.onError,
+    });
 };
 
 /**
@@ -112,8 +81,7 @@ const writeFile = (file: string, content: string, config?: BaseFileConfig) => {
 const appendFile = (file: string, content: string, config?: BaseFileConfig) => {
     attempt(
         () => {
-            const { created } = assureFile(file, content);
-            if (created) return;
+            ensureFile(file);
             fs.appendFileSync(file, content);
         },
         {
@@ -153,67 +121,46 @@ const readFile = (file: string, config?: BaseFileConfig) => {
 };
 
 /**
- * Delete a file. Will do nothing if the file does not exist. Configurable with the second argument.
+ * Delete a file or directory. Will do nothing if the path does not exist. Configurable with the second argument.
  * @param file - The file path.
  * @param config - Configurable options.
  * @returns - void
  * @example
- * FileKit.deleteFile("file.txt");
- * FileKit.deleteFile("file.txt", { logError: true });
- * FileKit.deleteFile("file.txt", { onError: (error) => console.log(error) });
+ * FileKit.remove("file.txt");
+ * FileKit.remove("file.txt", { logError: true });
+ * FileKit.remove("file.txt", { onError: (error) => console.log(error) });
+ *
+ * FileKit.remove("dir");
+ * FileKit.remove("dir", { logError: true });
+ * FileKit.remove("dir", { onError: (error) => console.log(error) });
  */
-const deleteFile = (file: string, config?: BaseFileConfig) => {
-    return attempt(
-        () => {
-            if (!pathExists(file, { type: "file" })) return;
-            fs.unlinkSync(file);
-        },
-        {
-            logError: config?.logError,
-            onError: config?.onError,
-        }
-    );
+const remove = (file: string, config?: BaseFileConfig) => {
+    return attempt(() => fs.removeSync(file), {
+        logError: config?.logError,
+        onError: config?.onError,
+    });
 };
 
 /**
  * Delete multiple files. Will do nothing if the file does not exist. Configurable with the second argument.
- * @param files - The file paths.
+ * @param paths - The file paths.
  * @param config - Configurable options.
  * @returns - void
  * @example
- * FileKit.deleteFiles(["file.txt", "file2.txt"]);
- * FileKit.deleteFiles(["file.txt", "file2.txt"], { logError: true });
- * FileKit.deleteFiles(["file.txt", "file2.txt"], { onError: (error) => console.log(error) });
+ * FileKit.removeMultiple(["file.txt", "file2.txt"]);
+ * FileKit.removeMultiple(["file.txt", "file2.txt"], { logError: true });
+ * FileKit.removeMultiple(["file.txt", "file2.txt"], { onError: (error) => console.log(error) });
+ *
+ * FileKit.removeMultiple(["dir", "dir2"]);
+ * FileKit.removeMultiple(["dir", "dir2"], { logError: true });
+ * FileKit.removeMultiple(["dir", "dir2"], { onError: (error) => console.log(error) });
  */
-const deleteFiles = (files: string[], config?: BaseFileConfig) => {
+const removeMultiple = (paths: string[], config?: BaseFileConfig) => {
     return attempt(
         () => {
-            files.forEach(file => {
-                deleteFile(file);
+            paths.forEach(file => {
+                remove(file);
             });
-        },
-        {
-            logError: config?.logError,
-            onError: config?.onError,
-        }
-    );
-};
-
-/**
- * Remove a directory. Will do nothing if the directory does not exist. Configurable with the second argument.
- * @param dir - The directory path.
- * @param config - Configurable options.
- * @returns - void
- * @example
- * FileKit.deleteDirectory("dir");
- * FileKit.deleteDirectory("dir", { logError: true });
- * FileKit.deleteDirectory("dir", { onError: (error) => console.log(error) });
- */
-const deleteDirectory = (dir: string, config?: BaseFileConfig) => {
-    return attempt(
-        () => {
-            if (!pathExists(dir, { type: "directory" })) return;
-            fs.rmSync(dir, { recursive: true });
         },
         {
             logError: config?.logError,
@@ -236,7 +183,7 @@ const createDirectory = (dir: string, config?: BaseFileConfig) => {
     return attempt(
         () => {
             if (pathExists(dir, { type: "directory" })) return;
-            assureDirectory(dir);
+            ensureDirectory(dir);
         },
         {
             logError: config?.logError,
@@ -256,15 +203,10 @@ const createDirectory = (dir: string, config?: BaseFileConfig) => {
  * const exists = FileKit.fileExists("file.txt", { onError: (error) => console.log(error) });
  */
 const fileExists = (file: string, config?: BaseFileConfig) => {
-    return attempt(
-        () => {
-            return pathExists(file, { type: "file" });
-        },
-        {
-            logError: config?.logError,
-            onError: config?.onError,
-        }
-    );
+    return attempt(() => pathExists(file, { type: "file" }), {
+        logError: config?.logError,
+        onError: config?.onError,
+    });
 };
 
 /**
@@ -278,33 +220,27 @@ const fileExists = (file: string, config?: BaseFileConfig) => {
  * const exists = FileKit.directoryExists("dir", { onError: (error) => console.log(error) });
  */
 const directoryExists = (dir: string, config?: BaseFileConfig) => {
-    return attempt(
-        () => {
-            return pathExists(dir, { type: "directory" });
-        },
-        {
-            logError: config?.logError,
-            onError: config?.onError,
-        }
-    );
+    return attempt(() => pathExists(dir, { type: "directory" }), {
+        logError: config?.logError,
+        onError: config?.onError,
+    });
 };
 
 /**
- * Copy a file. Overwrites the destination by default. Error if source file does not exists. If the destination is a file it should have an extension. Configurable with the third argument.
+ * Copy a file or directory. Overwrites the destination by default. Error if source does not exist or destination is a file name. Handle with `onError` callback. Configurable with the third argument.
  * @param source - The source path.
- * @param destination - The destination path. If it is a file, it should have an extension. Will create the directory if it does not exist.
+ * @param destination - The destination path.
  * @param config - Configurable options.
  * @returns - void
  * @example
- * FileKit.copyFile("file.txt", "file2.txt");
- * FileKit.copyFile("file.txt", "file2.txt", { logError: true });
- * FileKit.copyFile("file.txt", "file2.txt", { onError: (error) => console.log(error) });
+ * FileKit.copy("file.txt", "file2.txt");
+ *
+ * FileKit.copy("dir", "dir2");
  */
-const copyFile = (source: string, destination: string, config?: BaseFileConfig) => {
+export const copy = (source: string, destination: string, config?: BaseFileConfig) => {
     return attempt(
         () => {
-            assureDirectory(destination);
-            fs.copyFileSync(source, destination);
+            fs.copySync(source, destination);
         },
         {
             logError: config?.logError,
@@ -314,49 +250,20 @@ const copyFile = (source: string, destination: string, config?: BaseFileConfig) 
 };
 
 /**
- * Copy a directory. Overwrites the destination by default. Error if source does not exist or destination is a file name. Handle with `onError` callback. Configurable with the third argument.
- * @param source - The source path. Should be a directory.
- * @param destination - The destination path. Should be a directory.
+ * Move a file or directory. Overwrites the destination by default. Error if source does not exist. Handle with `onError` callback. Configurable with the third argument.
+ * @param source - The source path.
+ * @param destination - The destination path.
  * @param config - Configurable options.
  * @returns - void
  * @example
- * FileKit.copyDirectory("dir", "dir2");
- * FileKit.copyDirectory("dir", "dir2", { logError: true });
- * FileKit.copyDirectory("dir", "dir2", { onError: (error) => console.log(error) });
+ * FileKit.move("file.txt", "file2.txt");
+ * FileKit.move("dir", "dir2");
  */
-const copyDirectory = (source: string, destination: string, config?: BaseFileConfig) => {
-    return attempt(
-        () => {
-            if (!directoryExists(source)) throw new Error("Source does not exist.");
-            if (extname(destination) !== "") throw new Error("Destination should be a directory.");
-            if (source === destination)
-                throw new Error("Source and destination should not be the same.");
-
-            const isSubdirectoryOfSource = destination.startsWith(`${source}/`);
-
-            if (isSubdirectoryOfSource)
-                throw new Error("Destination should not be a subdirectory of source.");
-
-            assureDirectory(destination);
-
-            const files = fs.readdirSync(source);
-
-            files.forEach(file => {
-                const sourcePath = `${source}/${file}`;
-                const destinationPath = `${destination}/${file}`;
-
-                if (directoryExists(sourcePath)) {
-                    copyDirectory(sourcePath, destinationPath);
-                } else {
-                    copyFile(sourcePath, destinationPath);
-                }
-            });
-        },
-        {
-            logError: config?.logError,
-            onError: config?.onError,
-        }
-    );
+export const move = (source: string, destination: string, config?: BaseFileConfig) => {
+    return attempt(() => fs.moveSync(source, destination, { overwrite: true }), {
+        logError: config?.logError,
+        onError: config?.onError,
+    });
 };
 
 /**
@@ -365,14 +272,13 @@ const copyDirectory = (source: string, destination: string, config?: BaseFileCon
 export const FileKit = {
     writeFile,
     appendFile,
-    deleteFile,
-    deleteFiles,
+    remove,
+    removeMultiple,
     readFile,
     createDirectory,
-    deleteDirectory,
     fileExists,
     directoryExists,
     pathExists,
-    copyFile,
-    copyDirectory,
+    copy,
+    move,
 };

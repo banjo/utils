@@ -25,7 +25,7 @@ describe("logger", () => {
     });
 
     afterEach(() => {
-        FileKit.deleteDirectory(testDirectory);
+        FileKit.remove(testDirectory);
     });
 
     it("should save log to file", () => {

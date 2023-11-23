@@ -39,24 +39,46 @@ Auto generated from TSDocs.
 ### Table of Contents
 
 -   [File](#file)
+    -   [copy](#copy)
+    -   [move](#move)
     -   [pathExists](#pathExists)
     -   [writeFile](#writeFile)
     -   [appendFile](#appendFile)
     -   [readFile](#readFile)
-    -   [deleteFile](#deleteFile)
-    -   [deleteFiles](#deleteFiles)
-    -   [deleteDirectory](#deleteDirectory)
+    -   [remove](#remove)
+    -   [removeMultiple](#removeMultiple)
     -   [createDirectory](#createDirectory)
     -   [fileExists](#fileExists)
     -   [directoryExists](#directoryExists)
-    -   [copyFile](#copyFile)
-    -   [copyDirectory](#copyDirectory)
 -   [Logger](#logger)
     -   [Logger](#Logger)
 
 ### File
 
 A file utility for reading and writing files using the fs module.
+
+---
+
+#### copy
+
+> Copy a file or directory. Overwrites the destination by default. Error if source does not exist or destination is a file name. Handle with `onError` callback. Configurable with the third argument.
+
+```ts
+FileKit.copy("file.txt", "file2.txt");
+
+FileKit.copy("dir", "dir2");
+```
+
+---
+
+#### move
+
+> Move a file or directory. Overwrites the destination by default. Error if source does not exist. Handle with `onError` callback. Configurable with the third argument.
+
+```ts
+FileKit.move("file.txt", "file2.txt");
+FileKit.move("dir", "dir2");
+```
 
 ---
 
@@ -111,38 +133,34 @@ const content = FileKit.readFile("file.txt", { onError: error => console.log(err
 
 ---
 
-#### deleteFile
+#### remove
 
-> Delete a file. Will do nothing if the file does not exist. Configurable with the second argument.
+> Delete a file or directory. Will do nothing if the path does not exist. Configurable with the second argument.
 
 ```ts
-FileKit.deleteFile("file.txt");
-FileKit.deleteFile("file.txt", { logError: true });
-FileKit.deleteFile("file.txt", { onError: error => console.log(error) });
+FileKit.remove("file.txt");
+FileKit.remove("file.txt", { logError: true });
+FileKit.remove("file.txt", { onError: error => console.log(error) });
+
+FileKit.remove("dir");
+FileKit.remove("dir", { logError: true });
+FileKit.remove("dir", { onError: error => console.log(error) });
 ```
 
 ---
 
-#### deleteFiles
+#### removeMultiple
 
 > Delete multiple files. Will do nothing if the file does not exist. Configurable with the second argument.
 
 ```ts
-FileKit.deleteFiles(["file.txt", "file2.txt"]);
-FileKit.deleteFiles(["file.txt", "file2.txt"], { logError: true });
-FileKit.deleteFiles(["file.txt", "file2.txt"], { onError: error => console.log(error) });
-```
+FileKit.removeMultiple(["file.txt", "file2.txt"]);
+FileKit.removeMultiple(["file.txt", "file2.txt"], { logError: true });
+FileKit.removeMultiple(["file.txt", "file2.txt"], { onError: error => console.log(error) });
 
----
-
-#### deleteDirectory
-
-> Remove a directory. Will do nothing if the directory does not exist. Configurable with the second argument.
-
-```ts
-FileKit.deleteDirectory("dir");
-FileKit.deleteDirectory("dir", { logError: true });
-FileKit.deleteDirectory("dir", { onError: error => console.log(error) });
+FileKit.removeMultiple(["dir", "dir2"]);
+FileKit.removeMultiple(["dir", "dir2"], { logError: true });
+FileKit.removeMultiple(["dir", "dir2"], { onError: error => console.log(error) });
 ```
 
 ---
@@ -179,30 +197,6 @@ const exists = FileKit.fileExists("file.txt", { onError: error => console.log(er
 const exists = FileKit.directoryExists("dir"); // true or false
 const exists = FileKit.directoryExists("dir", { logError: true });
 const exists = FileKit.directoryExists("dir", { onError: error => console.log(error) });
-```
-
----
-
-#### copyFile
-
-> Copy a file. Overwrites the destination by default. Error if source file does not exists. If the destination is a file it should have an extension. Configurable with the third argument.
-
-```ts
-FileKit.copyFile("file.txt", "file2.txt");
-FileKit.copyFile("file.txt", "file2.txt", { logError: true });
-FileKit.copyFile("file.txt", "file2.txt", { onError: error => console.log(error) });
-```
-
----
-
-#### copyDirectory
-
-> Copy a directory. Overwrites the destination by default. Error if source does not exist or destination is a file name. Handle with `onError` callback. Configurable with the third argument.
-
-```ts
-FileKit.copyDirectory("dir", "dir2");
-FileKit.copyDirectory("dir", "dir2", { logError: true });
-FileKit.copyDirectory("dir", "dir2", { onError: error => console.log(error) });
 ```
 
 ---

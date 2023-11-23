@@ -29,6 +29,7 @@
     },
     "devDependencies": {
         "@antfu/ni": "^0.19.0",
+        "@types/fs-extra": "^11.0.4",
         "@types/node": "^18.15.0",
         "bumpp": "^8.2.1",
         "fs-extra": "^11.1.1",
