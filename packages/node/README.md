@@ -9,19 +9,17 @@ A collection of some of my most used node-specific JavaScript / TypeScript utili
 -   :file_folder: - Small size
 -   :bookmark: - Own well-tested utilities or imported from large open source projects.
 
-The package is designed to be used as `devDependencies` and bundled into your dist.
-
 ## Install
 
 ```bash
 # npm
-npm install @banjoanton/node-utils -D
+npm install @banjoanton/node-utils
 
 # yarn
-yarn add @banjoanton/node-utils -D
+yarn add @banjoanton/node-utils
 
 # pnpm
-pnpm install @banjoanton/node-utils -D
+pnpm install @banjoanton/node-utils
 ```
 
 ## Import
