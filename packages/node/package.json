@@ -1,7 +1,7 @@
 {
     "name": "@banjoanton/node-utils",
     "type": "module",
-    "version": "0.0.2",
+    "version": "0.0.3",
     "description": "",
     "author": "Anton Ödman <anton.odman@gmail.com>",
     "license": "MIT",
