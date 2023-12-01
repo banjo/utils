@@ -13,8 +13,8 @@
     },
     "bugs": "https://github.com/banjo/utils/issues",
     "keywords": [],
-    "main": "dist/index.esm.cjs",
-    "module": "dist/index.esm.mjs",
+    "main": "dist/index.cjs",
+    "module": "dist/index.js",
     "types": "dist/index.d.ts",
     "files": [
         "dist/*"
