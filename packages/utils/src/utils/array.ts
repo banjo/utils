@@ -437,3 +437,29 @@ export function zip<T extends any[]>(...arrays: ZipInput<T>): ZipOutput<T> {
     }
     return result as ZipOutput<T>;
 }
+
+/**
+ * Partition an array into two arrays. The first array will contain the items that pass the predicate function, the second array will contain the items that don't pass the predicate function.
+ * @param array - The array to partition.
+ * @param predicate - The predicate function to use.
+ * @returns - An array containing two arrays, the first array contains the items that pass the predicate function, the second array contains the items that don't pass the predicate function.
+ * @example
+ * const a = {name: "Alex", age: 20};
+ * const b = {name: "Alex", age: 15};
+ *
+ * partition([a, b], (item) => item.age > 18); // returns [[a], [b]]
+ *
+ * const values = [1, 2, 3, 4, 5];
+ * partition(values, (item) => item % 2 === 0); // returns [[2, 4], [1, 3, 5]]
+ */
+export const partition = <T>(array: T[], predicate: (item: T) => boolean): [T[], T[]] => {
+    const truthy: T[] = [];
+    const falsy: T[] = [];
+
+    array.forEach(item => {
+        if (predicate(item)) truthy.push(item);
+        else falsy.push(item);
+    });
+
+    return [truthy, falsy];
+};

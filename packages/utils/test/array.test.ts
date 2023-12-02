@@ -9,6 +9,7 @@ import {
     intersection,
     last,
     move,
+    partition,
     range,
     remove,
     sample,
@@ -299,6 +300,30 @@ describe("array", () => {
             [1, "a", true, 1],
             [2, "b", false, 2],
             [3, "c", true, 3],
+        ]);
+    });
+
+    it("partition", () => {
+        const a = [1, 2, 3];
+        expect(partition(a, x => x > 2)).toEqual([[3], [1, 2]]);
+
+        const b = ["a", "b", "c"];
+        expect(partition(b, x => x === "a")).toEqual([["a"], ["b", "c"]]);
+
+        const c = [{ a: 1 }, { a: 2 }, { a: 3 }];
+        expect(partition(c, x => x.a > 2)).toEqual([[{ a: 3 }], [{ a: 1 }, { a: 2 }]]);
+
+        const d = [
+            { name: "john", age: 10 },
+            { name: "john", age: 20 },
+            { name: "jack", age: 10 },
+        ];
+        expect(partition(d, x => x.name === "john")).toEqual([
+            [
+                { name: "john", age: 10 },
+                { name: "john", age: 20 },
+            ],
+            [{ name: "jack", age: 10 }],
         ]);
     });
 });
