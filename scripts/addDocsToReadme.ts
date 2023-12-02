@@ -1,6 +1,6 @@
 import { readFileSync, writeFileSync } from "node:fs";
 import { capitalize, objectEntries } from "../packages/utils/src/index";
-import { astParseFiles } from "./ast";
+import { ParsedAstOutput, astParseFiles } from "./ast";
 import { TYPES, Type, format, getDirectories, getUtilFiles } from "./utils";
 
 const TS_DOCS_REGEX = /\/\*\*[\s\S]*?\*\//g;

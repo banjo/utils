@@ -20,19 +20,19 @@ describe("logger", () => {
     });
 
     beforeEach(() => {
-        FileKit.createDirectory(testDirectory);
+        FileKit.createDirectorySync(testDirectory);
         consola.mockTypes(() => vi.fn());
     });
 
     afterEach(() => {
-        FileKit.remove(testDirectory);
+        FileKit.removeSync(testDirectory);
     });
 
     it("should save log to file", () => {
         const fileName = getNewPath("log.txt");
         Logger.setLoggerConfig({ logFile: fileName });
         Logger.log("test");
-        const fileContent = FileKit.readFile(fileName);
+        const fileContent = FileKit.readFileSync(fileName);
         expect(fileContent).toBe(`[LOG] 2023-01-01T00-00-00.000Z: test\n`);
     });
 
@@ -40,7 +40,7 @@ describe("logger", () => {
         const fileName = getNewPath("log.txt");
         Logger.setLoggerConfig({ logFile: fileName });
         Logger.success("test");
-        const fileContent = FileKit.readFile(fileName);
+        const fileContent = FileKit.readFileSync(fileName);
         expect(fileContent).toBe(`[SUCCESS] 2023-01-01T00-00-00.000Z: test\n`);
     });
 
@@ -48,7 +48,7 @@ describe("logger", () => {
         const fileName = getNewPath("log.txt");
         Logger.setLoggerConfig({ logFile: fileName });
         Logger.debug("test");
-        const fileContent = FileKit.readFile(fileName);
+        const fileContent = FileKit.readFileSync(fileName);
         expect(fileContent).toBe(`[DEBUG] 2023-01-01T00-00-00.000Z: test\n`);
     });
 
@@ -56,7 +56,7 @@ describe("logger", () => {
         const fileName = getNewPath("log.txt");
         Logger.setLoggerConfig({ logFile: fileName });
         Logger.info("test");
-        const fileContent = FileKit.readFile(fileName);
+        const fileContent = FileKit.readFileSync(fileName);
         expect(fileContent).toBe(`[INFO] 2023-01-01T00-00-00.000Z: test\n`);
     });
 
@@ -64,7 +64,7 @@ describe("logger", () => {
         const fileName = getNewPath("log.txt");
         Logger.setLoggerConfig({ logFile: fileName });
         Logger.warning("test");
-        const fileContent = FileKit.readFile(fileName);
+        const fileContent = FileKit.readFileSync(fileName);
         expect(fileContent).toBe(`[WARNING] 2023-01-01T00-00-00.000Z: test\n`);
     });
 
@@ -72,7 +72,7 @@ describe("logger", () => {
         const fileName = getNewPath("log.txt");
         Logger.setLoggerConfig({ logFile: fileName });
         Logger.error("test");
-        const fileContent = FileKit.readFile(fileName);
+        const fileContent = FileKit.readFileSync(fileName);
         expect(fileContent).toBe(`[ERROR] 2023-01-01T00-00-00.000Z: test\n`);
     });
 
@@ -85,7 +85,7 @@ describe("logger", () => {
         Logger.info("test");
         Logger.warning("test");
         Logger.error("test");
-        const fileContent = FileKit.readFile(fileName);
+        const fileContent = FileKit.readFileSync(fileName);
         expect(fileContent).toBe(
             `[LOG] 2023-01-01T00-00-00.000Z: test\n` +
                 `[SUCCESS] 2023-01-01T00-00-00.000Z: test\n` +

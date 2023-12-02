@@ -89,14 +89,14 @@ const saveToFile = (message: unknown, type: Type) => {
 
     if (LOGGER_CONFIG.fileLogHandler) {
         const formattedMessage = LOGGER_CONFIG.fileLogHandler(message as string, type);
-        FileKit.appendFile(logFile, formattedMessage);
+        FileKit.appendFileSync(logFile, formattedMessage);
         return;
     }
 
     const formattedLogDate = new Date().toISOString().replace(/:/g, "-");
     const formattedMessage = `[${type.toUpperCase()}] ${formattedLogDate}: ${message}\n`;
 
-    FileKit.appendFile(logFile, formattedMessage);
+    FileKit.appendFileSync(logFile, formattedMessage);
 };
 
 const debug = (message: string | unknown) => {

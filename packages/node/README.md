@@ -39,17 +39,28 @@ Auto generated from TSDocs.
 ### Table of Contents
 
 -   [File](#file)
-    -   [copy](#copy)
-    -   [move](#move)
+    -   [pathExistsSync](#pathExistsSync)
     -   [pathExists](#pathExists)
+    -   [writeFileSync](#writeFileSync)
     -   [writeFile](#writeFile)
+    -   [appendFileSync](#appendFileSync)
     -   [appendFile](#appendFile)
+    -   [readFileSync](#readFileSync)
     -   [readFile](#readFile)
+    -   [removeSync](#removeSync)
     -   [remove](#remove)
+    -   [removeMultipleSync](#removeMultipleSync)
     -   [removeMultiple](#removeMultiple)
+    -   [createDirectorySync](#createDirectorySync)
     -   [createDirectory](#createDirectory)
+    -   [fileExistsSync](#fileExistsSync)
     -   [fileExists](#fileExists)
+    -   [directoryExistsSync](#directoryExistsSync)
     -   [directoryExists](#directoryExists)
+    -   [copySync](#copySync)
+    -   [copy](#copy)
+    -   [moveSync](#moveSync)
+    -   [move](#move)
 -   [Logger](#logger)
     -   [Logger](#Logger)
 
@@ -59,144 +70,286 @@ A file utility for reading and writing files using the fs module.
 
 ---
 
-#### copy
+#### pathExistsSync
 
-> Copy a file or directory. Overwrites the destination by default. Error if source does not exist or destination is a file name. Handle with `onError` callback. Configurable with the third argument.
-
-```ts
-FileKit.copy("file.txt", "file2.txt");
-
-FileKit.copy("dir", "dir2");
-```
-
----
-
-#### move
-
-> Move a file or directory. Overwrites the destination by default. Error if source does not exist. Handle with `onError` callback. Configurable with the third argument.
+> Check if a path exists. Configurable with the second argument.
 
 ```ts
-FileKit.move("file.txt", "file2.txt");
-FileKit.move("dir", "dir2");
+const fileOrFolderExists = FileKit.pathExistsSync("file.txt");
+const explicitFileOrFolderExists = FileKit.pathExistsSync("file.txt", { type: "all" });
+const fileExistsSync = FileKit.pathExistsSync("file.txt", { type: "file" });
+const folderExists = FileKit.pathExistsSync("dir", { type: "directory" });
 ```
 
 ---
 
 #### pathExists
 
-> Check if a path exists. Configurable with the second argument.
+> Check if a path exists async. Configurable with the second argument.
 
 ```ts
-const fileOrFolderExists = FileKit.pathExists("file.txt");
-const explicitFileOrFolderExists = FileKit.pathExists("file.txt", { type: "all" });
-const fileExists = FileKit.pathExists("file.txt", { type: "file" });
-const folderExists = FileKit.pathExists("dir", { type: "directory" });
+const fileOrFolderExists = await FileKit.pathExists("file.txt");
+const explicitFileOrFolderExists = await FileKit.pathExists("file.txt", { type: "all" });
+const fileExistsSync = await FileKit.pathExists("file.txt", { type: "file" });
+const folderExists = await FileKit.pathExists("dir", { type: "directory" });
+```
+
+---
+
+#### writeFileSync
+
+> Write to a file with the given content. If it exists, it will be overwritten. Otherwise it will be created. If the directory does not exist, it will be created. Configurable with the third argument.
+
+```ts
+FileKit.writeFileSync("file.txt", "Hello world!");
+
+// With config
+FileKit.writeFileSync("file.txt", "Hello world!", { logError: true });
 ```
 
 ---
 
 #### writeFile
 
-> Write to a file with the given content. If it exists, it will be overwritten. Otherwise it will be created. If the directory does not exist, it will be created. Configurable with the third argument.
+> Write to a file with the given content async. If it exists, it will be overwritten. Otherwise it will be created. If the directory does not exist, it will be created. Configurable with the third argument.
 
 ```ts
-FileKit.writeFile("file.txt", "Hello world!");
+await FileKit.writeFile("file.txt", "Hello world!");
 
 // With config
-FileKit.writeFile("file.txt", "Hello world!", { logError: true });
+await FileKit.writeFile("file.txt", "Hello world!", { logError: true });
+```
+
+---
+
+#### appendFileSync
+
+> Append content to a file. If the file does not exist, it will be created. If the directory does not exist, it will be created. Configurable with the third argument.
+
+```ts
+FileKit.appendFileSync("file.txt", "Hello world!");
+FileKit.appendFileSync("file.txt", "Hello world!", { logError: true });
+FileKit.appendFileSync("file.txt", "Hello world!", { onError: error => console.log(error) });
 ```
 
 ---
 
 #### appendFile
 
-> Append content to a file. If the file does not exist, it will be created. If the directory does not exist, it will be created. Configurable with the third argument.
+> Append content to a file async. If the file does not exist, it will be created. If the directory does not exist, it will be created. Configurable with the third argument.
 
 ```ts
-FileKit.appendFile("file.txt", "Hello world!");
-FileKit.appendFile("file.txt", "Hello world!", { logError: true });
-FileKit.appendFile("file.txt", "Hello world!", { onError: error => console.log(error) });
+await FileKit.appendFile("file.txt", "Hello world!");
+await FileKit.appendFile("file.txt", "Hello world!", { logError: true });
+await FileKit.appendFile("file.txt", "Hello world!", { onError: error => console.log(error) });
+```
+
+---
+
+#### readFileSync
+
+> Read a file. Will return undefined if the file does not exist. Configurable with the second argument.
+
+```ts
+const content = FileKit.readFileSync("file.txt"); // undefined or string
+
+const content = FileKit.readFileSync("file.txt", { logError: true });
+const content = FileKit.readFileSync("file.txt", { onError: error => console.log(error) });
 ```
 
 ---
 
 #### readFile
 
-> Read a file. Will return undefined if the file does not exist. Configurable with the second argument.
+> Read a file async. Will return undefined if the file does not exist. Configurable with the second argument.
 
 ```ts
-const content = FileKit.readFile("file.txt"); // undefined or string
+const content = await FileKit.readFile("file.txt"); // undefined or string
 
-const content = FileKit.readFile("file.txt", { logError: true });
-const content = FileKit.readFile("file.txt", { onError: error => console.log(error) });
+const content = await FileKit.readFile("file.txt", { logError: true });
+const content = await FileKit.readFile("file.txt", { onError: error => console.log(error) });
+```
+
+---
+
+#### removeSync
+
+> Delete a file or directory. Will do nothing if the path does not exist. Configurable with the second argument.
+
+```ts
+FileKit.removeSync("file.txt");
+FileKit.removeSync("file.txt", { logError: true });
+FileKit.removeSync("file.txt", { onError: error => console.log(error) });
+
+FileKit.removeSync("dir");
+FileKit.removeSync("dir", { logError: true });
+FileKit.removeSync("dir", { onError: error => console.log(error) });
 ```
 
 ---
 
 #### remove
 
-> Delete a file or directory. Will do nothing if the path does not exist. Configurable with the second argument.
+> Delete a file or directory async. Will do nothing if the path does not exist. Configurable with the second argument.
 
 ```ts
-FileKit.remove("file.txt");
-FileKit.remove("file.txt", { logError: true });
-FileKit.remove("file.txt", { onError: error => console.log(error) });
+await FileKit.remove("file.txt");
+await FileKit.remove("file.txt", { logError: true });
+await FileKit.remove("file.txt", { onError: error => console.log(error) });
 
-FileKit.remove("dir");
-FileKit.remove("dir", { logError: true });
-FileKit.remove("dir", { onError: error => console.log(error) });
+await FileKit.remove("dir");
+await FileKit.remove("dir", { logError: true });
+await FileKit.remove("dir", { onError: error => console.log(error) });
+```
+
+---
+
+#### removeMultipleSync
+
+> Delete multiple files. Will do nothing if the file does not exist. Configurable with the second argument.
+
+```ts
+FileKit.removeMultipleSync(["file.txt", "file2.txt"]);
+FileKit.removeMultipleSync(["file.txt", "file2.txt"], { logError: true });
+FileKit.removeMultipleSync(["file.txt", "file2.txt"], { onError: error => console.log(error) });
+
+FileKit.removeMultipleSync(["dir", "dir2"]);
+FileKit.removeMultipleSync(["dir", "dir2"], { logError: true });
+FileKit.removeMultipleSync(["dir", "dir2"], { onError: error => console.log(error) });
 ```
 
 ---
 
 #### removeMultiple
 
-> Delete multiple files. Will do nothing if the file does not exist. Configurable with the second argument.
+> Delete multiple files async. Will do nothing if the file does not exist. Configurable with the second argument.
 
 ```ts
-FileKit.removeMultiple(["file.txt", "file2.txt"]);
-FileKit.removeMultiple(["file.txt", "file2.txt"], { logError: true });
-FileKit.removeMultiple(["file.txt", "file2.txt"], { onError: error => console.log(error) });
+await FileKit.removeMultiple(["file.txt", "file2.txt"]);
+await FileKit.removeMultiple(["file.txt", "file2.txt"], { logError: true });
+await FileKit.removeMultiple(["file.txt", "file2.txt"], { onError: error => console.log(error) });
 
-FileKit.removeMultiple(["dir", "dir2"]);
-FileKit.removeMultiple(["dir", "dir2"], { logError: true });
-FileKit.removeMultiple(["dir", "dir2"], { onError: error => console.log(error) });
+await FileKit.removeMultiple(["dir", "dir2"]);
+await FileKit.removeMultiple(["dir", "dir2"], { logError: true });
+await FileKit.removeMultiple(["dir", "dir2"], { onError: error => console.log(error) });
+```
+
+---
+
+#### createDirectorySync
+
+> Create a directory. Will do nothing if the directory already exists. Configurable with the second argument.
+
+```ts
+FileKit.createDirectorySync("dir");
+FileKit.createDirectorySync("dir", { logError: true });
+FileKit.createDirectorySync("dir", { onError: error => console.log(error) });
 ```
 
 ---
 
 #### createDirectory
 
-> Create a directory. Will do nothing if the directory already exists. Configurable with the second argument.
+> Create a directory async. Will do nothing if the directory already exists. Configurable with the second argument.
 
 ```ts
-FileKit.createDirectory("dir");
-FileKit.createDirectory("dir", { logError: true });
-FileKit.createDirectory("dir", { onError: error => console.log(error) });
+await FileKit.createDirectory("dir");
+await FileKit.createDirectory("dir", { logError: true });
+await FileKit.createDirectory("dir", { onError: error => console.log(error) });
+```
+
+---
+
+#### fileExistsSync
+
+> Will return true if the file exists. Does not work for directories. Configurable with the second argument.
+
+```ts
+const exists = FileKit.fileExistsSync("file.txt"); // true or false
+const exists = FileKit.fileExistsSync("file.txt", { logError: true });
+const exists = FileKit.fileExistsSync("file.txt", { onError: error => console.log(error) });
 ```
 
 ---
 
 #### fileExists
 
-> Will return true if the file exists. Does not work for directories. Configurable with the second argument.
+> Will return true if the file exists async. Does not work for directories. Configurable with the second argument.
 
 ```ts
-const exists = FileKit.fileExists("file.txt"); // true or false
-const exists = FileKit.fileExists("file.txt", { logError: true });
-const exists = FileKit.fileExists("file.txt", { onError: error => console.log(error) });
+const exists = await FileKit.fileExists("file.txt"); // true or false
+const exists = await FileKit.fileExists("file.txt", { logError: true });
+const exists = await FileKit.fileExists("file.txt", { onError: error => console.log(error) });
+```
+
+---
+
+#### directoryExistsSync
+
+> Check if a directory exists. Does not work for files. Configurable with the second argument.
+
+```ts
+const exists = FileKit.directoryExistsSync("dir"); // true or false
+const exists = FileKit.directoryExistsSync("dir", { logError: true });
+const exists = FileKit.directoryExistsSync("dir", { onError: error => console.log(error) });
 ```
 
 ---
 
 #### directoryExists
 
-> Check if a directory exists. Does not work for files. Configurable with the second argument.
+> Check if a directory exists async. Does not work for files. Configurable with the second argument.
 
 ```ts
-const exists = FileKit.directoryExists("dir"); // true or false
-const exists = FileKit.directoryExists("dir", { logError: true });
-const exists = FileKit.directoryExists("dir", { onError: error => console.log(error) });
+const exists = await FileKit.directoryExists("dir"); // true or false
+const exists = await FileKit.directoryExists("dir", { logError: true });
+const exists = await FileKit.directoryExists("dir", { onError: error => console.log(error) });
+```
+
+---
+
+#### copySync
+
+> Copy a file or directory. Overwrites the destination by default. Error if source does not exist or destination is a file name. Handle with `onError` callback. Configurable with the third argument.
+
+```ts
+FileKit.copySync("file.txt", "file2.txt");
+
+FileKit.copySync("dir", "dir2");
+```
+
+---
+
+#### copy
+
+> Copy a file or directory async. Overwrites the destination by default. Error if source does not exist or destination is a file name. Handle with `onError` callback. Configurable with the third argument.
+
+```ts
+await FileKit.copy("file.txt", "file2.txt");
+
+await FileKit.copy("dir", "dir2");
+```
+
+---
+
+#### moveSync
+
+> Move a file or directory. Overwrites the destination by default. Error if source does not exist. Handle with `onError` callback. Configurable with the third argument.
+
+```ts
+FileKit.moveSync("file.txt", "file2.txt");
+FileKit.moveSync("dir", "dir2");
+```
+
+---
+
+#### move
+
+> Move a file or directory async. Overwrites the destination by default. Error if source does not exist. Handle with `onError` callback. Configurable with the third argument.
+
+```ts
+await FileKit.move("file.txt", "file2.txt");
+await FileKit.move("dir", "dir2");
 ```
 
 ---
