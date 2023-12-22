@@ -1,11 +1,13 @@
 import { describe, expect, it } from "vitest";
 import {
+    exists,
     isArray,
     isBoolean,
     isDate,
     isDateObject,
     isDefined,
     isEmpty,
+    isFalsy,
     isFunction,
     isNil,
     isNull,
@@ -15,6 +17,7 @@ import {
     isRegExp,
     isString,
     isSymbol,
+    isTruthy,
     isUndefined,
 } from "../src/utils/is";
 
@@ -155,6 +158,16 @@ describe("is", () => {
         expect(isNil(() => {})).toBe(false);
     });
 
+    it("exists", () => {
+        expect(exists(1)).toBe(true);
+        expect(exists("1")).toBe(true);
+        expect(exists(true)).toBe(true);
+        expect(exists(false)).toBe(true);
+        expect(exists(true)).toBe(true);
+        expect(exists(null)).toBe(false);
+        expect(exists(undefined)).toBe(false);
+    });
+
     it("isDefined", () => {
         expect(isDefined(1)).toBe(true);
         expect(isDefined("1")).toBe(true);
@@ -224,5 +237,43 @@ describe("is", () => {
         expect(isEmpty(new WeakMap([[{}, 1]]))).toBe(true);
         expect(isEmpty(new Set())).toBe(true);
         expect(isEmpty(new Set([1]))).toBe(false);
+    });
+
+    it("isFalsy", () => {
+        expect(isFalsy([])).toBe(false);
+        expect(isFalsy({})).toBe(false);
+        expect(isFalsy(1)).toBe(false);
+        expect(isFalsy("1")).toBe(false);
+        expect(isFalsy(true)).toBe(false);
+        expect(isFalsy(null)).toBe(true);
+        expect(isFalsy(undefined)).toBe(true);
+        expect(isFalsy(() => {})).toBe(false);
+        expect(isFalsy([1])).toBe(false);
+        expect(isFalsy({ a: 1 })).toBe(false);
+        expect(isFalsy(" ")).toBe(false);
+        expect(isFalsy("")).toBe(true);
+        expect(isFalsy(new Map())).toBe(false);
+        expect(isFalsy(new Map([["a", 1]]))).toBe(false);
+        expect(isFalsy(new WeakMap())).toBe(false);
+        expect(isFalsy(NaN)).toBe(true);
+    });
+
+    it("isTruthy", () => {
+        expect(isTruthy([])).toBe(true);
+        expect(isTruthy({})).toBe(true);
+        expect(isTruthy(1)).toBe(true);
+        expect(isTruthy("1")).toBe(true);
+        expect(isTruthy(true)).toBe(true);
+        expect(isTruthy(null)).toBe(false);
+        expect(isTruthy(undefined)).toBe(false);
+        expect(isTruthy(() => {})).toBe(true);
+        expect(isTruthy([1])).toBe(true);
+        expect(isTruthy({ a: 1 })).toBe(true);
+        expect(isTruthy(" ")).toBe(true);
+        expect(isTruthy("")).toBe(false);
+        expect(isTruthy(new Map())).toBe(true);
+        expect(isTruthy(new Map([["a", 1]]))).toBe(true);
+        expect(isTruthy(new WeakMap())).toBe(true);
+        expect(isTruthy(NaN)).toBe(false);
     });
 });

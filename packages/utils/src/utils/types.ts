@@ -89,3 +89,8 @@ export type Primitive = string | number | boolean | symbol | null | undefined;
 export type Prettify<T> = {
     [K in keyof T]: T[K];
 } & {};
+
+/**
+ * A type that represents a falsy value.
+ */
+export type Falsy = false | 0 | "" | null | undefined;

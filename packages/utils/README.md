@@ -62,6 +62,7 @@ Auto generated from TSDocs.
     -   [includes](#includes)
     -   [zip](#zip)
     -   [partition](#partition)
+    -   [sum](#sum)
 -   [Base](#base)
     -   [sleep](#sleep)
 -   [Cache](#cache)
@@ -109,6 +110,9 @@ Auto generated from TSDocs.
     -   [isUndefined](#isUndefined)
     -   [isNil](#isNil)
     -   [isDefined](#isDefined)
+    -   [exists](#exists)
+    -   [isTruthy](#isTruthy)
+    -   [isFalsy](#isFalsy)
     -   [isPrimitive](#isPrimitive)
     -   [isArray](#isArray)
     -   [isElement](#isElement)
@@ -450,6 +454,16 @@ partition([a, b], item => item.age > 18); // returns [[a], [b]]
 
 const values = [1, 2, 3, 4, 5];
 partition(values, item => item % 2 === 0); // returns [[2, 4], [1, 3, 5]]
+```
+
+---
+
+#### sum
+
+> Return the sum of all the elements in an array.
+
+```ts
+sum([1, 2, 3, 4, 5]); // returns 15
 ```
 
 ---
@@ -1059,7 +1073,7 @@ isNil(1); // false
 
 #### isDefined
 
-> Check if the given value exists (is not undefined). Also type guards against undefined. Previously named `exists`.
+> Check if the given value exists (is not undefined). Also type guards against undefined.
 
 ```ts
 isDefined(undefined); // false
@@ -1068,6 +1082,59 @@ isDefined("hello world"); // true
 isDefined(1); // true
 isDefined(false); // true
 isDefined([]); // true
+```
+
+---
+
+#### exists
+
+> Check if the given value is not null or undefined. Also type guards against null and undefined.
+
+```ts
+exists(undefined); // false
+exists(null); // false
+exists("hello world"); // true
+exists(1); // true
+exists(false); // true
+exists([]); // true
+```
+
+---
+
+#### isTruthy
+
+> Check if the given value is truthy. Also type guards against falsy values.
+
+```ts
+isTruthy(undefined); // false
+isTruthy(null); // false
+isTruthy("hello world"); // true
+isTruthy(1); // true
+isTruthy(false); // false
+isTruthy([]); // true
+isTruthy(0); // false
+isTruthy(""); // false
+isTruthy(NaN); // false
+isTruthy({}); // true
+```
+
+---
+
+#### isFalsy
+
+> Check if the given value is falsy. Also type guards against truthy values.
+
+```ts
+isFalsy(undefined); // true
+isFalsy(null); // true
+isFalsy("hello world"); // false
+isFalsy(1); // false
+isFalsy(false); // true
+isFalsy([]); // false
+isFalsy(0); // true
+isFalsy(""); // true
+isFalsy(NaN); // true
+isFalsy({}); // false
 ```
 
 ---

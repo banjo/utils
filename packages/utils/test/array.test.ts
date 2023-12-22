@@ -1,4 +1,4 @@
-import { describe, expect, expectTypeOf, it } from "vitest";
+import { describe, expect, expectTypeOf, it, vi } from "vitest";
 import {
     chunk,
     compact,
@@ -24,6 +24,7 @@ import {
 } from "../src/utils/array";
 
 describe("array", () => {
+    vi.resetModules();
     it("first", () => {
         expect(first([1, 2, 3])).toBe(1);
         expect(first([1])).toBe(1);
@@ -48,8 +49,8 @@ describe("array", () => {
         expect(toArray(1)).toEqual([1]);
         expect(toArray([1])).toEqual([1]);
         expect(toArray([])).toEqual([]);
-        expect(toArray(null)).toEqual([]);
-        expect(toArray(undefined)).toEqual([]);
+        expect(toArray(null)).toEqual([null]);
+        expect(toArray(undefined)).toEqual([undefined]);
         expect(toArray("1")).toEqual(["1"]);
     });
 
@@ -78,6 +79,11 @@ describe("array", () => {
     it("shuffle", () => {
         expect(shuffle([1, 2, 3, 4, 5])).not.toEqual([1, 2, 3, 4, 5]);
         expect(shuffle([1, 2, 3, 4, 5]).length).toBe(5);
+
+        const first = [1, 2, 3, 4, 5];
+        const second = shuffle(first);
+        expect(first).not.toEqual(second);
+        expect(first).toEqual([1, 2, 3, 4, 5]);
     });
 
     it("chunk", () => {
@@ -140,6 +146,9 @@ describe("array", () => {
         expect(compact([1, 2, 3, undefined])).toEqual([1, 2, 3]);
         expect(compact([1, 2, 3, null, undefined])).toEqual([1, 2, 3]);
         expect(compact([1, 2, 3, null, undefined, 0])).toEqual([1, 2, 3]);
+        expect(compact([1, 2, 3, null, undefined, 0, false])).toEqual([1, 2, 3]);
+        expect(compact([1, 2, 3, null, undefined, 0, false, ""])).toEqual([1, 2, 3]);
+        expect(compact([1, 2, 3, null, undefined, 0, false, "", NaN])).toEqual([1, 2, 3]);
     });
 
     it("difference", () => {

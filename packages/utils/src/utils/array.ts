@@ -1,5 +1,7 @@
-import { isArray, isEqual, isNil, isPrimitive } from "./is";
+import { produce } from "./function";
+import { isArray, isEqual, isNil, isPrimitive, isTruthy } from "./is";
 import { getProperty } from "./object";
+import { Falsy } from "./types";
 
 /**
  * Utility functions for working with arrays.
@@ -14,7 +16,6 @@ import { getProperty } from "./object";
  * toArray([1, 2, 3]); // returns [1, 2, 3]
  */
 export const toArray = <T>(value: T | T[]): T[] => {
-    if (isNil(value)) return [];
     return isArray(value) ? value : [value];
 };
 
@@ -77,10 +78,7 @@ export const uniqBy = <T>(array: T[], key: string | ((item: T) => any)): T[] => 
  * shuffle(['a', 'b', 'c', 'd', 'e']); // returns ['b', 'd', 'a', 'e', 'c']
  */
 export const shuffle = <T>(array: T[]): T[] => {
-    return array
-        .map(value => ({ value, sort: Math.random() }))
-        .sort((a, b) => a.sort - b.sort)
-        .map(({ value }) => value);
+    return produce(array, draft => draft.sort(() => Math.random() - 0.5));
 };
 
 /**
@@ -207,7 +205,7 @@ export const remove = <T>(array: T[], item: T): T[] => {
  * @example
  * compact([1, 2, 3, 4, 0, null, undefined, false]); // returns [1, 2, 3, 4]
  */
-export const compact = <T>(array: T[]): T[] => array.filter(Boolean);
+export const compact = <T>(array: (T | Falsy)[]): T[] => array.filter(isTruthy);
 
 /**
  * Return the difference between two arrays. Objects are compared by value, meaning that two objects with the same properties will be considered equal. Can also take a custom comparator function.
@@ -289,10 +287,7 @@ export const intersection = <T>(
  * // multiple arrays
  * union([1, 2, 3], [2, 4], [5, 6]); // returns [1, 2, 3, 4, 5, 6]
  */
-export const union = <T>(...arrays: T[]) => {
-    return uniq(arrays.flat());
-};
-
+export const union = <T>(...arrays: T[]) => uniq(arrays.flat());
 /**
  * Sort an array. Can sort by a single key or multiple keys. Can also take a custom function that receives the item to choose the value to sort by.
  * @param array - The array to sort.
@@ -463,3 +458,12 @@ export const partition = <T>(array: T[], predicate: (item: T) => boolean): [T[],
 
     return [truthy, falsy];
 };
+
+/**
+ * Return the sum of all the elements in an array.
+ * @param array - The array to sum.
+ * @returns - The sum of all the elements in the array.
+ * @example
+ * sum([1, 2, 3, 4, 5]); // returns 15
+ */
+export const sum = (array: number[]): number => array.reduce((a, b) => a + b, 0);

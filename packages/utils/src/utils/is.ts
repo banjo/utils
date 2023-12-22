@@ -1,4 +1,5 @@
 import equal from "fast-deep-equal/es6";
+import { Falsy } from "./types";
 
 /**
  * Utility functions for checking the type of a value.
@@ -149,7 +150,7 @@ export const isUndefined = (value: any): value is undefined => value === undefin
 export const isNil = (value: any): value is null | undefined => isNull(value) || isUndefined(value);
 
 /**
- * Check if the given value exists (is not undefined). Also type guards against undefined. Previously named `exists`.
+ * Check if the given value exists (is not undefined). Also type guards against undefined.
  * @param value - The value to check.
  * @returns true if the value exists, false otherwise.
  * @example
@@ -161,6 +162,57 @@ export const isNil = (value: any): value is null | undefined => isNull(value) ||
  * isDefined([]); // true
  */
 export const isDefined = <T>(value: T | undefined): value is T => value !== undefined;
+
+/**
+ * Check if the given value is not null or undefined. Also type guards against null and undefined.
+ * @param value - The value to check.
+ * @returns true if the value is not null or undefined, false otherwise.
+ * @example
+ * exists(undefined); // false
+ * exists(null); // false
+ * exists("hello world"); // true
+ * exists(1); // true
+ * exists(false); // true
+ * exists([]); // true
+ */
+export const exists = <T>(value: T | null | undefined): value is T =>
+    value !== null && value !== undefined;
+
+/**
+ * Check if the given value is truthy. Also type guards against falsy values.
+ * @param value - The value to check.
+ * @returns true if the value is truthy, false otherwise.
+ * @example
+ * isTruthy(undefined); // false
+ * isTruthy(null); // false
+ * isTruthy("hello world"); // true
+ * isTruthy(1); // true
+ * isTruthy(false); // false
+ * isTruthy([]); // true
+ * isTruthy(0); // false
+ * isTruthy(""); // false
+ * isTruthy(NaN); // false
+ * isTruthy({}); // true
+ */
+export const isTruthy = <T>(x: T | Falsy): x is T => !!x;
+
+/**
+ * Check if the given value is falsy. Also type guards against truthy values.
+ * @param value - The value to check.
+ * @returns true if the value is falsy, false otherwise.
+ * @example
+ * isFalsy(undefined); // true
+ * isFalsy(null); // true
+ * isFalsy("hello world"); // false
+ * isFalsy(1); // false
+ * isFalsy(false); // true
+ * isFalsy([]); // false
+ * isFalsy(0); // true
+ * isFalsy(""); // true
+ * isFalsy(NaN); // true
+ * isFalsy({}); // false
+ */
+export const isFalsy = <T>(x: T | Falsy): x is Falsy => !x;
 
 /**
  * Check if the given value is a primitive type (string, number, boolean).
