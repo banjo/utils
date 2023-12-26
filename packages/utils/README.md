@@ -293,7 +293,7 @@ sample(["a", "b", "c", "d"]); // returns a random element from the array
 
 #### remove
 
-> Remove an element from an array.
+> Remove one or more elements from an array. Either by item or by predicate.
 
 ```ts
 remove([1, 2, 3, 4], 2); // returns [1, 3, 4]

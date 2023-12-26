@@ -186,7 +186,7 @@ export const move = <T>(array: T[], from: number, to: number): T[] => {
 export const sample = <T>(array: T[]): T => array[Math.floor(Math.random() * array.length)];
 
 /**
- * Remove an element from an array.
+ * Remove one or more elements from an array. Either by item or by predicate.
  * @param array - The array to remove the element from.
  * @param item - The element to remove or the function to compare.
  * @returns The input array with the element removed.
