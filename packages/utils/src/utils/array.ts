@@ -1,5 +1,5 @@
 import { produce } from "./function";
-import { isArray, isEqual, isNil, isPrimitive, isTruthy } from "./is";
+import { isArray, isEqual, isFunction, isNil, isPrimitive, isTruthy } from "./is";
 import { getProperty } from "./object";
 import { Falsy } from "./types";
 
@@ -188,15 +188,26 @@ export const sample = <T>(array: T[]): T => array[Math.floor(Math.random() * arr
 /**
  * Remove an element from an array.
  * @param array - The array to remove the element from.
- * @param item - The element to remove.
+ * @param item - The element to remove or the function to compare.
  * @returns The input array with the element removed.
  * @example
  * remove([1, 2, 3, 4], 2); // returns [1, 3, 4]
  * remove(['a', 'b', 'c', 'd'], 'b'); // returns ['a', 'c', 'd']
+ *
+ * // remove by a custom function
+ * remove([1,2,3], (item) => item === 2); // returns [1, 3]
+ * remove(['a', 'b', 'c', 'd'], (item) => item === 'b'); // returns ['a', 'c', 'd']
  */
-export const remove = <T>(array: T[], item: T): T[] => {
-    return array.filter(i => i !== item);
-};
+export function remove<T>(array: T[], item: T): T[];
+export function remove<T>(array: T[], predicate: (item: T) => boolean): T[];
+export function remove<T>(array: T[], itemOrFunction: T | ((item: T) => boolean)): T[] {
+    if (isFunction(itemOrFunction)) {
+        const predicate = (item: T) => !itemOrFunction(item);
+        return array.filter(predicate);
+    }
+
+    return array.filter(i => i !== itemOrFunction);
+}
 
 /**
  * Remove falsy values (`null`, `undefined`, `""`, `0`, `false`, `NaN`) from an array.

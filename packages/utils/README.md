@@ -298,6 +298,10 @@ sample(["a", "b", "c", "d"]); // returns a random element from the array
 ```ts
 remove([1, 2, 3, 4], 2); // returns [1, 3, 4]
 remove(["a", "b", "c", "d"], "b"); // returns ['a', 'c', 'd']
+
+// remove by a custom function
+remove([1, 2, 3], item => item === 2); // returns [1, 3]
+remove(["a", "b", "c", "d"], item => item === "b"); // returns ['a', 'c', 'd']
 ```
 
 ---

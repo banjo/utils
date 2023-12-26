@@ -77,13 +77,15 @@ describe("array", () => {
     });
 
     it("shuffle", () => {
-        expect(shuffle([1, 2, 3, 4, 5])).not.toEqual([1, 2, 3, 4, 5]);
-        expect(shuffle([1, 2, 3, 4, 5]).length).toBe(5);
+        const arr = Array.from({ length: 40 }, (_, i) => i + 1);
+        expect(shuffle(arr)).not.toEqual(arr);
+        expect(shuffle(arr).length).toBe(40);
 
-        const first = [1, 2, 3, 4, 5];
+        const first = Array.from({ length: 40 }, (_, i) => i + 1);
+        const copyFirst = [...first];
         const second = shuffle(first);
         expect(first).not.toEqual(second);
-        expect(first).toEqual([1, 2, 3, 4, 5]);
+        expect(first).toEqual(copyFirst);
     });
 
     it("chunk", () => {
@@ -138,6 +140,12 @@ describe("array", () => {
         expect(remove([1, 2, 3], 2)).toEqual([1, 3]);
         expect(remove([1, 2, 3], 3)).toEqual([1, 2]);
         expect(remove([1, 2, 3], 4)).toEqual([1, 2, 3]);
+
+        expect(remove([1, 2, 3], x => x === 1)).toEqual([2, 3]);
+        expect(remove([1, 2, 3], x => x === 2)).toEqual([1, 3]);
+
+        expect(remove(["abc", "def", "ghi"], x => x === "abc")).toEqual(["def", "ghi"]);
+        expect(remove(["abc", "abcd", "ghi"], x => x.startsWith("abc"))).toEqual(["ghi"]);
     });
 
     it("compact", () => {
