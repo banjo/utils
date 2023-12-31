@@ -9,6 +9,7 @@ export * from "./utils/is";
 export * from "./utils/number";
 export * from "./utils/object";
 export * from "./utils/result";
+export * from "./utils/set";
 export * from "./utils/string";
 export * from "./utils/test";
 export * from "./utils/types";

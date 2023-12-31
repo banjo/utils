@@ -60,6 +60,13 @@ describe("array", () => {
         expect(uniq([])).toEqual([]);
         expect(uniq([1])).toEqual([1]);
         expect(uniq([1, 1])).toEqual([1]);
+
+        const point1 = { x: 1, y: 1 };
+        const point2 = { x: 2, y: 2 };
+        const point3 = { x: 3, y: 3 };
+        const point3ButSame = { x: 3, y: 3 };
+
+        expect(uniq([point1, point2, point3, point3ButSame])).toEqual([point1, point2, point3]);
     });
 
     it("uniqBy", () => {
@@ -222,7 +229,7 @@ describe("array", () => {
 
         expect(union([a, b, c], [a, b])).toEqual([a, b, c]);
         expect(union([a, b, c], [a, b, c])).toEqual([a, b, c]);
-        expect(union([a, b, c], [a, b, c, d])).toEqual([a, b, c, d]);
+        expect(union([a, b, c], [a, b, c, d])).toEqual([a, b, c]);
     });
 
     it("sortBy", () => {

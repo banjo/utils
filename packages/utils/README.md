@@ -182,11 +182,19 @@ take(["a", "b", "c", "d", "e"], 3); // returns ['a', 'b', 'c']
 
 #### uniq
 
-> Remove duplicate values from an array.
+> Remove duplicate values from an array. Primites works as usual, objects are compared by value.
 
 ```ts
 uniq([1, 2, 2, 3, 4, 4]); // returns [1, 2, 3, 4]
 uniq(["a", "a", "b", "c"]); // returns ['a', 'b', 'c']
+
+// objects are compared by value
+const a = { name: "Alex", age: 20 };
+const b = { name: "Alex", age: 15 };
+const c = { name: "Bony", age: 5 };
+const d = { name: "Bony", age: 5 };
+
+uniq([a, b, c, d]); // returns [a, b, c]
 ```
 
 ---
@@ -373,6 +381,14 @@ union(["a", "b", "c"], ["b", "d"]); // returns ['a', 'b', 'c', 'd']
 
 // multiple arrays
 union([1, 2, 3], [2, 4], [5, 6]); // returns [1, 2, 3, 4, 5, 6]
+
+// objects are also compared by value by default
+const point1 = { x: 1, y: 1 };
+const point2 = { x: 2, y: 2 };
+const point3 = { x: 3, y: 3 };
+const point3ButSame = { x: 3, y: 3 };
+
+union([point1, point2], [point2, point3], [point3ButSame]); // returns [point1, point2, point3]
 ```
 
 ---

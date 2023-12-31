@@ -1,6 +1,7 @@
 import { produce } from "./function";
 import { isArray, isEqual, isFunction, isNil, isPrimitive, isTruthy } from "./is";
 import { getProperty } from "./object";
+import { ObjectSet } from "./set";
 import { Falsy } from "./types";
 
 /**
@@ -33,14 +34,26 @@ export const take = <T>(array: T[], count: number): T[] => {
 };
 
 /**
- * Remove duplicate values from an array.
+ * Remove duplicate values from an array. Primites works as usual, objects are compared by value.
  * @param array - The array to remove duplicates from.
  * @returns A new array with duplicate values removed.
  * @example
  * uniq([1, 2, 2, 3, 4, 4]); // returns [1, 2, 3, 4]
  * uniq(['a', 'a', 'b', 'c']); // returns ['a', 'b', 'c']
+ *
+ * // objects are compared by value
+ * const a = {name: "Alex", age: 20};
+ * const b = {name: "Alex", age: 15};
+ * const c = {name: "Bony", age: 5};
+ * const d = {name: "Bony", age: 5};
+ *
+ * uniq([a, b, c, d]); // returns [a, b, c]
  */
-export const uniq = <T>(array: T[]): T[] => Array.from(new Set(array));
+export const uniq = <T>(array: T[]): T[] => {
+    const item = array[0];
+    if (isPrimitive(item)) return Array.from(new Set(array));
+    return new ObjectSet(array).values;
+};
 
 /**
  * Remove duplicate values from an array by a key. Can also take a custom function that receives the item to choose the value to compare by.
@@ -297,6 +310,14 @@ export const intersection = <T>(
  *
  * // multiple arrays
  * union([1, 2, 3], [2, 4], [5, 6]); // returns [1, 2, 3, 4, 5, 6]
+ *
+ * // objects are also compared by value by default
+ * const point1 = { x: 1, y: 1 };
+ * const point2 = { x: 2, y: 2 };
+ * const point3 = { x: 3, y: 3 };
+ * const point3ButSame = { x: 3, y: 3 };
+ *
+ * union([point1, point2], [point2, point3], [point3ButSame]); // returns [point1, point2, point3]
  */
 export const union = <T>(...arrays: T[]) => uniq(arrays.flat());
 /**
