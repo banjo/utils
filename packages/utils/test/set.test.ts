@@ -155,4 +155,17 @@ describe("ObjectSet", () => {
         const uniqeArray = [...new ObjectSet([point1, point2, point3, point3ButSame])];
         expect(uniqeArray).toEqual([point1, point2, point3]);
     });
+
+    it("can clear the set", () => {
+        const set = new ObjectSet<number>();
+
+        set.add(1);
+        set.add(2);
+        set.add(3);
+
+        expect(set.size).toBe(3);
+
+        set.clear();
+        expect(set.size).toBe(0);
+    });
 });

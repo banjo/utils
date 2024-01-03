@@ -29,6 +29,11 @@ export class ObjectSet<T> {
         return isDefined(this.hashIndexMap[key]);
     }
 
+    public clear() {
+        this.data = [];
+        this.hashIndexMap = {};
+    }
+
     public remove(item: T): void {
         const key = hash(item);
         const index = this.hashIndexMap[key];
