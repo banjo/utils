@@ -1,5 +1,6 @@
 import { describe, expect, it } from "vitest";
 import {
+    clone,
     defaults,
     flip,
     merge,
@@ -51,6 +52,21 @@ describe("object", () => {
         const res3 = merge(obj, obj2, obj3);
         expect(obj).toEqual(unaffectedObj);
         expect(res3).toEqual({ a: 2, b: 2, c: 3, d: 5, e: { f: 5 } });
+    });
+
+    it("clone", () => {
+        const obj = { a: 1, b: 2, c: 3 };
+        const res = clone(obj);
+        expect(res).toEqual({ a: 1, b: 2, c: 3 });
+        expect(res).not.toBe(obj);
+
+        const obj2 = { a: 1, b: 2, c: 3 };
+        const cloned = clone(obj2);
+        cloned.a = 2;
+        expect(obj2.a).toEqual(1);
+        expect(cloned.a).toEqual(2);
+        expect(cloned).toEqual({ a: 2, b: 2, c: 3 });
+        expect(cloned).not.toBe(obj2);
     });
 
     it("defaults", () => {

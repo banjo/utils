@@ -131,6 +131,7 @@ Auto generated from TSDocs.
     -   [objectValues](#objectValues)
     -   [objectEntries](#objectEntries)
     -   [merge](#merge)
+    -   [clone](#clone)
     -   [defaults](#defaults)
     -   [flip](#flip)
 -   [Result](#result)
@@ -1391,6 +1392,19 @@ const obj1 = { a: { b: 1 } };
 const obj2 = { a: { b: 2 } };
 const obj3 = { a: { b: 3 } };
 merge(obj1, obj2, obj3); // => { a: { b: 3 } }
+```
+
+---
+
+#### clone
+
+> Deeply clones an object. No mutation.
+
+```ts
+const obj = { a: { b: 1 } };
+const cloned = clone(obj);
+cloned.a.b = 2;
+console.log(obj.a.b); // => 1
 ```
 
 ---

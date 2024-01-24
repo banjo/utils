@@ -182,6 +182,20 @@ export const merge = <T extends object = object, S extends object = DeepPartial<
 };
 
 /**
+ * Deeply clones an object. No mutation.
+ * @param obj - object to clone
+ * @returns A new cloned object.
+ * @example
+ * const obj = { a: { b: 1 } };
+ * const cloned = clone(obj);
+ * cloned.a.b = 2;
+ * console.log(obj.a.b); // => 1
+ */
+export const clone = <T extends object>(obj: T): T => {
+    return merge(obj);
+};
+
+/**
  * Used for setting default values. Deeply merges two objects. No mutation. The first object is the partial one, and the second object is the default one. If a value is already set in the partial object, it will not be overwritten.
  * @param obj - the settings object from the user
  * @param defaultsList - the default settings objects
