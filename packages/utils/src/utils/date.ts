@@ -21,15 +21,15 @@ const defaultMonthOptions = {
  * @param options - Options object.
  * @returns An array of month names.
  * @example
- * getMonths(); // returns ['January', 'February', ...]
- * getMonths({ month: 'short' }); // returns ['Jan', 'Feb', ...]
- * getMonths({ month: 'narrow' }); // returns ['J', 'F', ...]
- * getMonths({ month: 'numeric' }); // returns ['1', '2', ...]
+ * getCalendarMonths(); // returns ['January', 'February', ...]
+ * getCalendarMonths({ month: 'short' }); // returns ['Jan', 'Feb', ...]
+ * getCalendarMonths({ month: 'narrow' }); // returns ['J', 'F', ...]
+ * getCalendarMonths({ month: 'numeric' }); // returns ['1', '2', ...]
  *
- * getMonths({ locales: 'fr-FR' }); // returns ['janvier', 'février', ...]
- * getMonths({ locales: 'sv-SE' }); // returns ['januari', 'februari', ...]
+ * getCalendarMonths({ locales: 'fr-FR' }); // returns ['janvier', 'février', ...]
+ * getCalendarMonths({ locales: 'sv-SE' }); // returns ['januari', 'februari', ...]
  */
-export const getMonths = (options?: MonthOptions): string[] => {
+export const getCalendarMonths = (options?: MonthOptions): string[] => {
     const { locales, format } = { ...defaultMonthOptions, ...options };
     return range(12).map(i => {
         const date = new Date(0, i);
@@ -54,16 +54,16 @@ const defaultDayOptions = {
  * @param options - Options object.
  * @returns An array of day names.
  * @example
- * getDays(); // returns ['Monday', 'Tuesday', ...]
- * getDays({ day: 'short' }); // returns ['Mon', 'Tue', ...]
- * getDays({ day: 'narrow' }); // returns ['M', 'T', ...]
- * getDays({ startOnMonday: false }); // returns ['Sunday', 'Monday', ...]
+ * getCalendarDays(); // returns ['Monday', 'Tuesday', ...]
+ * getCalendarDays({ day: 'short' }); // returns ['Mon', 'Tue', ...]
+ * getCalendarDays({ day: 'narrow' }); // returns ['M', 'T', ...]
+ * getCalendarDays({ startOnMonday: false }); // returns ['Sunday', 'Monday', ...]
  *
- * getDays({ locales: 'fr-FR' }); // returns ['lundi', 'mardi', ...]
- * getDays({ locales: 'sv-SE' }); // returns ['måndag', 'tisdag', ...]
- * getDays({ locales: 'sv-SE', startOnMonday: false }); // returns ['söndag', 'måndag', ...]
+ * getCalendarDays({ locales: 'fr-FR' }); // returns ['lundi', 'mardi', ...]
+ * getCalendarDays({ locales: 'sv-SE' }); // returns ['måndag', 'tisdag', ...]
+ * getCalendarDays({ locales: 'sv-SE', startOnMonday: false }); // returns ['söndag', 'måndag', ...]
  */
-export const getDays = (options?: DayOptions): string[] => {
+export const getCalendarDays = (options?: DayOptions): string[] => {
     const { locales, format, startOnMonday } = {
         ...defaultDayOptions,
         ...options,

@@ -2,9 +2,9 @@ import { describe, expect, it } from "vitest";
 import {
     earliest,
     formatDate,
-    getDays,
+    getCalendarDays,
     getFirstDayOfWeek,
-    getMonths,
+    getCalendarMonths,
     getWeekNumber,
     isBetweenDates,
     latest,
@@ -15,8 +15,8 @@ import {
 } from "../src/utils/date";
 
 describe("date", () => {
-    it("getMonths", () => {
-        expect(getMonths()).toEqual([
+    it("getCalendarMonths", () => {
+        expect(getCalendarMonths()).toEqual([
             "January",
             "February",
             "March",
@@ -31,7 +31,7 @@ describe("date", () => {
             "December",
         ]);
 
-        expect(getMonths({ format: "short" })).toEqual([
+        expect(getCalendarMonths({ format: "short" })).toEqual([
             "Jan",
             "Feb",
             "Mar",
@@ -46,7 +46,7 @@ describe("date", () => {
             "Dec",
         ]);
 
-        expect(getMonths({ format: "narrow" })).toEqual([
+        expect(getCalendarMonths({ format: "narrow" })).toEqual([
             "J",
             "F",
             "M",
@@ -61,7 +61,7 @@ describe("date", () => {
             "D",
         ]);
 
-        expect(getMonths({ locales: "fr-FR" })).toEqual([
+        expect(getCalendarMonths({ locales: "fr-FR" })).toEqual([
             "janvier",
             "février",
             "mars",
@@ -77,8 +77,8 @@ describe("date", () => {
         ]);
     });
 
-    it("getDays", () => {
-        expect(getDays()).toEqual([
+    it("getCalendarDays", () => {
+        expect(getCalendarDays()).toEqual([
             "Monday",
             "Tuesday",
             "Wednesday",
@@ -88,7 +88,7 @@ describe("date", () => {
             "Sunday",
         ]);
 
-        expect(getDays({ format: "short" })).toEqual([
+        expect(getCalendarDays({ format: "short" })).toEqual([
             "Mon",
             "Tue",
             "Wed",
@@ -98,9 +98,9 @@ describe("date", () => {
             "Sun",
         ]);
 
-        expect(getDays({ format: "narrow" })).toEqual(["M", "T", "W", "T", "F", "S", "S"]);
+        expect(getCalendarDays({ format: "narrow" })).toEqual(["M", "T", "W", "T", "F", "S", "S"]);
 
-        expect(getDays({ startOnMonday: false })).toEqual([
+        expect(getCalendarDays({ startOnMonday: false })).toEqual([
             "Sunday",
             "Monday",
             "Tuesday",
@@ -110,7 +110,7 @@ describe("date", () => {
             "Saturday",
         ]);
 
-        expect(getDays({ locales: "fr-FR" })).toEqual([
+        expect(getCalendarDays({ locales: "fr-FR" })).toEqual([
             "lundi",
             "mardi",
             "mercredi",
@@ -120,7 +120,7 @@ describe("date", () => {
             "dimanche",
         ]);
 
-        expect(getDays({ locales: "sv-SE" })).toEqual([
+        expect(getCalendarDays({ locales: "sv-SE" })).toEqual([
             "måndag",
             "tisdag",
             "onsdag",
@@ -130,7 +130,7 @@ describe("date", () => {
             "söndag",
         ]);
 
-        expect(getDays({ locales: "sv-SE", startOnMonday: false })).toEqual([
+        expect(getCalendarDays({ locales: "sv-SE", startOnMonday: false })).toEqual([
             "söndag",
             "måndag",
             "tisdag",

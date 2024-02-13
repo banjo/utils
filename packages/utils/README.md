@@ -74,8 +74,8 @@ Auto generated from TSDocs.
     -   [decrypt](#decrypt)
     -   [hash](#hash)
 -   [Date](#date)
-    -   [getMonths](#getMonths)
-    -   [getDays](#getDays)
+    -   [getCalendarMonths](#getCalendarMonths)
+    -   [getCalendarDays](#getCalendarDays)
     -   [toMilliseconds](#toMilliseconds)
     -   [toSeconds](#toSeconds)
     -   [toMinutes](#toMinutes)
@@ -615,35 +615,35 @@ Utility functions for date and time.
 
 ---
 
-#### getMonths
+#### getCalendarMonths
 
 > Returns an array of month names. The array is zero-based, so the first month is January.
 
 ```ts
-getMonths(); // returns ['January', 'February', ...]
-getMonths({ month: "short" }); // returns ['Jan', 'Feb', ...]
-getMonths({ month: "narrow" }); // returns ['J', 'F', ...]
-getMonths({ month: "numeric" }); // returns ['1', '2', ...]
+getCalendarMonths(); // returns ['January', 'February', ...]
+getCalendarMonths({ month: "short" }); // returns ['Jan', 'Feb', ...]
+getCalendarMonths({ month: "narrow" }); // returns ['J', 'F', ...]
+getCalendarMonths({ month: "numeric" }); // returns ['1', '2', ...]
 
-getMonths({ locales: "fr-FR" }); // returns ['janvier', 'février', ...]
-getMonths({ locales: "sv-SE" }); // returns ['januari', 'februari', ...]
+getCalendarMonths({ locales: "fr-FR" }); // returns ['janvier', 'février', ...]
+getCalendarMonths({ locales: "sv-SE" }); // returns ['januari', 'februari', ...]
 ```
 
 ---
 
-#### getDays
+#### getCalendarDays
 
 > Returns an array of day names. The array is zero-based. The first day is Monday by default.
 
 ```ts
-getDays(); // returns ['Monday', 'Tuesday', ...]
-getDays({ day: "short" }); // returns ['Mon', 'Tue', ...]
-getDays({ day: "narrow" }); // returns ['M', 'T', ...]
-getDays({ startOnMonday: false }); // returns ['Sunday', 'Monday', ...]
+getCalendarDays(); // returns ['Monday', 'Tuesday', ...]
+getCalendarDays({ day: "short" }); // returns ['Mon', 'Tue', ...]
+getCalendarDays({ day: "narrow" }); // returns ['M', 'T', ...]
+getCalendarDays({ startOnMonday: false }); // returns ['Sunday', 'Monday', ...]
 
-getDays({ locales: "fr-FR" }); // returns ['lundi', 'mardi', ...]
-getDays({ locales: "sv-SE" }); // returns ['måndag', 'tisdag', ...]
-getDays({ locales: "sv-SE", startOnMonday: false }); // returns ['söndag', 'måndag', ...]
+getCalendarDays({ locales: "fr-FR" }); // returns ['lundi', 'mardi', ...]
+getCalendarDays({ locales: "sv-SE" }); // returns ['måndag', 'tisdag', ...]
+getCalendarDays({ locales: "sv-SE", startOnMonday: false }); // returns ['söndag', 'måndag', ...]
 ```
 
 ---
