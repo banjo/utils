@@ -1,5 +1,6 @@
 import currentWeekNumber from "current-week-number";
 import { range, sortBy } from "./array";
+import { defaults } from "./object";
 
 /**
  * Utility functions for date and time.
@@ -74,7 +75,8 @@ export const getDays = (options?: DayOptions): string[] => {
     });
 };
 
-type Props = {
+type TimeProps = {
+    milliseconds?: number;
     seconds?: number;
     minutes?: number;
     hours?: number;
@@ -82,6 +84,7 @@ type Props = {
 };
 
 const defaultProps = {
+    milliseconds: 0,
     seconds: 0,
     minutes: 0,
     hours: 0,
@@ -89,7 +92,7 @@ const defaultProps = {
 };
 
 /**
- * Converts a time unit to milliseconds. Combined all units to get the total time in milliseconds.
+ * Converts a time unit to milliseconds. Combine all units to get the total time in milliseconds.
  * @param props - Object with definition or array of objects with definition.
  * @returns Time in milliseconds.
  * @example
@@ -100,17 +103,69 @@ const defaultProps = {
  * toMilliseconds({ seconds: 10, minutes: 10 }); // returns 610000
  * toMilliseconds({ seconds: 10, minutes: 10, hours: 10 }); // returns 3610000
  */
-export const toMilliseconds = (props: Props) => {
+export const toMilliseconds = (props: TimeProps) => {
     if (!props) {
         throw new Error("You must pass an object with a time definition.");
     }
 
-    const { seconds, minutes, hours, days } = { ...defaultProps, ...props };
+    const { seconds, minutes, hours, days, milliseconds } = defaults(props, defaultProps);
 
     return (
-        seconds * 1000 + minutes * 1000 * 60 + hours * 1000 * 60 * 60 + days * 1000 * 60 * 60 * 24
+        milliseconds +
+        seconds * 1000 +
+        minutes * 1000 * 60 +
+        hours * 1000 * 60 * 60 +
+        days * 1000 * 60 * 60 * 24
     );
 };
+
+/**
+ * Converts a time unit to seconds. Combine all units to get the total time in seconds.
+ * @param props - Object with definition or array of objects with definition.
+ * @returns - Time in seconds.
+ * @example
+ * toSeconds({ seconds: 10 }); // returns 10
+ * toSeconds({ minutes: 10 }); // returns 600
+ * toSeconds({ hours: 10 }); // returns 36000
+ * toSeconds({ days: 10 }); // returns 864000
+ */
+export const toSeconds = (props: TimeProps) => toMilliseconds(props) / 1000;
+
+/**
+ * Converts a time unit to minutes. Combine all units to get the total time in minutes.
+ * @param props - Object with definition or array of objects with definition.
+ * @returns - Time in minutes.
+ * @example
+ * toMinutes({ seconds: 10 }); // returns 0.16666666666666666
+ * toMinutes({ minutes: 10 }); // returns 10
+ * toMinutes({ hours: 10 }); // returns 600
+ * toMinutes({ days: 10 }); // returns 14400
+ */
+export const toMinutes = (props: TimeProps) => toSeconds(props) / 60;
+
+/**
+ * Converts a time unit to hours. Combine all units to get the total time in hours.
+ * @param props - Object with definition or array of objects with definition.
+ * @returns - Time in hours.
+ * @example
+ * toHours({ seconds: 10 }); // returns 0.002777777777777778
+ * toHours({ minutes: 10 }); // returns 0.16666666666666666
+ * toHours({ hours: 10 }); // returns 10
+ * toHours({ days: 10 }); // returns 240
+ */
+export const toHours = (props: TimeProps) => toMinutes(props) / 60;
+
+/**
+ * Converts a time unit to days. Combine all units to get the total time in days.
+ * @param props - Object with definition or array of objects with definition.
+ * @returns - Time in days.
+ * @example
+ * toDays({ seconds: 10 }); // returns 0.00011574074074074074
+ * toDays({ minutes: 10 }); // returns 0.006944444444444444
+ * toDays({ hours: 10 }); // returns 0.4166666666666667
+ * toDays({ days: 10 }); // returns 10
+ */
+export const toDays = (props: TimeProps) => toHours(props) / 24;
 
 /**
  * Returns the earliest date in an array of dates.

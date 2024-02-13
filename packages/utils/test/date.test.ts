@@ -8,7 +8,10 @@ import {
     getWeekNumber,
     isBetweenDates,
     latest,
+    toDays,
+    toHours,
     toMilliseconds,
+    toSeconds,
 } from "../src/utils/date";
 
 describe("date", () => {
@@ -139,6 +142,7 @@ describe("date", () => {
     });
 
     it("toMilliseconds", () => {
+        expect(toMilliseconds({ milliseconds: 10 })).toBe(10);
         expect(toMilliseconds({ seconds: 10 })).toBe(10000);
         expect(toMilliseconds({ minutes: 10 })).toBe(600000);
         expect(toMilliseconds({ hours: 10 })).toBe(36000000);
@@ -146,6 +150,30 @@ describe("date", () => {
 
         expect(toMilliseconds({ seconds: 10, minutes: 10 })).toBe(610000);
         expect(toMilliseconds({ seconds: 10, minutes: 10, hours: 10 })).toBe(36610000);
+    });
+
+    it("toSeconds", () => {
+        expect(toSeconds({ milliseconds: 10000 })).toBe(10);
+        expect(toSeconds({ seconds: 10 })).toBe(10);
+        expect(toSeconds({ minutes: 10 })).toBe(600);
+        expect(toSeconds({ hours: 10 })).toBe(36000);
+        expect(toSeconds({ days: 10 })).toBe(864000);
+    });
+
+    it("toHours", () => {
+        expect(toHours({ milliseconds: 3600000 })).toBe(1);
+        expect(toHours({ seconds: 3600 })).toBe(1);
+        expect(toHours({ minutes: 60 })).toBe(1);
+        expect(toHours({ hours: 1 })).toBe(1);
+        expect(toHours({ days: 10 })).toBe(240);
+    });
+
+    it("toDays", () => {
+        expect(toDays({ milliseconds: 86400000 })).toBe(1);
+        expect(toDays({ seconds: 86400 })).toBe(1);
+        expect(toDays({ minutes: 1440 })).toBe(1);
+        expect(toDays({ hours: 24 })).toBe(1);
+        expect(toDays({ days: 1 })).toBe(1);
     });
 
     it("earliest", () => {

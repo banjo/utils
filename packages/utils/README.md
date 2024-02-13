@@ -77,6 +77,10 @@ Auto generated from TSDocs.
     -   [getMonths](#getMonths)
     -   [getDays](#getDays)
     -   [toMilliseconds](#toMilliseconds)
+    -   [toSeconds](#toSeconds)
+    -   [toMinutes](#toMinutes)
+    -   [toHours](#toHours)
+    -   [toDays](#toDays)
     -   [earliest](#earliest)
     -   [latest](#latest)
     -   [isBetweenDates](#isBetweenDates)
@@ -646,7 +650,7 @@ getDays({ locales: "sv-SE", startOnMonday: false }); // returns ['söndag', 'må
 
 #### toMilliseconds
 
-> Converts a time unit to milliseconds. Combined all units to get the total time in milliseconds.
+> Converts a time unit to milliseconds. Combine all units to get the total time in milliseconds.
 
 ```ts
 toMilliseconds({ seconds: 10 }); // returns 10000
@@ -655,6 +659,58 @@ toMilliseconds({ hours: 10 }); // returns 36000000
 
 toMilliseconds({ seconds: 10, minutes: 10 }); // returns 610000
 toMilliseconds({ seconds: 10, minutes: 10, hours: 10 }); // returns 3610000
+```
+
+---
+
+#### toSeconds
+
+> Converts a time unit to seconds. Combine all units to get the total time in seconds.
+
+```ts
+toSeconds({ seconds: 10 }); // returns 10
+toSeconds({ minutes: 10 }); // returns 600
+toSeconds({ hours: 10 }); // returns 36000
+toSeconds({ days: 10 }); // returns 864000
+```
+
+---
+
+#### toMinutes
+
+> Converts a time unit to minutes. Combine all units to get the total time in minutes.
+
+```ts
+toMinutes({ seconds: 10 }); // returns 0.16666666666666666
+toMinutes({ minutes: 10 }); // returns 10
+toMinutes({ hours: 10 }); // returns 600
+toMinutes({ days: 10 }); // returns 14400
+```
+
+---
+
+#### toHours
+
+> Converts a time unit to hours. Combine all units to get the total time in hours.
+
+```ts
+toHours({ seconds: 10 }); // returns 0.002777777777777778
+toHours({ minutes: 10 }); // returns 0.16666666666666666
+toHours({ hours: 10 }); // returns 10
+toHours({ days: 10 }); // returns 240
+```
+
+---
+
+#### toDays
+
+> Converts a time unit to days. Combine all units to get the total time in days.
+
+```ts
+toDays({ seconds: 10 }); // returns 0.00011574074074074074
+toDays({ minutes: 10 }); // returns 0.006944444444444444
+toDays({ hours: 10 }); // returns 0.4166666666666667
+toDays({ days: 10 }); // returns 10
 ```
 
 ---
