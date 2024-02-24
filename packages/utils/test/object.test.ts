@@ -52,6 +52,9 @@ describe("object", () => {
         const res3 = merge(obj, obj2, obj3);
         expect(obj).toEqual(unaffectedObj);
         expect(res3).toEqual({ a: 2, b: 2, c: 3, d: 5, e: { f: 5 } });
+
+        const res4 = merge({ a: [] }, { b: 2 });
+        expect(res4).toEqual({ a: [], b: 2 });
     });
 
     it("clone", () => {

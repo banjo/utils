@@ -84,7 +84,7 @@ Auto generated from TSDocs.
     -   [earliest](#earliest)
     -   [latest](#latest)
     -   [isBetweenDates](#isBetweenDates)
-    -   [formatDate](#formatDate)
+    -   [toIsoDateString](#toIsoDateString)
     -   [getFirstDayOfWeek](#getFirstDayOfWeek)
     -   [getWeekNumber](#getWeekNumber)
 -   [Function](#function)
@@ -759,12 +759,12 @@ isBetweenDates(dateInBetween, earlyDate, lateDate); // returns true
 
 ---
 
-#### formatDate
+#### toIsoDateString
 
-> Format date to YYYY-MM-DD format.
+> Format date to ISO 8601 format. YYYY-MM-DD.
 
 ```ts
-formatDate(new Date(2020, 0, 1)); // returns '2020-01-01'
+toIsoDateString(new Date(2020, 0, 1)); // returns '2020-01-01'
 ```
 
 ---
@@ -1411,7 +1411,7 @@ objectEntries({}); // => []
 
 #### merge
 
-> Deeply merges two or more objects. The last object in the arguments list overwrites previous values. No mutation.
+> Deeply merges two or more objects. The last object in the arguments list overwrites previous values. No mutation. Uses the `deepmerge` library.
 
 ```ts
 const obj1 = { a: 1 };

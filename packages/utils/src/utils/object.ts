@@ -1,3 +1,4 @@
+import deepMerge from "deepmerge";
 import {
     deleteProperty as dp,
     getProperty as gp,
@@ -124,39 +125,8 @@ export type DeepPartial<T> = {
     [P in keyof T]?: T[P] extends object ? DeepPartial<T[P]> : T[P];
 };
 
-const isMergableObject = (item: any): item is Record<string, any> => {
-    return item !== null && typeof item === "object";
-};
-
-const _merge = <T extends object = object, S extends object = DeepPartial<T>>(
-    _target: T | S,
-    ...sources: Array<S | undefined>
-): T | S => {
-    let target = _target as T & S;
-    if (!sources.length) return target;
-
-    const source = sources.shift();
-    if (source === undefined) return target;
-
-    if (isMergableObject(target) && isMergableObject(source)) {
-        Object.keys(source).forEach(key => {
-            // @ts-expect-error
-            if (isMergableObject((source as S)[key])) {
-                // @ts-expect-error
-                if (!target[key]) target[key] = {} as any;
-                // @ts-expect-error
-                _merge(target[key] as S, (source as S)[key]);
-            } else {
-                // @ts-expect-error
-                target[key] = (source as S)[key] as T[keyof T];
-            }
-        });
-    }
-    return _merge(target, ...sources);
-};
-
 /**
- * Deeply merges two or more objects. The last object in the arguments list overwrites previous values. No mutation.
+ * Deeply merges two or more objects. The last object in the arguments list overwrites previous values. No mutation. Uses the `deepmerge` library.
  * @param target - object to merge into
  * @param sources - objects to merge from
  * @returns A new merged object.
@@ -176,9 +146,9 @@ const _merge = <T extends object = object, S extends object = DeepPartial<T>>(
  */
 export const merge = <T extends object = object, S extends object = DeepPartial<T>>(
     target: T | S,
-    ...sources: Array<S | undefined>
-): T | S => {
-    return _merge({} as T & S, target, ...sources);
+    ...sources: Array<S>
+): T & S => {
+    return deepMerge.all([target, ...sources]) as T & S;
 };
 
 /**
@@ -207,12 +177,12 @@ export const clone = <T extends object>(obj: T): T => {
  * defaults(obj2, obj1); // => { a: 2 }
  *
  */
-export const defaults = <T extends object, U extends Maybe<Partial<T>>>(
-    obj: U,
+export const defaults = <T extends object, U extends Partial<T>>(
+    obj: Maybe<U>,
     defaultObj: T
 ): T & NonNullable<U> => {
     const safeObj: Partial<T> = obj ?? {};
-    const updated = { ...defaultObj, ...safeObj };
+    const updated = merge(defaultObj, safeObj);
     return updated as T & NonNullable<U>;
 };
 
