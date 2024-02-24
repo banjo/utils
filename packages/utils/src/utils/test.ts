@@ -3,9 +3,8 @@
  */
 
 import { DeepPartial, defaults, merge } from "./object";
-import { Maybe } from "./types";
 
-type AttemptOptions = {
+type AttemptOptions<F = unknown> = {
     /**
      * If true, will log the error to the console.
      */
@@ -21,13 +20,14 @@ type AttemptOptions = {
     /**
      * The fallback value to return if the function throws an error.
      */
-    fallbackValue?: any;
+    fallbackValue?: F;
 };
 
 const defaultOptions: AttemptOptions = {
     logError: false,
-    fallbackValue: undefined,
 };
+
+type FallbackType<F> = F extends undefined ? undefined : F;
 
 /**
  * Try to run a function, and return a fallback value if it throws an error. Defaults to undefined if nothing is provided.
@@ -42,14 +42,18 @@ const defaultOptions: AttemptOptions = {
  * attempt(() => { throw new Error("test"); }, { fallbackValue: 1, logError: true }); // 1, logs error to console
  * attempt(() => { throw new Error("test"); }, { fallbackValue: 1, onError: (e) => console.error(e) }); // 1, logs error to console
  */
-export const attempt = <T>(fn: () => T, options?: AttemptOptions): Maybe<T> => {
+export const attempt = <T, F = undefined>(
+    fn: () => T,
+    options?: AttemptOptions<F>
+): T | FallbackType<F> => {
+    // The default fallback value is kept as undefined if it is not provided.
     const { fallbackValue, logError, onError, onFinally } = defaults(options, defaultOptions);
     try {
         return fn();
     } catch (e) {
         if (onError) onError(e);
         if (logError) console.error(e);
-        return fallbackValue;
+        return fallbackValue as FallbackType<F>;
     } finally {
         if (onFinally) onFinally();
     }
@@ -68,17 +72,17 @@ export const attempt = <T>(fn: () => T, options?: AttemptOptions): Maybe<T> => {
  * await attemptAsync(() => { throw new Error("test"); }, { fallbackValue: 1, logError: true }); // 1, logs error to console
  * await attemptAsync(() => { throw new Error("test"); }, { fallbackValue: 1, onError: (e) => console.error(e) }); // 1, logs error to console
  */
-export const attemptAsync = async <T>(
+export const attemptAsync = async <T, F = undefined>(
     asyncFn: () => Promise<T>,
-    options?: AttemptOptions
-): Promise<Maybe<T>> => {
+    options?: AttemptOptions<F>
+): Promise<T | FallbackType<F>> => {
     const { fallbackValue, logError, onError, onFinally } = defaults(options, defaultOptions);
     try {
         return await asyncFn();
     } catch (e) {
         if (onError) onError(e);
         if (logError) console.error(e);
-        return fallbackValue;
+        return fallbackValue as FallbackType<F>;
     } finally {
         if (onFinally) onFinally();
     }

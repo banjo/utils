@@ -207,13 +207,13 @@ export const clone = <T extends object>(obj: T): T => {
  * defaults(obj2, obj1); // => { a: 2 }
  *
  */
-export const defaults = <T extends object, U extends Partial<T>>(
-    obj: Maybe<U>,
+export const defaults = <T extends object, U extends Maybe<Partial<T>>>(
+    obj: U,
     defaultObj: T
-): T => {
+): T & NonNullable<U> => {
     const safeObj: Partial<T> = obj ?? {};
-    const updated = merge(defaultObj, safeObj);
-    return updated as T;
+    const updated = { ...defaultObj, ...safeObj };
+    return updated as T & NonNullable<U>;
 };
 
 /**
