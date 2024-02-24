@@ -8,7 +8,7 @@
  * @returns A promise that resolves after the given amount of time.
  * @example
  * await sleep(1000); // sleep for 1 second
- * await sleep(); // sleep for 0 milliseconds
+ * await sleep(); // sleep for at least 0 milliseconds
  */
 export const sleep = (ms: number = 0): Promise<void> =>
     new Promise(resolve => setTimeout(resolve, ms));
