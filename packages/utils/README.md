@@ -87,8 +87,6 @@ Auto generated from TSDocs.
     -   [formatDate](#formatDate)
     -   [getFirstDayOfWeek](#getFirstDayOfWeek)
     -   [getWeekNumber](#getWeekNumber)
--   [Fetch](#fetch)
-    -   [fetchJson](#fetchJson)
 -   [Function](#function)
     -   [debounce](#debounce)
     -   [throttle](#throttle)
@@ -789,26 +787,6 @@ getFirstDayOfWeek(new Date("2022-02-02")); // returns previous monday from speci
 ```ts
 getWeekNumber(); // returns 5 (if in week 5)
 getWeekNumber("2020-01-04"); // returns 1
-```
-
----
-
-### Fetch
-
-Utlilties that uses the fetch API to fetch data. Smaller implementations that basically saves time.
-
----
-
-#### fetchJson
-
-> Fetches a JSON response from a URL. Returns null if the response is not ok.
-> Can pass normal fetch options as well as custom options for the wrapper.
-
-```ts
-await fetchJson("https://example.com/api");
-await fetchJson("https://example.com/api", { throws: true });
-await fetchJson("https://example.com/api", { debug: true });
-await fetchJson("https://example.com/api", { method: "POST" });
 ```
 
 ---

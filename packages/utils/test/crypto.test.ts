@@ -1,6 +1,5 @@
 import { describe, expect, it } from "vitest";
-import { hash, isUUID } from "../legacy/crypto";
-import { uuid } from "../src/utils/crypto";
+import { hash, isUUID, uuid } from "../src/utils/crypto";
 
 describe("crypto", () => {
     it("uuid", () => {
