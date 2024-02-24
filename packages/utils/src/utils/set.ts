@@ -1,6 +1,16 @@
 import { hash } from "./crypto";
 import { isDefined, isUndefined } from "./is";
 
+/**
+ * A set that can store objects. It uses a hash function to determine if an object is already in the set.
+ * @example
+ * const set = new ObjectSet([{ a: 1 }, { a: 2 }]);
+ * set.add({ a: 3 });
+ * set.has({ a: 3 }); // => true
+ *
+ * set.add({ a: 3 });
+ * set.size; // => 3 // no duplicates
+ */
 export class ObjectSet<T> {
     protected data: T[] = [];
     protected hashIndexMap: { [key: string]: number } = {};

@@ -1,15 +1,15 @@
 import { describe, expect, it } from "vitest";
 import {
     earliest,
-    formatDate,
     getCalendarDays,
-    getFirstDayOfWeek,
     getCalendarMonths,
+    getFirstDayOfWeek,
     getWeekNumber,
     isBetweenDates,
     latest,
     toDays,
     toHours,
+    toIsoDateString,
     toMilliseconds,
     toSeconds,
 } from "../src/utils/date";
@@ -206,9 +206,9 @@ describe("date", () => {
         expect(isBetweenDates(date1, date2, date3)).toBe(false);
     });
 
-    it("formatDate", () => {
-        expect(formatDate(new Date(2022, 0, 1))).toBe("2022-01-01");
-        expect(formatDate(new Date(2022, 2, 10))).toBe("2022-03-10");
+    it("toIsoDateString", () => {
+        expect(toIsoDateString(new Date(2022, 0, 1))).toBe("2022-01-01");
+        expect(toIsoDateString(new Date(2022, 2, 10))).toBe("2022-03-10");
     });
 
     it("getFirstDayOfWeek", () => {

@@ -11,10 +11,10 @@ type MonthOptions = {
     locales?: string;
 };
 
-const defaultMonthOptions = {
+const defaultMonthOptions: MonthOptions = {
     format: "long",
     locales: "en-US",
-} as const;
+};
 
 /**
  * Returns an array of month names. The array is zero-based, so the first month is January.
@@ -30,7 +30,7 @@ const defaultMonthOptions = {
  * getCalendarMonths({ locales: 'sv-SE' }); // returns ['januari', 'februari', ...]
  */
 export const getCalendarMonths = (options?: MonthOptions): string[] => {
-    const { locales, format } = { ...defaultMonthOptions, ...options };
+    const { locales, format } = defaults(options, defaultMonthOptions);
     return range(12).map(i => {
         const date = new Date(0, i);
         return date.toLocaleString(locales, { month: format });
@@ -43,11 +43,11 @@ type DayOptions = {
     startOnMonday?: boolean;
 };
 
-const defaultDayOptions = {
+const defaultDayOptions: DayOptions = {
     format: "long",
     locales: "en-US",
     startOnMonday: true,
-} as const;
+};
 
 /**
  * Returns an array of day names. The array is zero-based. The first day is Monday by default.
@@ -64,10 +64,7 @@ const defaultDayOptions = {
  * getCalendarDays({ locales: 'sv-SE', startOnMonday: false }); // returns ['söndag', 'måndag', ...]
  */
 export const getCalendarDays = (options?: DayOptions): string[] => {
-    const { locales, format, startOnMonday } = {
-        ...defaultDayOptions,
-        ...options,
-    };
+    const { locales, format, startOnMonday } = defaults(options, defaultDayOptions);
 
     return range(7).map(i => {
         const date = new Date(0, 0, startOnMonday ? i + 1 : i);
@@ -233,13 +230,13 @@ export const isBetweenDates = (
 };
 
 /**
- * Format date to YYYY-MM-DD format.
+ * Format date to ISO 8601 format. YYYY-MM-DD.
  * @param date - Date to format.
  * @returns - Formatted date as a string.
  * @example
- * formatDate(new Date(2020, 0, 1)); // returns '2020-01-01'
+ * toIsoDateString(new Date(2020, 0, 1)); // returns '2020-01-01'
  */
-export const formatDate = (date: Date): string => {
+export const toIsoDateString = (date: Date): string => {
     const year = date.getFullYear();
     const month = date.getMonth() + 1;
     const day = date.getDate();
@@ -275,6 +272,4 @@ export const getFirstDayOfWeek = (date = new Date()) => {
  * getWeekNumber(); // returns 5 (if in week 5)
  * getWeekNumber("2020-01-04"); // returns 1
  */
-export const getWeekNumber = (date = new Date()): number => {
-    return currentWeekNumber(date);
-};
+export const getWeekNumber = (date = new Date()): number => currentWeekNumber(date);
