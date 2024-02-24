@@ -3,7 +3,8 @@
  */
 
 import { toMilliseconds } from "./date";
-import { isBrowser } from "./is";
+import { isBrowser, isDefined } from "./is";
+import { defaults } from "./object";
 
 type Options = {
     /**
@@ -16,13 +17,18 @@ type Options = {
      * If true, the cache is persisted in local storage. Defaults to false.
      * @default false
      */
-    persistant?: boolean;
+    persistent?: boolean;
 
     /**
-     * The key used to store the cache in local storage. Defaults to "banjo-cache". Only used if persistant is true. It is recommended to change this if you are using multiple caches.
+     * The key used to store the cache in local storage. Defaults to "banjo-cache". Only used if persistent is true. It is recommended to change this if you are using multiple caches.
      * @default "banjo-cache"
      */
     key?: string;
+    /**
+     * Interval for cleaning the cache in ms. Defaults to 5 minutes. Set to false to disable.
+     * @default 300000
+     */
+    cleanInterval?: number | false;
 };
 
 type SingleOptions = {
@@ -32,7 +38,7 @@ type SingleOptions = {
     ttl?: number;
 
     /**
-     * If true, the cache is persisted in local storage. Defaults to the global persistant value.
+     * If true, the cache is persisted in local storage. Defaults to the global persistent value.
      * @default false
      */
     persist?: boolean;
@@ -40,8 +46,9 @@ type SingleOptions = {
 
 const defaultOptions = {
     ttl: toMilliseconds({ minutes: 5 }),
-    persistant: false,
+    persistent: false,
     key: "banjo-cache",
+    cleanInterval: toMilliseconds({ minutes: 5 }) as number | false,
 };
 
 type CacheObject<T> = {
@@ -51,7 +58,7 @@ type CacheObject<T> = {
 
 const isExpired = (expires: number) => Date.now() > expires;
 
-const initMap = <T>(key: string, persistant: boolean) => {
+const initMap = <T>(key: string, persistent: boolean) => {
     let cache: Map<string | symbol, CacheObject<T>>;
 
     if (!isBrowser()) {
@@ -59,20 +66,20 @@ const initMap = <T>(key: string, persistant: boolean) => {
         return cache;
     }
 
-    if (!persistant) {
+    if (!persistent) {
         cache = new Map();
         return cache;
     }
 
-    const previusCache = localStorage.getItem(key);
+    const previousCache = localStorage.getItem(key);
 
-    if (!previusCache) {
+    if (!previousCache) {
         cache = new Map();
         return cache;
     }
 
     try {
-        const parsed = JSON.parse(previusCache);
+        const parsed = JSON.parse(previousCache);
         if (!Array.isArray(parsed)) {
             cache = new Map();
         }
@@ -85,8 +92,8 @@ const initMap = <T>(key: string, persistant: boolean) => {
 };
 
 /**
- * Creates a super simple cache with expiration and support for persistance. Can be used with strings and symbols as key. Is generic and can be used with any type.
- * @returns An object with the following methods: get, set, has, delete, clear.
+ * Creates a super simple cache with expiration and support for persistance in browsers. Can be used with strings and symbols as key. Is generic and can be used with any type.
+ * @returns An object with the following methods: get, set, has, delete, clear, stopCleanup, hasActiveCleanup.
  * @example
  * const { get, set, has, delete, clear } = cache();
  *
@@ -105,16 +112,21 @@ const initMap = <T>(key: string, persistant: boolean) => {
  * cache.set(key, "value");
  *
  * // can be be persisted in local storage
- * const cache = cache({ persistant: true });
+ * const cache = cache({ persistent: true });
  *
  * // can be be persisted in local storage with a custom key
- * const cache = cache({ persistant: true, key: "my-cache" });
+ * const cache = cache({ persistent: true, key: "my-cache" });
  *
  * // custom expiration time in ms
- * const cache = cache({ expires: 1000 });
+ * const cache = cache({ ttl: 1000 });
  */
 export const cache = <T>(options: Options = defaultOptions) => {
-    const { ttl: globalTtl, key, persistant: globalPersist } = { ...defaultOptions, ...options };
+    const {
+        ttl: globalTtl,
+        key,
+        persistent: globalPersist,
+        cleanInterval,
+    } = defaults(options, defaultOptions);
     const cache = initMap<T>(key, globalPersist);
 
     const doPersist = (persist = globalPersist) => {
@@ -124,6 +136,18 @@ export const cache = <T>(options: Options = defaultOptions) => {
         const str = JSON.stringify(Array.from(cache.entries()));
         localStorage.setItem(key, str);
     };
+
+    const cleanup = () => {
+        for (const [key, value] of cache.entries()) {
+            if (isExpired(value.ttl)) {
+                cache.delete(key);
+            }
+        }
+    };
+
+    const intervalId = cleanInterval !== false ? setInterval(cleanup, cleanInterval) : undefined;
+    const stopCleanup = () => clearInterval(intervalId);
+    const hasActiveCleanup = isDefined(intervalId);
 
     return {
         get: (key: string | symbol) => {
@@ -184,5 +208,7 @@ export const cache = <T>(options: Options = defaultOptions) => {
             cache.clear();
             doPersist();
         },
+        stopCleanup,
+        hasActiveCleanup,
     };
 };

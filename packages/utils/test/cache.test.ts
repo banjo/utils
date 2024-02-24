@@ -115,7 +115,7 @@ describe("cache", () => {
 
     it("can persist in localstorage", () => {
         const localStorageKey = "someKey";
-        const c = cache({ persistant: true, key: localStorageKey });
+        const c = cache({ persistent: true, key: localStorageKey });
         const key = "key";
         const value = "value";
 
