@@ -88,6 +88,46 @@ export const attemptAsync = async <T, F = undefined>(
     }
 };
 
+type TResult<T> = T | undefined;
+type TError = Error | undefined;
+type Out<T> = [TResult<T>, undefined] | [undefined, TError];
+
+/**
+ * Attempt to run a function like in Go, returning an array with the result and the error.
+ * @param fn - The function to run.
+ * @returns - The result of the function, or the error if the function throws an error.
+ * @example
+ *
+ * const [result, error] = attemptWithError(() => 1); // [1, undefined]
+ * const [result, error] = attemptWithError(() => { throw new Error("test"); }); // [undefined, Error("test")]
+ */
+export const attemptWithError = <T>(fn: () => T): Out<T> => {
+    try {
+        const result = fn();
+        return [result, undefined];
+    } catch (e) {
+        return [undefined, e instanceof Error ? e : new Error(String(e))];
+    }
+};
+
+/**
+ * Attempt to run an async function like in Go, returning an array with the result and the error.
+ * @param asyncFn - The async function to run.
+ * @returns - The result of the function, or the error if the function throws an error.
+ * @example
+ *
+ * const [result, error] = await attemptWithErrorAsync(() => 1); // [1, undefined]
+ * const [result, error] = await attemptWithErrorAsync(() => { throw new Error("test"); }); // [undefined, Error("test")]
+ */
+export const attemptWithErrorAsync = async <T>(asyncFn: () => Promise<T>): Promise<Out<T>> => {
+    try {
+        const result = await asyncFn();
+        return [result, undefined];
+    } catch (e) {
+        return [undefined, e instanceof Error ? e : new Error(String(e))];
+    }
+};
+
 /**
  * Create a new create mock function to update the base mock with the partial mock.
  * @param baseMock - base object to use

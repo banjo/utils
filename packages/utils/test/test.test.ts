@@ -1,5 +1,11 @@
 import { describe, expect, it } from "vitest";
-import { attempt, attemptAsync, createMockCreator } from "../src/utils/test";
+import {
+    attempt,
+    attemptAsync,
+    attemptWithError,
+    attemptWithErrorAsync,
+    createMockCreator,
+} from "../src/utils/test";
 
 describe("test", () => {
     it("attempt", () => {
@@ -39,6 +45,23 @@ describe("test", () => {
                 logError: true,
             })
         ).toBe(1);
+    });
+
+    it("attemptWithError", () => {
+        expect(attemptWithError(() => 1)).toStrictEqual([1, undefined]);
+        expect(
+            attemptWithError(() => {
+                throw new Error("test");
+            })
+        ).toStrictEqual([undefined, new Error("test")]);
+    });
+
+    it("attemptWithErrorAsync", async () => {
+        expect(await attemptWithErrorAsync(() => Promise.resolve(1))).toStrictEqual([1, undefined]);
+        expect(await attemptWithErrorAsync(() => Promise.reject(new Error("test")))).toStrictEqual([
+            undefined,
+            new Error("test"),
+        ]);
     });
 
     it("createMockCreator", () => {
