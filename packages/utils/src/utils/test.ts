@@ -88,9 +88,7 @@ export const attemptAsync = async <T, F = undefined>(
     }
 };
 
-type TResult<T> = T | undefined;
-type TError = Error | undefined;
-type Out<T> = [TResult<T>, undefined] | [undefined, TError];
+type Out<T> = [T, undefined] | [undefined, Error];
 
 /**
  * Attempt to run a function like in Go, returning an array with the result and the error.
