@@ -153,8 +153,8 @@ Auto generated from TSDocs.
 -   [Test](#test)
     -   [attempt](#attempt)
     -   [attemptAsync](#attemptAsync)
-    -   [attemptWithError](#attemptWithError)
-    -   [attemptWithErrorAsync](#attemptWithErrorAsync)
+    -   [wrap](#wrap)
+    -   [wrapAsync](#wrapAsync)
     -   [createMockCreator](#createMockCreator)
 
 ### Array
@@ -1703,26 +1703,26 @@ await attemptAsync(
 
 ---
 
-#### attemptWithError
+#### wrap
 
 > Attempt to run a function like in Go, returning an array with the result and the error.
 
 ```ts
-const [result, error] = attemptWithError(() => 1); // [1, undefined]
-const [result, error] = attemptWithError(() => {
+const [result, error] = wrap(() => 1); // [1, undefined]
+const [result, error] = wrap(() => {
     throw new Error("test");
 }); // [undefined, Error("test")]
 ```
 
 ---
 
-#### attemptWithErrorAsync
+#### wrapAsync
 
 > Attempt to run an async function like in Go, returning an array with the result and the error.
 
 ```ts
-const [result, error] = await attemptWithErrorAsync(() => 1); // [1, undefined]
-const [result, error] = await attemptWithErrorAsync(() => {
+const [result, error] = await wrapAsync(() => 1); // [1, undefined]
+const [result, error] = await wrapAsync(() => {
     throw new Error("test");
 }); // [undefined, Error("test")]
 ```

@@ -96,10 +96,10 @@ type Out<T> = [T, undefined] | [undefined, Error];
  * @returns - The result of the function, or the error if the function throws an error.
  * @example
  *
- * const [result, error] = attemptWithError(() => 1); // [1, undefined]
- * const [result, error] = attemptWithError(() => { throw new Error("test"); }); // [undefined, Error("test")]
+ * const [result, error] = wrap(() => 1); // [1, undefined]
+ * const [result, error] = wrap(() => { throw new Error("test"); }); // [undefined, Error("test")]
  */
-export const attemptWithError = <T>(fn: () => T): Out<T> => {
+export const wrap = <T>(fn: () => T): Out<T> => {
     try {
         const result = fn();
         return [result, undefined];
@@ -114,10 +114,10 @@ export const attemptWithError = <T>(fn: () => T): Out<T> => {
  * @returns - The result of the function, or the error if the function throws an error.
  * @example
  *
- * const [result, error] = await attemptWithErrorAsync(() => 1); // [1, undefined]
- * const [result, error] = await attemptWithErrorAsync(() => { throw new Error("test"); }); // [undefined, Error("test")]
+ * const [result, error] = await wrapAsync(() => 1); // [1, undefined]
+ * const [result, error] = await wrapAsync(() => { throw new Error("test"); }); // [undefined, Error("test")]
  */
-export const attemptWithErrorAsync = async <T>(asyncFn: () => Promise<T>): Promise<Out<T>> => {
+export const wrapAsync = async <T>(asyncFn: () => Promise<T>): Promise<Out<T>> => {
     try {
         const result = await asyncFn();
         return [result, undefined];

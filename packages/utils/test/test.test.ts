@@ -1,11 +1,5 @@
-import { describe, expect, it } from "vitest";
-import {
-    attempt,
-    attemptAsync,
-    attemptWithError,
-    attemptWithErrorAsync,
-    createMockCreator,
-} from "../src/utils/test";
+import { describe, expect, expectTypeOf, it } from "vitest";
+import { attempt, attemptAsync, createMockCreator, wrap, wrapAsync } from "../src/utils/test";
 
 describe("test", () => {
     it("attempt", () => {
@@ -47,21 +41,41 @@ describe("test", () => {
         ).toBe(1);
     });
 
-    it("attemptWithError", () => {
-        expect(attemptWithError(() => 1)).toStrictEqual([1, undefined]);
+    it("wrap", () => {
+        expect(wrap(() => 1)).toStrictEqual([1, undefined]);
         expect(
-            attemptWithError(() => {
+            wrap(() => {
                 throw new Error("test");
             })
         ).toStrictEqual([undefined, new Error("test")]);
+
+        const [res, err] = wrap(() => 1);
+        expectTypeOf(res).toEqualTypeOf<number | undefined>();
+        expectTypeOf(err).toEqualTypeOf<Error | undefined>();
+
+        if (err) {
+            expectTypeOf(err).toEqualTypeOf<Error>();
+        } else {
+            expectTypeOf(res).toEqualTypeOf<number>();
+        }
     });
 
-    it("attemptWithErrorAsync", async () => {
-        expect(await attemptWithErrorAsync(() => Promise.resolve(1))).toStrictEqual([1, undefined]);
-        expect(await attemptWithErrorAsync(() => Promise.reject(new Error("test")))).toStrictEqual([
+    it("wrapAsync", async () => {
+        expect(await wrapAsync(() => Promise.resolve(1))).toStrictEqual([1, undefined]);
+        expect(await wrapAsync(() => Promise.reject(new Error("test")))).toStrictEqual([
             undefined,
             new Error("test"),
         ]);
+
+        const [res, err] = await wrapAsync(() => Promise.resolve(1));
+        expectTypeOf(res).toEqualTypeOf<number | undefined>();
+        expectTypeOf(err).toEqualTypeOf<Error | undefined>();
+
+        if (err) {
+            expectTypeOf(err).toEqualTypeOf<Error>();
+        } else {
+            expectTypeOf(res).toEqualTypeOf<number>();
+        }
     });
 
     it("createMockCreator", () => {
