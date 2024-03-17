@@ -1,4 +1,5 @@
 import { isBoolean } from "./is";
+import { Maybe } from "./types";
 
 /**
  * Utility functions for working with numbers.
@@ -41,3 +42,20 @@ export function random(...args: any): number {
 
     return Math.floor(Math.random() * (max - min + 1)) + min;
 }
+
+/**
+ * Parse a string into a number. If the string is empty or cannot be parsed, undefined is returned.
+ * @param value - the string to parse.
+ * @returns - the parsed number or undefined.
+ * @example
+ * parseNumber("1"); // 1
+ * parseNumber("1.5"); // 1.5
+ * parseNumber("1.5.5"); // undefined
+ * parseNumber(""); // undefined
+ */
+export const parseNumber = (value: string): Maybe<number> => {
+    if (value.trim() === "") return undefined;
+    const parsed = Number(value);
+    if (!Number.isFinite(parsed)) return undefined;
+    return parsed;
+};

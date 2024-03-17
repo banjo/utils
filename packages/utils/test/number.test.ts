@@ -1,6 +1,6 @@
-import { random } from "../src/utils/number";
-import { expect, describe, it } from "vitest";
+import { describe, expect, it } from "vitest";
 import { range } from "../src";
+import { parseNumber, random } from "../src/utils/number";
 
 describe("number", () => {
     it("random", () => {
@@ -29,5 +29,14 @@ describe("number", () => {
             expect(r).toBeLessThanOrEqual(5);
             expect(r.toString()).toContain(".");
         });
+    });
+
+    it("parseNumber", () => {
+        expect(parseNumber("1")).toBe(1);
+        expect(parseNumber("1.5")).toBe(1.5);
+        expect(parseNumber("1.5.5")).toBe(undefined);
+        expect(parseNumber("")).toBe(undefined);
+        expect(parseNumber("fifty")).toBe(undefined);
+        expect(parseNumber("1,5")).toBe(undefined);
     });
 });

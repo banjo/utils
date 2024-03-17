@@ -124,6 +124,7 @@ Auto generated from TSDocs.
     -   [isNode](#isNode)
 -   [Number](#number)
     -   [random](#random)
+    -   [parseNumber](#parseNumber)
 -   [Object](#object)
     -   [getProperty](#getProperty)
     -   [setProperty](#setProperty)
@@ -1308,6 +1309,19 @@ random(0, 5); // 2
 random(5); // 2
 random(5, true); // 2.123876376
 random(0, 5, true); // 2.123876376
+```
+
+---
+
+#### parseNumber
+
+> Parse a string into a number. If the string is empty or cannot be parsed, undefined is returned.
+
+```ts
+parseNumber("1"); // 1
+parseNumber("1.5"); // 1.5
+parseNumber("1.5.5"); // undefined
+parseNumber(""); // undefined
 ```
 
 ---
