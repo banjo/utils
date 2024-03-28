@@ -94,3 +94,17 @@ export type Prettify<T> = {
  * A type that represents a falsy value.
  */
 export type Falsy = false | 0 | "" | null | undefined;
+
+/**
+ * A type that makes an object mutable, removing readonly modifiers.
+ * @example
+ * type ReadonlyObject = {
+ *  readonly name: string;
+ * };
+ *
+ * type MutableObject = Mutable<ReadonlyObject>;
+ * const obj: MutableObject = { name: "test" };
+ */
+export type Mutable<T> = {
+    -readonly [P in keyof T]: T[P];
+};
