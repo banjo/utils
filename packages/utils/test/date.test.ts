@@ -7,6 +7,7 @@ import {
     getWeekNumber,
     isBetweenDates,
     latest,
+    parseDate,
     toDays,
     toHours,
     toIsoDateString,
@@ -219,5 +220,18 @@ describe("date", () => {
     it("getWeekNumber", () => {
         expect(getWeekNumber(new Date("2023-04-09"))).toBe(14);
         expect(getWeekNumber(new Date("2023-03-09"))).toBe(10);
+    });
+
+    it("parseDate", () => {
+        expect(parseDate("2022-01-01")).toStrictEqual(new Date(Date.UTC(2022, 0, 1)));
+        expect(parseDate("2022-01-01T00:00:00Z")).toStrictEqual(new Date(Date.UTC(2022, 0, 1)));
+        expect(parseDate("2022-01-01T00:00:00.000Z")).toStrictEqual(new Date(Date.UTC(2022, 0, 1)));
+        expect(() => parseDate("abc")).toThrowError();
+
+        // test without throwing error
+        expect(parseDate("abc", { throwOnInvalid: false })).toBeUndefined();
+        expect(parseDate("2022-01-01", { throwOnInvalid: false })).toStrictEqual(
+            new Date(Date.UTC(2022, 0, 1))
+        );
     });
 });

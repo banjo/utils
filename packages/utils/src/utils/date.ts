@@ -273,3 +273,40 @@ export const getFirstDayOfWeek = (date = new Date()) => {
  * getWeekNumber("2020-01-04"); // returns 1
  */
 export const getWeekNumber = (date = new Date()): number => currentWeekNumber(date);
+
+/**
+ * Parse a date string or date object to a Date object based on the provided options.
+ * If a Date object is passed, it is returned as is.
+ * If throwOnInvalid is true and the date is invalid, it throws an error.
+ * If throwOnInvalid is false and the date is invalid, it returns undefined.
+ * @param date - Date string or date object to parse.
+ * @param options - Object with a boolean throwOnInvalid property.
+ * @returns - Date object or undefined based on provided options.
+ * @example
+ * parseDate("2020-01-01"); // returns Date object or throws error if invalid
+ * parseDate("2020-01-01", { throwOnInvalid: false }); // returns Date object or undefined if invalid
+ * parseDate(new Date("2020-01-01")); // returns Date object
+ * parseDate(123456789, { throwOnInvalid: true }); // throws error
+ * parseDate({}, { throwOnInvalid: false }); // returns undefined
+ * parseDate([], { throwOnInvalid: false }); // returns undefined
+ */
+export function parseDate(date: unknown, options: { throwOnInvalid: true }): Date;
+export function parseDate(date: unknown, options?: { throwOnInvalid?: false }): Date | undefined;
+export function parseDate(date: unknown, { throwOnInvalid = true } = {}): Date | undefined {
+    if (date instanceof Date) {
+        return date;
+    }
+
+    if (typeof date === "string") {
+        const parsedDate = new Date(date);
+        if (!isNaN(parsedDate.getTime())) {
+            return parsedDate;
+        }
+    }
+
+    if (!throwOnInvalid) {
+        return undefined;
+    }
+
+    throw new Error("Invalid date format. Must be a string or a Date object.");
+}

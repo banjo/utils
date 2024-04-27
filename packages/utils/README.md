@@ -87,6 +87,7 @@ Auto generated from TSDocs.
     -   [toIsoDateString](#toIsoDateString)
     -   [getFirstDayOfWeek](#getFirstDayOfWeek)
     -   [getWeekNumber](#getWeekNumber)
+    -   [parseDate](#parseDate)
 -   [Function](#function)
     -   [debounce](#debounce)
     -   [throttle](#throttle)
@@ -790,6 +791,24 @@ getFirstDayOfWeek(new Date("2022-02-02")); // returns previous monday from speci
 ```ts
 getWeekNumber(); // returns 5 (if in week 5)
 getWeekNumber("2020-01-04"); // returns 1
+```
+
+---
+
+#### parseDate
+
+> Parse a date string or date object to a Date object based on the provided options.
+> If a Date object is passed, it is returned as is.
+> If throwOnInvalid is true and the date is invalid, it throws an error.
+> If throwOnInvalid is false and the date is invalid, it returns undefined.
+
+```ts
+parseDate("2020-01-01"); // returns Date object or throws error if invalid
+parseDate("2020-01-01", { throwOnInvalid: false }); // returns Date object or undefined if invalid
+parseDate(new Date("2020-01-01")); // returns Date object
+parseDate(123456789, { throwOnInvalid: true }); // throws error
+parseDate({}, { throwOnInvalid: false }); // returns undefined
+parseDate([], { throwOnInvalid: false }); // returns undefined
 ```
 
 ---
