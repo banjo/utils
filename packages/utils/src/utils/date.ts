@@ -290,8 +290,8 @@ export const getWeekNumber = (date = new Date()): number => currentWeekNumber(da
  * parseDate({}, { throwOnInvalid: false }); // returns undefined
  * parseDate([], { throwOnInvalid: false }); // returns undefined
  */
-export function parseDate(date: unknown, options: { throwOnInvalid: true }): Date;
-export function parseDate(date: unknown, options?: { throwOnInvalid?: false }): Date | undefined;
+export function parseDate(date: unknown, options?: { throwOnInvalid?: true }): Date;
+export function parseDate(date: unknown, options: { throwOnInvalid: false }): Date | undefined;
 export function parseDate(date: unknown, { throwOnInvalid = true } = {}): Date | undefined {
     if (date instanceof Date) {
         return date;
