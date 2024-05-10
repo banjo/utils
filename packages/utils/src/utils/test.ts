@@ -2,6 +2,7 @@
  * Simple utility function for tests
  */
 
+import deepmerge from "deepmerge";
 import { DeepPartial, defaults, merge } from "./object";
 
 type AttemptOptions<F = unknown> = {
@@ -126,8 +127,9 @@ export const wrapAsync = async <T>(asyncFn: () => Promise<T>): Promise<Out<T>> =
     }
 };
 
+const overwriteMerge = (_: unknown[], sourceArray: unknown[]) => sourceArray;
 /**
- * Create a new create mock function to update the base mock with the partial mock.
+ * Create a new create mock function to update the base mock with the partial mock. Will overwrite arrays.
  * @param baseMock - base object to use
  * @param partialMock - partial object to use
  * @returns The merged object.
@@ -140,7 +142,7 @@ export const wrapAsync = async <T>(asyncFn: () => Promise<T>): Promise<Out<T>> =
  * createNumbersMock(updatedData); // => { a: 2, b: 2, c: 3 }
  */
 export const createMockCreator =
-    <T extends object>(baseMock: DeepPartial<T>) =>
+    <T extends object>(baseMock: T) =>
     (partialMock: DeepPartial<T> = {}): T => {
-        return merge(baseMock, partialMock) as T;
+        return deepmerge(baseMock, partialMock as any, { arrayMerge: overwriteMerge }) as T;
     };

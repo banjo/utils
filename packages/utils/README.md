@@ -1764,7 +1764,7 @@ const [result, error] = await wrapAsync(() => {
 
 #### createMockCreator
 
-> Create a new create mock function to update the base mock with the partial mock.
+> Create a new create mock function to update the base mock with the partial mock. Will overwrite arrays.
 
 ```ts
 const numbersMock = { a: 1, b: 2, c: 3 };
