@@ -102,5 +102,14 @@ describe("test", () => {
         const createObjectMock = createMockCreator(objectMock);
         const mock3 = createObjectMock(updatedData3);
         expect(mock3).toEqual({ a: 2, b: 2, c: [4] });
+
+        // should not replace array if it is empty
+        const objectMock2 = { a: 1, b: 2, c: [1] };
+        const updatedData4 = { a: 2, c: [] };
+
+        const createObjectMock2 = createMockCreator(objectMock2);
+        const mock4 = createObjectMock2(updatedData4);
+
+        expect(mock4).toEqual({ a: 2, b: 2, c: [1] });
     });
 });
