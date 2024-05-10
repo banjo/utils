@@ -22,21 +22,21 @@ describe("test", () => {
                 () => {
                     throw new Error("test");
                 },
-                { fallbackValue: 1, logError: true }
+                { fallbackValue: 1, logError: false }
             )
         ).toBe(1);
     });
 
     it("attemptAsync", async () => {
         expect(await attemptAsync(() => Promise.resolve(1))).toBe(1);
-        expect(await attemptAsync(() => Promise.reject(new Error("test")))).toBe(undefined);
+        expect(await attemptAsync(() => Promise.reject(new Error("test2")))).toBe(undefined);
         expect(
             await attemptAsync(() => Promise.reject(new Error("test")), { fallbackValue: 1 })
         ).toBe(1);
         expect(
             await attemptAsync(() => Promise.reject(new Error("test")), {
                 fallbackValue: 1,
-                logError: true,
+                logError: false,
             })
         ).toBe(1);
     });
@@ -94,5 +94,13 @@ describe("test", () => {
 
         const mock2 = createNumbersMock2(updatedData2);
         expect(mock2).toEqual({ a: 2, b: 2, c: { d: 4 } });
+
+        // should replace arrays and such
+        const objectMock = { a: 1, b: 2, c: [1, 2, 3] };
+        const updatedData3 = { a: 2, c: [4] };
+
+        const createObjectMock = createMockCreator(objectMock);
+        const mock3 = createObjectMock(updatedData3);
+        expect(mock3).toEqual({ a: 2, b: 2, c: [4] });
     });
 });
