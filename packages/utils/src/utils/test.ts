@@ -127,12 +127,9 @@ export const wrapAsync = async <T>(asyncFn: () => Promise<T>): Promise<Out<T>> =
     }
 };
 
-const overwriteMerge = (destinationArray: unknown[], sourceArray: unknown[]) => {
-    if (sourceArray.length === 0) return destinationArray;
-    return sourceArray;
-};
+const overwriteMerge = (destinationArray: unknown[], sourceArray: unknown[]) => sourceArray;
 /**
- * Create a new create mock function to update the base mock with the partial mock. Will use mock array if it has values, otherwise it will use the base mock.
+ * Create a new create mock function to update the base mock with the partial mock. Will overwrite arrays instead of merging them.
  * @param baseMock - base object to use
  * @param partialMock - partial object to use
  * @returns The merged object.
