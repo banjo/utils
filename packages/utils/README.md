@@ -1709,25 +1709,25 @@ attempt(
 > Try to run an async function, and return a fallback value if it throws an error. Defaults to undefined if nothing is provided.
 
 ```ts
-await attemptAsync(() => 1); // 1
-await attemptAsync(() => {
+await attemptAsync(async () => 1); // 1
+await attemptAsync(async () => {
     throw new Error("test");
 }); // undefined
 
 await attemptAsync(
-    () => {
+    async () => {
         throw new Error("test");
     },
     { fallbackValue: 1 }
 ); // 1
 await attemptAsync(
-    () => {
+    async () => {
         throw new Error("test");
     },
     { fallbackValue: 1, logError: true }
 ); // 1, logs error to console
 await attemptAsync(
-    () => {
+    async () => {
         throw new Error("test");
     },
     { fallbackValue: 1, onError: e => console.error(e) }

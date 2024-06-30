@@ -66,12 +66,12 @@ export const attempt = <T, F = undefined>(
  * @param options - The options to use.
  * @returns - The result of the function, or the fallback value if the function throws an error.
  * @example
- * await attemptAsync(() => 1); // 1
- * await attemptAsync(() => { throw new Error("test"); }); // undefined
+ * await attemptAsync(async () => 1); // 1
+ * await attemptAsync(async () => { throw new Error("test"); }); // undefined
  *
- * await attemptAsync(() => { throw new Error("test"); }, { fallbackValue: 1 }); // 1
- * await attemptAsync(() => { throw new Error("test"); }, { fallbackValue: 1, logError: true }); // 1, logs error to console
- * await attemptAsync(() => { throw new Error("test"); }, { fallbackValue: 1, onError: (e) => console.error(e) }); // 1, logs error to console
+ * await attemptAsync(async () => { throw new Error("test"); }, { fallbackValue: 1 }); // 1
+ * await attemptAsync(async () => { throw new Error("test"); }, { fallbackValue: 1, logError: true }); // 1, logs error to console
+ * await attemptAsync(async () => { throw new Error("test"); }, { fallbackValue: 1, onError: (e) => console.error(e) }); // 1, logs error to console
  */
 export const attemptAsync = async <T, F = undefined>(
     asyncFn: () => Promise<T>,
