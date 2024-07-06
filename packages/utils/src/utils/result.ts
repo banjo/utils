@@ -57,10 +57,13 @@ export type AsyncResultType<T> = Promise<ResultType<T>>;
  *
  */
 export const Result = {
-    ok: <T>(data: T): SuccessResult<T> => ({
+    ok: <T = void>(data?: T): SuccessResult<T extends undefined ? void : T> => ({
         success: true,
-        data,
+        data: data as T extends undefined ? void : T,
     }),
+    /**
+     * @deprecated Use `Result.ok()` instead.
+     */
     okEmpty: (): SuccessResult<void> => ({
         success: true,
         data: undefined,
