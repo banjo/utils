@@ -1,7 +1,7 @@
 {
     "name": "@banjoanton/utils",
     "type": "module",
-    "version": "0.1.86",
+    "version": "0.1.87",
     "description": "",
     "author": "Anton Ödman <anton.odman@gmail.com>",
     "license": "MIT",
