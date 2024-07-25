@@ -465,6 +465,8 @@ export function zip<T extends any[]>(...arrays: ZipInput<T>): ZipOutput<T> {
     return result as ZipOutput<T>;
 }
 
+type TypeGuard<T, U extends T> = (item: T) => item is U;
+
 /**
  * Partition an array into two arrays. The first array will contain the items that pass the predicate function, the second array will contain the items that don't pass the predicate function.
  * @param array - The array to partition.
@@ -479,13 +481,16 @@ export function zip<T extends any[]>(...arrays: ZipInput<T>): ZipOutput<T> {
  * const values = [1, 2, 3, 4, 5];
  * partition(values, (item) => item % 2 === 0); // returns [[2, 4], [1, 3, 5]]
  */
-export const partition = <T>(array: T[], predicate: (item: T) => boolean): [T[], T[]] => {
-    const truthy: T[] = [];
-    const falsy: T[] = [];
+export const partition = <T, U extends T>(
+    array: T[],
+    predicate: TypeGuard<T, U>
+): [U[], Exclude<T, U>[]] => {
+    const truthy: U[] = [];
+    const falsy: Exclude<T, U>[] = [];
 
     array.forEach(item => {
         if (predicate(item)) truthy.push(item);
-        else falsy.push(item);
+        else falsy.push(item as Exclude<T, U>);
     });
 
     return [truthy, falsy];
