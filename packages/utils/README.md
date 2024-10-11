@@ -140,6 +140,7 @@ Auto generated from TSDocs.
     -   [flip](#flip)
 -   [Result](#result)
     -   [Result](#Result)
+    -   [createResult](#createResult)
 -   [String](#string)
     -   [capitalize](#capitalize)
     -   [randomString](#randomString)
@@ -1510,16 +1511,41 @@ A result type that can be used to return a value or an error.
 
 #### Result
 
-> A simple result type that can be used to return a value or an error. Much like Rust's Result type.
+> A simple result type that can be used to return a value or an error.
 
 ```ts
-// result();
-
-const result = Result.ok(1); // or Result.okEmpty, or Result.error, etc;
+const result = Result.ok(1); // or Result.error
 if (result.success) {
     console.log(result.data);
 } else {
     console.log(result.message);
+}
+
+const error = Result.error("error message");
+console.log(error.message);
+```
+
+---
+
+#### createResult
+
+> Create a custom Result type with error data and types.
+
+```ts
+type MyErrorDataMap = {
+    network: { endpoint: string; statusCode: number };
+    internal: { errorId: string; details: string };
+};
+
+const OwnResult = createResult<MyErrorDataMap>();
+
+const error = OwnResult.error("error message", {
+    type: "network",
+    data: { endpoint: "http://example.com", statusCode: 404 },
+});
+
+if (error.type === "network") {
+    console.log(error.data.endpoint);
 }
 ```
 
