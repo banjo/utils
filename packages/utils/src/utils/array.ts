@@ -466,6 +466,8 @@ export function zip<T extends any[]>(...arrays: ZipInput<T>): ZipOutput<T> {
 }
 
 type TypeGuard<T, U extends T> = (item: T) => item is U;
+type GeneralPredicate<T> = (item: T) => boolean;
+type CombinedPredicate<T, U extends T> = TypeGuard<T, U> | GeneralPredicate<T>;
 
 /**
  * Partition an array into two arrays. The first array will contain the items that pass the predicate function, the second array will contain the items that don't pass the predicate function.
@@ -481,20 +483,25 @@ type TypeGuard<T, U extends T> = (item: T) => item is U;
  * const values = [1, 2, 3, 4, 5];
  * partition(values, (item) => item % 2 === 0); // returns [[2, 4], [1, 3, 5]]
  */
-export const partition = <T, U extends T>(
+export function partition<T, U extends T>(
     array: T[],
     predicate: TypeGuard<T, U>
-): [U[], Exclude<T, U>[]] => {
-    const truthy: U[] = [];
-    const falsy: Exclude<T, U>[] = [];
+): [U[], Exclude<T, U>[]];
+export function partition<T>(array: T[], predicate: GeneralPredicate<T>): [T[], T[]];
+export function partition<T, U extends T>(
+    array: T[],
+    predicate: CombinedPredicate<T, U>
+): [U[], Exclude<T, U>[]] | [T[], T[]] {
+    const truthy: U[] | T[] = [];
+    const falsy: Exclude<T, U>[] | T[] = [];
 
     array.forEach(item => {
-        if (predicate(item)) truthy.push(item);
+        if (predicate(item)) truthy.push(item as U);
         else falsy.push(item as Exclude<T, U>);
     });
 
     return [truthy, falsy];
-};
+}
 
 /**
  * Return the sum of all the elements in an array.
