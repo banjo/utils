@@ -44,10 +44,9 @@ export const Result = {
 };
 
 type ErrorResultMeta<TErrorDataMap extends Record<string, any>> = {
-    [K in keyof TErrorDataMap]: {
-        type: K;
-        data: TErrorDataMap[K];
-    };
+    [K in keyof TErrorDataMap]: TErrorDataMap[K] extends undefined
+        ? { type: K }
+        : { type: K; data: TErrorDataMap[K] };
 }[keyof TErrorDataMap];
 
 export type ErrorResultWithType<TErrorDataMap extends Record<string, any>> = ErrorType &
@@ -86,7 +85,6 @@ export const createResult = <TErrorDataMap extends Record<string, any>>() => ({
     ): ErrorResultWithType<TErrorDataMap> => ({
         success: false,
         message,
-        type: meta.type,
-        data: meta.data,
+        ...meta,
     }),
 });
