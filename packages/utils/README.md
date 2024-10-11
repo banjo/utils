@@ -1536,8 +1536,9 @@ type MyErrorDataMap = {
     network: { endpoint: string; statusCode: number };
     internal: { errorId: string; details: string };
 };
+type DefaultError = "UnknownError";
 
-const OwnResult = createResult<MyErrorDataMap>();
+const OwnResult = createResult<MyErrorDataMap, DefaultError>();
 
 const error = OwnResult.error("error message", {
     type: "network",
@@ -1547,6 +1548,9 @@ const error = OwnResult.error("error message", {
 if (error.type === "network") {
     console.log(error.data.endpoint);
 }
+
+const error = OwnResult.error("error message");
+console.log(error.type); // type "UnknownError"
 ```
 
 ---

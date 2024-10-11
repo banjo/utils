@@ -43,18 +43,22 @@ export const Result = {
     }),
 };
 
-type ErrorResultMeta<TErrorDataMap extends Record<string, any>> = {
-    [K in keyof TErrorDataMap]: TErrorDataMap[K] extends undefined
-        ? { type: K }
-        : { type: K; data: TErrorDataMap[K] };
-}[keyof TErrorDataMap];
+type ErrorResultMeta<TErrorDataMap extends Record<string, any>, TDefaultError> =
+    | {
+          [K in keyof TErrorDataMap]: TErrorDataMap[K] extends undefined
+              ? { type: K }
+              : { type: K; data: TErrorDataMap[K] };
+      }[keyof TErrorDataMap]
+    | { type: TDefaultError };
 
-export type ErrorResultWithType<TErrorDataMap extends Record<string, any>> = ErrorType &
-    ErrorResultMeta<TErrorDataMap>;
+export type ErrorResultWithType<
+    TErrorDataMap extends Record<string, any>,
+    TDefaultError,
+> = ErrorType & ErrorResultMeta<TErrorDataMap, TDefaultError>;
 
-export type CreatedResultType<TData, TErrorDataMap extends Record<string, any>> =
+export type CreatedResultType<TData, TErrorDataMap extends Record<string, any>, TDefaultError> =
     | SuccessResult<TData>
-    | ErrorResultWithType<TErrorDataMap>;
+    | ErrorResultWithType<TErrorDataMap, TDefaultError>;
 
 /**
  * Create a custom Result type with error data and types.
@@ -65,8 +69,9 @@ export type CreatedResultType<TData, TErrorDataMap extends Record<string, any>> 
  *    network: { endpoint: string; statusCode: number };
  *    internal: { errorId: string; details: string };
  * };
+ * type DefaultError = "UnknownError";
  *
- * const OwnResult = createResult<MyErrorDataMap>();
+ * const OwnResult = createResult<MyErrorDataMap, DefaultError>();
  *
  * const error = OwnResult.error("error message", {
  *    type: "network",
@@ -76,15 +81,31 @@ export type CreatedResultType<TData, TErrorDataMap extends Record<string, any>> 
  * if (error.type === "network") {
  *    console.log(error.data.endpoint);
  * }
+ *
+ * const error = OwnResult.error("error message");
+ * console.log(error.type); // type "UnknownError"
  */
-export const createResult = <TErrorDataMap extends Record<string, any>>() => ({
-    ok,
-    error: (
-        message: string,
-        meta: ErrorResultMeta<TErrorDataMap>
-    ): ErrorResultWithType<TErrorDataMap> => ({
-        success: false,
-        message,
-        ...meta,
-    }),
-});
+export const createResult = <
+    TErrorDataMap extends Record<string, any>,
+    TDefaultError = "UnknownError",
+>() => {
+    return {
+        error: (
+            message: string,
+            meta?: ErrorResultMeta<TErrorDataMap, TDefaultError>
+        ): ErrorResultWithType<TErrorDataMap, TDefaultError> => {
+            if (meta) {
+                return {
+                    success: false,
+                    message,
+                    ...meta,
+                };
+            }
+            return {
+                success: false,
+                message,
+                type: undefined as any as TDefaultError,
+            };
+        },
+    };
+};
