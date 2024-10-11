@@ -90,6 +90,7 @@ export const createResult = <
     TDefaultError = "UnknownError",
 >() => {
     return {
+        ok,
         error: (
             message: string,
             meta?: ErrorResultMeta<TErrorDataMap, TDefaultError>
