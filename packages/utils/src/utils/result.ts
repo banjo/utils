@@ -20,6 +20,11 @@ const ok = <T = void>(data?: T): SuccessResult<T extends undefined ? void : T> =
     data: data as T extends undefined ? void : T,
 });
 
+const error = (message: string): ErrorType => ({
+    success: false,
+    message,
+});
+
 /**
  * A simple result type that can be used to return a value or an error.
  * @returns A result type that represents a value or an error.
@@ -37,11 +42,26 @@ const ok = <T = void>(data?: T): SuccessResult<T extends undefined ? void : T> =
  */
 export const Result = {
     ok,
-    error: (message: string): ErrorType => ({
-        success: false,
-        message,
-    }),
+    error,
 };
+
+/**
+ * Create a wrapper around the default Result type.
+ * Making it possible to import the Result type from your own module.
+ * Without any custom error data and types. Use `createResultWithErrorData` for custom error data and types.
+ * @returns A result type that represents a value or an error.
+ * @example
+ *
+ * const OwnResult = createResult();
+ *
+ * const result = OwnResult.ok(1); // or OwnResult.error
+ * if (result.success) {
+ *    console.log(result.data);
+ * } else {
+ *   console.log(result.message);
+ * }
+ */
+export const createResult = () => Result;
 
 type ErrorResultMeta<TErrorDataMap extends Record<string, any>, TDefaultError> =
     | {
@@ -85,7 +105,7 @@ export type CreatedResultType<TData, TErrorDataMap extends Record<string, any>, 
  * const error = OwnResult.error("error message");
  * console.log(error.type); // type "UnknownError"
  */
-export const createResult = <
+export const createResultWithErrorData = <
     TErrorDataMap extends Record<string, any>,
     TDefaultError = "UnknownError",
 >() => {

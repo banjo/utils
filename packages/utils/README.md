@@ -141,6 +141,7 @@ Auto generated from TSDocs.
 -   [Result](#result)
     -   [Result](#Result)
     -   [createResult](#createResult)
+    -   [createResultWithErrorData](#createResultWithErrorData)
 -   [String](#string)
     -   [capitalize](#capitalize)
     -   [randomString](#randomString)
@@ -1528,6 +1529,25 @@ console.log(error.message);
 ---
 
 #### createResult
+
+> Create a wrapper around the default Result type.
+> Making it possible to import the Result type from your own module.
+> Without any custom error data and types. Use `createResultWithErrorData` for custom error data and types.
+
+```ts
+const OwnResult = createResult();
+
+const result = OwnResult.ok(1); // or OwnResult.error
+if (result.success) {
+    console.log(result.data);
+} else {
+    console.log(result.message);
+}
+```
+
+---
+
+#### createResultWithErrorData
 
 > Create a custom Result type with error data and types.
 
