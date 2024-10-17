@@ -126,7 +126,12 @@ export const chunk = <T>(array: T[], size: number): T[][] => {
  * last([1, 2, 3]); // returns 3
  * last(['a', 'b', 'c']); // returns 'c'
  */
-export const last = <T>(array: T[]): Maybe<T> => array[array.length - 1];
+export const last = <T>(array: T[]): Maybe<T> => {
+    if (array && array.length > 0) {
+        return array[array.length - 1];
+    }
+    return undefined;
+};
 
 /**
  * Return the first element of an array.
@@ -136,7 +141,12 @@ export const last = <T>(array: T[]): Maybe<T> => array[array.length - 1];
  * first([1, 2, 3]); // returns 1
  * first(['a', 'b', 'c']); // returns 'a'
  */
-export const first = <T>(array: T[]): Maybe<T> => array[0];
+export const first = <T>(array: T[]): Maybe<T> => {
+    if (array && array.length > 0) {
+        return array[0];
+    }
+    return undefined;
+};
 
 /**
  * Generate an array of numbers in a given range.
