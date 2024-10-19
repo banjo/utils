@@ -15,10 +15,14 @@ export type ErrorType = {
 export type ResultType<T> = SuccessResult<T> | ErrorType;
 export type AsyncResultType<T> = Promise<ResultType<T>>;
 
-const ok = <T = void>(data?: T): SuccessResult<T extends undefined ? void : T> => ({
-    success: true,
-    data: data as T extends undefined ? void : T,
-});
+function ok(): SuccessResult<void>;
+function ok<T>(data: T): SuccessResult<T>;
+function ok<T>(data?: T): SuccessResult<T extends undefined ? void : T> {
+    return {
+        success: true,
+        data: (data === undefined ? undefined : data) as T extends undefined ? void : T,
+    };
+}
 
 const error = (message: string): ErrorType => ({
     success: false,
