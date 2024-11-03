@@ -1,8 +1,11 @@
 {
     "name": "@banjoanton/utils",
     "type": "module",
-    "version": "0.1.95",
+    "version": "1.0.0",
     "description": "",
+    "publishConfig": {
+        "access": "public"
+    },
     "author": "Anton Ödman <anton.odman@gmail.com>",
     "license": "MIT",
     "private": false,
