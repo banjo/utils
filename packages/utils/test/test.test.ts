@@ -1,16 +1,24 @@
 import { describe, expect, expectTypeOf, it } from "vitest";
-import { attempt, attemptAsync, createMockCreator, wrap, wrapAsync } from "../src/utils/test";
+import {
+    attempt,
+    attemptSync,
+    createMockCreator,
+    to,
+    toSync,
+    wrap,
+    wrapAsync,
+} from "../src/utils/test";
 
 describe("test", () => {
-    it("attempt", () => {
-        expect(attempt(() => 1)).toBe(1);
+    it("attemptSync", () => {
+        expect(attemptSync(() => 1)).toBe(1);
         expect(
-            attempt(() => {
+            attemptSync(() => {
                 throw new Error("test");
             })
         ).toBe(undefined);
         expect(
-            attempt(
+            attemptSync(
                 () => {
                     throw new Error("test");
                 },
@@ -18,7 +26,7 @@ describe("test", () => {
             )
         ).toBe(1);
         expect(
-            attempt(
+            attemptSync(
                 () => {
                     throw new Error("test");
                 },
@@ -27,14 +35,14 @@ describe("test", () => {
         ).toBe(1);
     });
 
-    it("attemptAsync", async () => {
-        expect(await attemptAsync(() => Promise.resolve(1))).toBe(1);
-        expect(await attemptAsync(() => Promise.reject(new Error("test2")))).toBe(undefined);
+    it("attempt", async () => {
+        expect(await attempt(() => Promise.resolve(1))).toBe(1);
+        expect(await attempt(() => Promise.reject(new Error("test2")))).toBe(undefined);
+        expect(await attempt(() => Promise.reject(new Error("test")), { fallbackValue: 1 })).toBe(
+            1
+        );
         expect(
-            await attemptAsync(() => Promise.reject(new Error("test")), { fallbackValue: 1 })
-        ).toBe(1);
-        expect(
-            await attemptAsync(() => Promise.reject(new Error("test")), {
+            await attempt(() => Promise.reject(new Error("test")), {
                 fallbackValue: 1,
                 logError: false,
             })
@@ -52,6 +60,42 @@ describe("test", () => {
         const [res, err] = wrap(() => 1);
         expectTypeOf(res).toEqualTypeOf<number | undefined>();
         expectTypeOf(err).toEqualTypeOf<Error | undefined>();
+
+        if (err) {
+            expectTypeOf(err).toEqualTypeOf<Error>();
+        } else {
+            expectTypeOf(res).toEqualTypeOf<number>();
+        }
+    });
+
+    it("toSync", () => {
+        expect(toSync(() => 1)).toStrictEqual([null, 1]);
+        expect(
+            toSync(() => {
+                throw new Error("test");
+            })
+        ).toStrictEqual([new Error("test"), null]);
+
+        const [err, res] = toSync(() => 1);
+        expectTypeOf(res).toEqualTypeOf<number | null>();
+        expectTypeOf(err).toEqualTypeOf<Error | null>();
+
+        if (err) {
+            expectTypeOf(err).toEqualTypeOf<Error>();
+        } else {
+            expectTypeOf(res).toEqualTypeOf<number>();
+        }
+    });
+
+    it("to", async () => {
+        expect(await to(() => Promise.resolve(1))).toStrictEqual([null, 1]);
+        expect(
+            await to(() => Promise.reject(new Error("test"))).then(res => res.map(String))
+        ).toStrictEqual(["Error: test", "null"]);
+
+        const [err, res] = await to(() => Promise.resolve(1));
+        expectTypeOf(res).toEqualTypeOf<number | null>();
+        expectTypeOf(err).toEqualTypeOf<Error | null>();
 
         if (err) {
             expectTypeOf(err).toEqualTypeOf<Error>();

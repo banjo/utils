@@ -134,3 +134,37 @@ export const createResultWithErrorData = <
         },
     };
 };
+
+export type TryExpressionResult<T, E extends Error = Error> = [E, null] | [null, T];
+
+/**
+ * Create a custom Result type based on try expressions, with a Go-like syntax. Used to return a value or an error.
+ * Return value is a `TryExpressionResult` tuple with an error and a value.
+ * @returns A tuple with an error and a value. E.g. [error, value]
+ * @example
+ * const Result = createTryExpressionResult();
+ * const getResult = () => {
+ *   if (something()) {
+ *     return Result.ok(1);
+ *   } else {
+ *     return Result.error(new Error("error"));
+ *   }
+ * }
+ *
+ * const [error, value] = getResult();
+ * if (error) {
+ *   console.log(error.message); // Error is defined
+ * } else {
+ *   console.log(value);         // Value is defined
+ * }
+ */
+export const createTryExpressionResult = () => {
+    return {
+        ok: <TData>(result: TData): [null, TData] => {
+            return [null, result];
+        },
+        error: <TError extends Error>(error: TError): [TError, null] => {
+            return [error, null];
+        },
+    };
+};

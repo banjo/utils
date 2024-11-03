@@ -31,19 +31,19 @@ const defaultOptions: AttemptOptions = {
 type FallbackType<F> = F extends undefined ? undefined : F;
 
 /**
- * Try to run a function, and return a fallback value if it throws an error. Defaults to undefined if nothing is provided.
+ * Try to run a sync function, and return a fallback value if it throws an error. Defaults to undefined if nothing is provided.
  * @param fn - The function to run.
  * @param options - The options to use.
  * @returns - The result of the function, or the fallback value if the function throws an error.
  * @example
- * attempt(() => 1); // 1
- * attempt(() => { throw new Error("test"); }); // undefined
+ * attemptSync(() => 1); // 1
+ * attemptSync(() => { throw new Error("test"); }); // undefined
  *
- * attempt(() => { throw new Error("test"); }, { fallbackValue: 1 }); // 1
- * attempt(() => { throw new Error("test"); }, { fallbackValue: 1, logError: true }); // 1, logs error to console
- * attempt(() => { throw new Error("test"); }, { fallbackValue: 1, onError: (e) => console.error(e) }); // 1, logs error to console
+ * attemptSync(() => { throw new Error("test"); }, { fallbackValue: 1 }); // 1
+ * attemptSync(() => { throw new Error("test"); }, { fallbackValue: 1, logError: true }); // 1, logs error to console
+ * attemptSync(() => { throw new Error("test"); }, { fallbackValue: 1, onError: (e) => console.error(e) }); // 1, logs error to console
  */
-export const attempt = <T, F = undefined>(
+export const attemptSync = <T, F = undefined>(
     fn: () => T,
     options?: AttemptOptions<F>
 ): T | FallbackType<F> => {
@@ -66,14 +66,14 @@ export const attempt = <T, F = undefined>(
  * @param options - The options to use.
  * @returns - The result of the function, or the fallback value if the function throws an error.
  * @example
- * await attemptAsync(async () => 1); // 1
- * await attemptAsync(async () => { throw new Error("test"); }); // undefined
+ * await attempt(async () => 1); // 1
+ * await attempt(async () => { throw new Error("test"); }); // undefined
  *
- * await attemptAsync(async () => { throw new Error("test"); }, { fallbackValue: 1 }); // 1
- * await attemptAsync(async () => { throw new Error("test"); }, { fallbackValue: 1, logError: true }); // 1, logs error to console
- * await attemptAsync(async () => { throw new Error("test"); }, { fallbackValue: 1, onError: (e) => console.error(e) }); // 1, logs error to console
+ * await attempt(async () => { throw new Error("test"); }, { fallbackValue: 1 }); // 1
+ * await attempt(async () => { throw new Error("test"); }, { fallbackValue: 1, logError: true }); // 1, logs error to console
+ * await attempt(async () => { throw new Error("test"); }, { fallbackValue: 1, onError: (e) => console.error(e) }); // 1, logs error to console
  */
-export const attemptAsync = async <T, F = undefined>(
+export const attempt = async <T, F = undefined>(
     asyncFn: () => Promise<T>,
     options?: AttemptOptions<F>
 ): Promise<T | FallbackType<F>> => {
@@ -89,18 +89,62 @@ export const attemptAsync = async <T, F = undefined>(
     }
 };
 
-type Out<T> = [T, undefined] | [undefined, Error];
+/**
+ * Try to run an async function, and return a fallback value if it throws an error. Defaults to undefined if nothing is provided.
+ * @deprecated Use `attempt` instead.
+ */
+export const attemptAsync = async <T, F = undefined>(
+    asyncFn: () => Promise<T>,
+    options?: AttemptOptions<F>
+): Promise<T | FallbackType<F>> => {
+    return attempt(asyncFn, options);
+};
+
+type Out<T> = [Error, null] | [null, T];
+
+/**
+ * Attempt to run an async function like in Go, returning a tuple with the error and the result.
+ * @param asyncFn The async function to execute.
+ * @returns A tuple with an error and a value. E.g. [error, value]
+ * @example
+ *
+ * const [error, result] = await to(async () => 1); // [null, 1]
+ * const [error, result] = await to(async () => { throw new Error("test"); }); // [Error("test"), null]
+ */
+export const to = async <T>(asyncFn: () => Promise<T>): Promise<Out<T>> => {
+    try {
+        const result = await asyncFn();
+        return [null, result];
+    } catch (e) {
+        return [e instanceof Error ? e : new Error(String(e)), null];
+    }
+};
+
+/**
+ * Attempt to run an sync function like in Go, returning a tuple with the error and the result.
+ * @param fn - The function to execute.
+ * @returns A tuple with an error and a value. E.g. [error, value]
+ * @example
+ *
+ * const [error, result] = toSync(() => 1); // [null, 1]
+ * const [error, result] = toSync(() => { throw new Error("test"); }); // [Error("test"), null]
+ */
+export const toSync = <T>(fn: () => T): Out<T> => {
+    try {
+        const result = fn();
+        return [null, result];
+    } catch (e) {
+        return [e instanceof Error ? e : new Error(String(e)), null];
+    }
+};
+
+type WrapOut<T> = [T, undefined] | [undefined, Error];
 
 /**
  * Attempt to run a function like in Go, returning an array with the result and the error.
- * @param fn - The function to run.
- * @returns - The result of the function, or the error if the function throws an error.
- * @example
- *
- * const [result, error] = wrap(() => 1); // [1, undefined]
- * const [result, error] = wrap(() => { throw new Error("test"); }); // [undefined, Error("test")]
+ * @deprecated Use `toSync` instead, as it has better defaults.
  */
-export const wrap = <T>(fn: () => T): Out<T> => {
+export const wrap = <T>(fn: () => T): WrapOut<T> => {
     try {
         const result = fn();
         return [result, undefined];
@@ -111,14 +155,9 @@ export const wrap = <T>(fn: () => T): Out<T> => {
 
 /**
  * Attempt to run an async function like in Go, returning an array with the result and the error.
- * @param asyncFn - The async function to run.
- * @returns - The result of the function, or the error if the function throws an error.
- * @example
- *
- * const [result, error] = await wrapAsync(() => 1); // [1, undefined]
- * const [result, error] = await wrapAsync(() => { throw new Error("test"); }); // [undefined, Error("test")]
+ * @deprecated Use `to` instead, as it has better defaults.
  */
-export const wrapAsync = async <T>(asyncFn: () => Promise<T>): Promise<Out<T>> => {
+export const wrapAsync = async <T>(asyncFn: () => Promise<T>): Promise<WrapOut<T>> => {
     try {
         const result = await asyncFn();
         return [result, undefined];

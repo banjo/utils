@@ -1,7 +1,7 @@
 // @ts-ignore
 import options from "@banjoanton/prettier-config";
 import fs from "fs";
-import { attempt } from "packages/utils/src";
+import { attemptSync } from "packages/utils/src";
 import path from "path";
 import prettier from "prettier";
 import { fileURLToPath } from "url";
@@ -38,7 +38,7 @@ export const getDirectories = (type: Type) => {
 export const getUtilFiles = (type: Type) => {
     const { utilsDir } = getDirectories(type);
     const fallbackValue: string[] = [];
-    const utilFiles = attempt(() => fs.readdirSync(utilsDir), { fallbackValue });
+    const utilFiles = attemptSync(() => fs.readdirSync(utilsDir), { fallbackValue });
 
     return utilFiles.map((file: string) => {
         const fileName = file.replace(".ts", "");
