@@ -30,5 +30,8 @@
         "format": "npx prettier --write .",
         "prepare": "husky install"
     },
-    "prettier": "@banjoanton/prettier-config"
+    "prettier": "@banjoanton/prettier-config",
+    "dependencies": {
+        "@changesets/cli": "^2.27.9"
+    }
 }

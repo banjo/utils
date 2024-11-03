@@ -142,6 +142,7 @@ Auto generated from TSDocs.
     -   [Result](#Result)
     -   [createResult](#createResult)
     -   [createResultWithErrorData](#createResultWithErrorData)
+    -   [createTryExpressionResult](#createTryExpressionResult)
 -   [String](#string)
     -   [capitalize](#capitalize)
     -   [randomString](#randomString)
@@ -155,8 +156,11 @@ Auto generated from TSDocs.
     -   [slugify](#slugify)
     -   [truncate](#truncate)
 -   [Test](#test)
+    -   [attemptSync](#attemptSync)
     -   [attempt](#attempt)
     -   [attemptAsync](#attemptAsync)
+    -   [to](#to)
+    -   [toSync](#toSync)
     -   [wrap](#wrap)
     -   [wrapAsync](#wrapAsync)
     -   [createMockCreator](#createMockCreator)
@@ -1575,6 +1579,31 @@ console.log(error.type); // type "UnknownError"
 
 ---
 
+#### createTryExpressionResult
+
+> Create a custom Result type based on try expressions, with a Go-like syntax. Used to return a value or an error.
+> Return value is a `TryExpressionResult` tuple with an error and a value.
+
+```ts
+const Result = createTryExpressionResult();
+const getResult = () => {
+    if (something()) {
+        return Result.ok(1);
+    } else {
+        return Result.error(new Error("error"));
+    }
+};
+
+const [error, value] = getResult();
+if (error) {
+    console.log(error.message); // Error is defined
+} else {
+    console.log(value); // Value is defined
+}
+```
+
+---
+
 ### String
 
 Utilities for working with strings.
@@ -1722,30 +1751,62 @@ Simple utility function for tests
 
 ---
 
-#### attempt
+#### attemptSync
 
-> Try to run a function, and return a fallback value if it throws an error. Defaults to undefined if nothing is provided.
+> Try to run a sync function, and return a fallback value if it throws an error. Defaults to undefined if nothing is provided.
 
 ```ts
-attempt(() => 1); // 1
-attempt(() => {
+attemptSync(() => 1); // 1
+attemptSync(() => {
     throw new Error("test");
 }); // undefined
 
-attempt(
+attemptSync(
     () => {
         throw new Error("test");
     },
     { fallbackValue: 1 }
 ); // 1
-attempt(
+attemptSync(
     () => {
         throw new Error("test");
     },
     { fallbackValue: 1, logError: true }
 ); // 1, logs error to console
-attempt(
+attemptSync(
     () => {
+        throw new Error("test");
+    },
+    { fallbackValue: 1, onError: e => console.error(e) }
+); // 1, logs error to console
+```
+
+---
+
+#### attempt
+
+> Try to run an async function, and return a fallback value if it throws an error. Defaults to undefined if nothing is provided.
+
+```ts
+await attempt(async () => 1); // 1
+await attempt(async () => {
+    throw new Error("test");
+}); // undefined
+
+await attempt(
+    async () => {
+        throw new Error("test");
+    },
+    { fallbackValue: 1 }
+); // 1
+await attempt(
+    async () => {
+        throw new Error("test");
+    },
+    { fallbackValue: 1, logError: true }
+); // 1, logs error to console
+await attempt(
+    async () => {
         throw new Error("test");
     },
     { fallbackValue: 1, onError: e => console.error(e) }
@@ -1759,29 +1820,33 @@ attempt(
 > Try to run an async function, and return a fallback value if it throws an error. Defaults to undefined if nothing is provided.
 
 ```ts
-await attemptAsync(async () => 1); // 1
-await attemptAsync(async () => {
-    throw new Error("test");
-}); // undefined
+undefined;
+```
 
-await attemptAsync(
-    async () => {
-        throw new Error("test");
-    },
-    { fallbackValue: 1 }
-); // 1
-await attemptAsync(
-    async () => {
-        throw new Error("test");
-    },
-    { fallbackValue: 1, logError: true }
-); // 1, logs error to console
-await attemptAsync(
-    async () => {
-        throw new Error("test");
-    },
-    { fallbackValue: 1, onError: e => console.error(e) }
-); // 1, logs error to console
+---
+
+#### to
+
+> Attempt to run an async function like in Go, returning a tuple with the error and the result.
+
+```ts
+const [error, result] = await to(async () => 1); // [null, 1]
+const [error, result] = await to(async () => {
+    throw new Error("test");
+}); // [Error("test"), null]
+```
+
+---
+
+#### toSync
+
+> Attempt to run an sync function like in Go, returning a tuple with the error and the result.
+
+```ts
+const [error, result] = toSync(() => 1); // [null, 1]
+const [error, result] = toSync(() => {
+    throw new Error("test");
+}); // [Error("test"), null]
 ```
 
 ---
@@ -1791,10 +1856,7 @@ await attemptAsync(
 > Attempt to run a function like in Go, returning an array with the result and the error.
 
 ```ts
-const [result, error] = wrap(() => 1); // [1, undefined]
-const [result, error] = wrap(() => {
-    throw new Error("test");
-}); // [undefined, Error("test")]
+undefined;
 ```
 
 ---
@@ -1804,10 +1866,7 @@ const [result, error] = wrap(() => {
 > Attempt to run an async function like in Go, returning an array with the result and the error.
 
 ```ts
-const [result, error] = await wrapAsync(() => 1); // [1, undefined]
-const [result, error] = await wrapAsync(() => {
-    throw new Error("test");
-}); // [undefined, Error("test")]
+undefined;
 ```
 
 ---
