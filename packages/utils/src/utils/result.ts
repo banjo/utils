@@ -3,12 +3,20 @@
  */
 
 export type SuccessResult<T> = {
+    /*
+     * @deprecated Use `ok` instead.
+     */
     success: true;
+    ok: true;
     data: T;
 };
 
 export type ErrorType = {
+    /*
+     * @deprecated Use `ok` instead.
+     */
     success: false;
+    ok: false;
     message: string;
 };
 
@@ -20,12 +28,14 @@ function ok<T>(data: T): SuccessResult<T>;
 function ok<T>(data?: T): SuccessResult<T extends undefined ? void : T> {
     return {
         success: true,
+        ok: true,
         data: (data === undefined ? undefined : data) as T extends undefined ? void : T,
     };
 }
 
 const error = (message: string): ErrorType => ({
     success: false,
+    ok: false,
     message,
 });
 
@@ -35,7 +45,7 @@ const error = (message: string): ErrorType => ({
  * @example
  *
  * const result = Result.ok(1); // or Result.error
- * if (result.success) {
+ * if (result.ok) {
  *    console.log(result.data);
  * } else {
  *   console.log(result.message);
@@ -59,7 +69,7 @@ export const Result = {
  * const OwnResult = createResult();
  *
  * const result = OwnResult.ok(1); // or OwnResult.error
- * if (result.success) {
+ * if (result.ok) {
  *    console.log(result.data);
  * } else {
  *   console.log(result.message);
@@ -122,12 +132,14 @@ export const createResultWithErrorData = <
             if (meta) {
                 return {
                     success: false,
+                    ok: false,
                     message,
                     ...meta,
                 };
             }
             return {
                 success: false,
+                ok: false,
                 message,
                 type: undefined as any as TDefaultError,
             };
@@ -135,7 +147,13 @@ export const createResultWithErrorData = <
     };
 };
 
-export type TryExpressionResult<T, E extends Error = Error> = [E, null] | [null, T];
+export type TryExpressionResult<T = undefined, E extends Error = Error> =
+    | [E, undefined]
+    | [undefined, T];
+
+export type AsyncTryExpressionResult<T = undefined, E extends Error = Error> = Promise<
+    TryExpressionResult<T, E>
+>;
 
 /**
  * Create a custom Result type based on try expressions, with a Go-like syntax. Used to return a value or an error.
@@ -160,11 +178,11 @@ export type TryExpressionResult<T, E extends Error = Error> = [E, null] | [null,
  */
 export const createTryExpressionResult = () => {
     return {
-        ok: <TData>(result: TData): [null, TData] => {
-            return [null, result];
+        ok: <TData = undefined>(result = undefined as TData): [undefined, TData] => {
+            return [undefined, result];
         },
-        error: <TError extends Error>(error: TError): [TError, null] => {
-            return [error, null];
+        error: <TError extends Error>(error: TError): [TError, undefined] => {
+            return [error, undefined];
         },
     };
 };

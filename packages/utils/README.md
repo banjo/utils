@@ -1520,7 +1520,7 @@ A result type that can be used to return a value or an error.
 
 ```ts
 const result = Result.ok(1); // or Result.error
-if (result.success) {
+if (result.ok) {
     console.log(result.data);
 } else {
     console.log(result.message);
@@ -1542,7 +1542,7 @@ console.log(error.message);
 const OwnResult = createResult();
 
 const result = OwnResult.ok(1); // or OwnResult.error
-if (result.success) {
+if (result.ok) {
     console.log(result.data);
 } else {
     console.log(result.message);
