@@ -77,6 +77,16 @@ export const Result = {
  */
 export const createResult = () => Result;
 
+export type SuccessResultV2<T> = {
+    ok: true;
+    data: T;
+};
+
+export type ErrorTypeV2 = {
+    ok: false;
+    message: string;
+};
+
 type ErrorResultMeta<TErrorDataMap extends Record<string, any>, TDefaultError> =
     | {
           [K in keyof TErrorDataMap]: TErrorDataMap[K] extends undefined
@@ -88,10 +98,10 @@ type ErrorResultMeta<TErrorDataMap extends Record<string, any>, TDefaultError> =
 export type ErrorResultWithType<
     TErrorDataMap extends Record<string, any>,
     TDefaultError,
-> = ErrorType & ErrorResultMeta<TErrorDataMap, TDefaultError>;
+> = ErrorTypeV2 & ErrorResultMeta<TErrorDataMap, TDefaultError>;
 
 export type CreatedResultType<TData, TErrorDataMap extends Record<string, any>, TDefaultError> =
-    | SuccessResult<TData>
+    | SuccessResultV2<TData>
     | ErrorResultWithType<TErrorDataMap, TDefaultError>;
 
 /**
@@ -131,19 +141,42 @@ export const createResultWithErrorData = <
         ): ErrorResultWithType<TErrorDataMap, TDefaultError> => {
             if (meta) {
                 return {
-                    success: false,
                     ok: false,
                     message,
                     ...meta,
                 };
             }
             return {
-                success: false,
                 ok: false,
                 message,
                 type: undefined as any as TDefaultError,
             };
         },
+    };
+};
+
+/**
+ * Create a custom Result type with error types, no data.
+ * @returns A result type that represents a value or an error with custom error types.
+ * @example
+ *
+ * type MyErrorType = "NetworkError" | "InternalError";
+ *
+ * const OwnResult = createResultWithType<MyErrorType>();
+ *
+ * const error = OwnResult.error("error message", "NetworkError");
+ * if (error.type === "NetworkError") {
+ *    console.log(error.message);
+ * }
+ */
+export const createResultWithType = <TErrorType extends string>() => {
+    return {
+        ok,
+        error: (message: string, type: TErrorType): ErrorTypeV2 & { type: TErrorType } => ({
+            ok: false,
+            message,
+            type,
+        }),
     };
 };
 

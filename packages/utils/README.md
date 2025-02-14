@@ -142,6 +142,7 @@ Auto generated from TSDocs.
     -   [Result](#Result)
     -   [createResult](#createResult)
     -   [createResultWithErrorData](#createResultWithErrorData)
+    -   [createResultWithType](#createResultWithType)
     -   [createTryExpressionResult](#createTryExpressionResult)
 -   [String](#string)
     -   [capitalize](#capitalize)
@@ -1575,6 +1576,23 @@ if (error.type === "network") {
 
 const error = OwnResult.error("error message");
 console.log(error.type); // type "UnknownError"
+```
+
+---
+
+#### createResultWithType
+
+> Create a custom Result type with error types, no data.
+
+```ts
+type MyErrorType = "NetworkError" | "InternalError";
+
+const OwnResult = createResultWithType<MyErrorType>();
+
+const error = OwnResult.error("error message", "NetworkError");
+if (error.type === "NetworkError") {
+    console.log(error.message);
+}
 ```
 
 ---
