@@ -155,6 +155,13 @@ export const createResultWithErrorData = <
     };
 };
 
+export type ResultWithTypeError<TErrorType> = ErrorTypeV2 & { type: TErrorType };
+export type ResultWithTypeSuccess<TData> = SuccessResultV2<TData>;
+export type ResultWithType<TData, TErrorType> =
+    | ResultWithTypeSuccess<TData>
+    | ResultWithTypeError<TErrorType>;
+export type AsyncResultWithType<TData, TErrorType> = Promise<ResultWithType<TData, TErrorType>>;
+
 /**
  * Create a custom Result type with error types, no data.
  * @returns A result type that represents a value or an error with custom error types.
@@ -172,7 +179,7 @@ export const createResultWithErrorData = <
 export const createResultWithType = <TErrorType extends string>() => {
     return {
         ok,
-        error: (message: string, type: TErrorType): ErrorTypeV2 & { type: TErrorType } => ({
+        error: (message: string, type: TErrorType): ResultWithTypeError<TErrorType> => ({
             ok: false,
             message,
             type,
