@@ -100,7 +100,7 @@ export const attemptAsync = async <T, F = undefined>(
     return attempt(asyncFn, options);
 };
 
-type Out<T> = [Error, null] | [null, T];
+type Out<T> = [Error, undefined] | [undefined, T];
 
 /**
  * Attempt to run an async function like in Go, returning a tuple with the error and the result.
@@ -108,15 +108,15 @@ type Out<T> = [Error, null] | [null, T];
  * @returns A tuple with an error and a value. E.g. [error, value]
  * @example
  *
- * const [error, result] = await to(async () => 1); // [null, 1]
- * const [error, result] = await to(async () => { throw new Error("test"); }); // [Error("test"), null]
+ * const [error, result] = await to(async () => 1); // [undefined, 1]
+ * const [error, result] = await to(async () => { throw new Error("test"); }); // [Error("test"), undefined]
  */
 export const to = async <T>(asyncFn: () => Promise<T>): Promise<Out<T>> => {
     try {
         const result = await asyncFn();
-        return [null, result];
+        return [undefined, result];
     } catch (e) {
-        return [e instanceof Error ? e : new Error(String(e)), null];
+        return [e instanceof Error ? e : new Error(String(e)), undefined];
     }
 };
 
@@ -126,15 +126,15 @@ export const to = async <T>(asyncFn: () => Promise<T>): Promise<Out<T>> => {
  * @returns A tuple with an error and a value. E.g. [error, value]
  * @example
  *
- * const [error, result] = toSync(() => 1); // [null, 1]
- * const [error, result] = toSync(() => { throw new Error("test"); }); // [Error("test"), null]
+ * const [error, result] = toSync(() => 1); // [undefined, 1]
+ * const [error, result] = toSync(() => { throw new Error("test"); }); // [Error("test"), undefined]
  */
 export const toSync = <T>(fn: () => T): Out<T> => {
     try {
         const result = fn();
-        return [null, result];
+        return [undefined, result];
     } catch (e) {
-        return [e instanceof Error ? e : new Error(String(e)), null];
+        return [e instanceof Error ? e : new Error(String(e)), undefined];
     }
 };
 

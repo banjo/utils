@@ -1830,10 +1830,10 @@ undefined;
 > Attempt to run an async function like in Go, returning a tuple with the error and the result.
 
 ```ts
-const [error, result] = await to(async () => 1); // [null, 1]
+const [error, result] = await to(async () => 1); // [undefined, 1]
 const [error, result] = await to(async () => {
     throw new Error("test");
-}); // [Error("test"), null]
+}); // [Error("test"), undefined]
 ```
 
 ---
@@ -1843,10 +1843,10 @@ const [error, result] = await to(async () => {
 > Attempt to run an sync function like in Go, returning a tuple with the error and the result.
 
 ```ts
-const [error, result] = toSync(() => 1); // [null, 1]
+const [error, result] = toSync(() => 1); // [undefined, 1]
 const [error, result] = toSync(() => {
     throw new Error("test");
-}); // [Error("test"), null]
+}); // [Error("test"), undefined]
 ```
 
 ---

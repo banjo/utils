@@ -69,16 +69,16 @@ describe("test", () => {
     });
 
     it("toSync", () => {
-        expect(toSync(() => 1)).toStrictEqual([null, 1]);
+        expect(toSync(() => 1)).toStrictEqual([undefined, 1]);
         expect(
             toSync(() => {
                 throw new Error("test");
             })
-        ).toStrictEqual([new Error("test"), null]);
+        ).toStrictEqual([new Error("test"), undefined]);
 
         const [err, res] = toSync(() => 1);
-        expectTypeOf(res).toEqualTypeOf<number | null>();
-        expectTypeOf(err).toEqualTypeOf<Error | null>();
+        expectTypeOf(res).toEqualTypeOf<number | undefined>();
+        expectTypeOf(err).toEqualTypeOf<Error | undefined>();
 
         if (err) {
             expectTypeOf(err).toEqualTypeOf<Error>();
@@ -88,14 +88,14 @@ describe("test", () => {
     });
 
     it("to", async () => {
-        expect(await to(() => Promise.resolve(1))).toStrictEqual([null, 1]);
+        expect(await to(() => Promise.resolve(1))).toStrictEqual([undefined, 1]);
         expect(
             await to(() => Promise.reject(new Error("test"))).then(res => res.map(String))
-        ).toStrictEqual(["Error: test", "null"]);
+        ).toStrictEqual(["Error: test", "undefined"]);
 
         const [err, res] = await to(() => Promise.resolve(1));
-        expectTypeOf(res).toEqualTypeOf<number | null>();
-        expectTypeOf(err).toEqualTypeOf<Error | null>();
+        expectTypeOf(res).toEqualTypeOf<number | undefined>();
+        expectTypeOf(err).toEqualTypeOf<Error | undefined>();
 
         if (err) {
             expectTypeOf(err).toEqualTypeOf<Error>();
