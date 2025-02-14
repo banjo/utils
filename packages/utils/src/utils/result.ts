@@ -87,6 +87,15 @@ export type ErrorTypeV2 = {
     message: string;
 };
 
+function okV2(): SuccessResultV2<void>;
+function okV2<T>(data: T): SuccessResultV2<T>;
+function okV2<T>(data?: T): SuccessResultV2<T extends undefined ? void : T> {
+    return {
+        ok: true,
+        data: (data === undefined ? undefined : data) as T extends undefined ? void : T,
+    };
+}
+
 type ErrorResultMeta<TErrorDataMap extends Record<string, any>, TDefaultError> =
     | {
           [K in keyof TErrorDataMap]: TErrorDataMap[K] extends undefined
@@ -178,7 +187,7 @@ export type AsyncResultWithType<TData, TErrorType> = Promise<ResultWithType<TDat
  */
 export const createResultWithType = <TErrorType extends string>() => {
     return {
-        ok,
+        ok: okV2,
         error: (message: string, type: TErrorType): ResultWithTypeError<TErrorType> => ({
             ok: false,
             message,
