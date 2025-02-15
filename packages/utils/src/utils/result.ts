@@ -3,19 +3,11 @@
  */
 
 export type SuccessResult<T> = {
-    /*
-     * @deprecated Use `ok` instead.
-     */
-    success: true;
     ok: true;
     data: T;
 };
 
 export type ErrorType = {
-    /*
-     * @deprecated Use `ok` instead.
-     */
-    success: false;
     ok: false;
     message: string;
 };
@@ -27,14 +19,12 @@ function ok(): SuccessResult<void>;
 function ok<T>(data: T): SuccessResult<T>;
 function ok<T>(data?: T): SuccessResult<T extends undefined ? void : T> {
     return {
-        success: true,
         ok: true,
         data: (data === undefined ? undefined : data) as T extends undefined ? void : T,
     };
 }
 
 const error = (message: string): ErrorType => ({
-    success: false,
     ok: false,
     message,
 });
@@ -77,25 +67,6 @@ export const Result = {
  */
 export const createResult = () => Result;
 
-export type SuccessResultV2<T> = {
-    ok: true;
-    data: T;
-};
-
-export type ErrorTypeV2 = {
-    ok: false;
-    message: string;
-};
-
-function okV2(): SuccessResultV2<void>;
-function okV2<T>(data: T): SuccessResultV2<T>;
-function okV2<T>(data?: T): SuccessResultV2<T extends undefined ? void : T> {
-    return {
-        ok: true,
-        data: (data === undefined ? undefined : data) as T extends undefined ? void : T,
-    };
-}
-
 type ErrorResultMeta<TErrorDataMap extends Record<string, any>, TDefaultError> =
     | {
           [K in keyof TErrorDataMap]: TErrorDataMap[K] extends undefined
@@ -107,10 +78,10 @@ type ErrorResultMeta<TErrorDataMap extends Record<string, any>, TDefaultError> =
 export type ErrorResultWithType<
     TErrorDataMap extends Record<string, any>,
     TDefaultError,
-> = ErrorTypeV2 & ErrorResultMeta<TErrorDataMap, TDefaultError>;
+> = ErrorType & ErrorResultMeta<TErrorDataMap, TDefaultError>;
 
 export type CreatedResultType<TData, TErrorDataMap extends Record<string, any>, TDefaultError> =
-    | SuccessResultV2<TData>
+    | SuccessResult<TData>
     | ErrorResultWithType<TErrorDataMap, TDefaultError>;
 
 /**
@@ -164,8 +135,8 @@ export const createResultWithErrorData = <
     };
 };
 
-export type ResultWithTypeError<TErrorType> = ErrorTypeV2 & { type: TErrorType };
-export type ResultWithTypeSuccess<TData> = SuccessResultV2<TData>;
+export type ResultWithTypeError<TErrorType> = ErrorType & { type: TErrorType };
+export type ResultWithTypeSuccess<TData> = SuccessResult<TData>;
 export type ResultWithType<TData, TErrorType> =
     | ResultWithTypeSuccess<TData>
     | ResultWithTypeError<TErrorType>;
@@ -187,7 +158,7 @@ export type AsyncResultWithType<TData, TErrorType> = Promise<ResultWithType<TDat
  */
 export const createResultWithType = <TErrorType extends string>() => {
     return {
-        ok: okV2,
+        ok,
         error: (message: string, type: TErrorType): ResultWithTypeError<TErrorType> => ({
             ok: false,
             message,
