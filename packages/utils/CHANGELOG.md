@@ -1,5 +1,11 @@
 # @banjoanton/utils
 
+## 1.1.0
+
+### Minor Changes
+
+-   breaking change: change all Result types to use `ok` instead of `success`
+
 ## 1.0.0
 
 ### Major Changes

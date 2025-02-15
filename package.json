@@ -28,7 +28,10 @@
         "prepareDocs": "tsx --no-cache ./scripts/addDocsToReadme.ts",
         "typecheck": "tsc --noEmit",
         "format": "npx prettier --write .",
-        "prepare": "husky install"
+        "prepare": "husky install",
+        "change:add": "changeset add",
+        "change:version": "changeset version",
+        "change:publish": "changeset publish"
     },
     "prettier": "@banjoanton/prettier-config",
     "dependencies": {
