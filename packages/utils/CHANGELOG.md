@@ -1,5 +1,11 @@
 # @banjoanton/utils
 
+## 1.1.1
+
+### Patch Changes
+
+-   daa7763: change default behavior to undefined instead of throw for parseDate
+
 ## 1.1.0
 
 ### Minor Changes
