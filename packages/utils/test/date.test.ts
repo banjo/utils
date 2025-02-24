@@ -226,11 +226,11 @@ describe("date", () => {
         expect(parseDate("2022-01-01")).toStrictEqual(new Date(Date.UTC(2022, 0, 1)));
         expect(parseDate("2022-01-01T00:00:00Z")).toStrictEqual(new Date(Date.UTC(2022, 0, 1)));
         expect(parseDate("2022-01-01T00:00:00.000Z")).toStrictEqual(new Date(Date.UTC(2022, 0, 1)));
-        expect(() => parseDate("abc")).toThrowError();
+        expect(() => parseDate("abc", { throws: true })).toThrowError();
 
         // test without throwing error
-        expect(parseDate("abc", { throwOnInvalid: false })).toBeUndefined();
-        expect(parseDate("2022-01-01", { throwOnInvalid: false })).toStrictEqual(
+        expect(parseDate("abc")).toBeUndefined();
+        expect(parseDate("2022-01-01", { throws: false })).toStrictEqual(
             new Date(Date.UTC(2022, 0, 1))
         );
     });

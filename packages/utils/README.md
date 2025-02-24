@@ -806,16 +806,16 @@ getWeekNumber("2020-01-04"); // returns 1
 
 > Parse a date string or date object to a Date object based on the provided options.
 > If a Date object is passed, it is returned as is.
-> If throwOnInvalid is true and the date is invalid, it throws an error.
-> If throwOnInvalid is false and the date is invalid, it returns undefined.
+> If throws is true and the date is invalid, it throws an error.
+> If throws is false and the date is invalid, it returns undefined. This is the default behavior.
 
 ```ts
-parseDate("2020-01-01"); // returns Date object or throws error if invalid
-parseDate("2020-01-01", { throwOnInvalid: false }); // returns Date object or undefined if invalid
+parseDate("2020-01-01"); // returns Date object or returns undefined if invalid
+parseDate("2020-01-01", { throws: true }); // returns Date object or throws error if invalid
 parseDate(new Date("2020-01-01")); // returns Date object
-parseDate(123456789, { throwOnInvalid: true }); // throws error
-parseDate({}, { throwOnInvalid: false }); // returns undefined
-parseDate([], { throwOnInvalid: false }); // returns undefined
+parseDate(123456789, { throws: true }); // throws error
+parseDate({}, { throws: false }); // returns undefined
+parseDate([], { throws: false }); // returns undefined
 ```
 
 ---

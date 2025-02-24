@@ -277,22 +277,22 @@ export const getWeekNumber = (date = new Date()): number => currentWeekNumber(da
 /**
  * Parse a date string or date object to a Date object based on the provided options.
  * If a Date object is passed, it is returned as is.
- * If throwOnInvalid is true and the date is invalid, it throws an error.
- * If throwOnInvalid is false and the date is invalid, it returns undefined.
+ * If throws is true and the date is invalid, it throws an error.
+ * If throws is false and the date is invalid, it returns undefined. This is the default behavior.
  * @param date - Date string or date object to parse.
- * @param options - Object with a boolean throwOnInvalid property.
+ * @param options - Object with a boolean throws property.
  * @returns - Date object or undefined based on provided options.
  * @example
- * parseDate("2020-01-01"); // returns Date object or throws error if invalid
- * parseDate("2020-01-01", { throwOnInvalid: false }); // returns Date object or undefined if invalid
+ * parseDate("2020-01-01"); // returns Date object or returns undefined if invalid
+ * parseDate("2020-01-01", { throws: true }); // returns Date object or throws error if invalid
  * parseDate(new Date("2020-01-01")); // returns Date object
- * parseDate(123456789, { throwOnInvalid: true }); // throws error
- * parseDate({}, { throwOnInvalid: false }); // returns undefined
- * parseDate([], { throwOnInvalid: false }); // returns undefined
+ * parseDate(123456789, { throws: true }); // throws error
+ * parseDate({}, { throws: false }); // returns undefined
+ * parseDate([], { throws: false }); // returns undefined
  */
-export function parseDate(date: unknown, options?: { throwOnInvalid?: true }): Date;
-export function parseDate(date: unknown, options: { throwOnInvalid: false }): Date | undefined;
-export function parseDate(date: unknown, { throwOnInvalid = true } = {}): Date | undefined {
+export function parseDate(date: unknown, options?: { throws?: false }): Date;
+export function parseDate(date: unknown, options: { throws: false }): Date | undefined;
+export function parseDate(date: unknown, { throws = false } = {}): Date | undefined {
     if (date instanceof Date) {
         return date;
     }
@@ -304,7 +304,7 @@ export function parseDate(date: unknown, { throwOnInvalid = true } = {}): Date |
         }
     }
 
-    if (!throwOnInvalid) {
+    if (!throws) {
         return undefined;
     }
 
