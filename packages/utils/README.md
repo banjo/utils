@@ -1874,7 +1874,10 @@ const [error, result] = toSync(() => {
 > Attempt to run a function like in Go, returning an array with the result and the error.
 
 ```ts
-undefined;
+const [result, error] = wrap(() => 1); // [1, undefined]
+const [result, error] = wrap(() => {
+    throw new Error("test");
+}); // [undefined, Error("test")]
 ```
 
 ---
@@ -1884,7 +1887,8 @@ undefined;
 > Attempt to run an async function like in Go, returning an array with the result and the error.
 
 ```ts
-undefined;
+const [result, error] = await wrapAsync(async () => Promise.resolve(1)); // [1, undefined]
+const [result, error] = await wrapAsync(async () => Promise.reject(new Error("test"))); // [undefined, Error("test")]
 ```
 
 ---

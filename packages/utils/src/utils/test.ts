@@ -143,6 +143,9 @@ type WrapOut<T> = [T, undefined] | [undefined, Error];
 /**
  * Attempt to run a function like in Go, returning an array with the result and the error.
  * @deprecated Use `toSync` instead, as it has better defaults.
+ * @example
+ * const [result, error] = wrap(() => 1); // [1, undefined]
+ * const [result, error] = wrap(() => { throw new Error("test"); }); // [undefined, Error("test")]
  */
 export const wrap = <T>(fn: () => T): WrapOut<T> => {
     try {
@@ -156,6 +159,9 @@ export const wrap = <T>(fn: () => T): WrapOut<T> => {
 /**
  * Attempt to run an async function like in Go, returning an array with the result and the error.
  * @deprecated Use `to` instead, as it has better defaults.
+ * @example
+ * const [result, error] = await wrapAsync(async () => Promise.resolve(1)); // [1, undefined]
+ * const [result, error] = await wrapAsync(async () => Promise.reject(new Error("test"))); // [undefined, Error("test")]
  */
 export const wrapAsync = async <T>(asyncFn: () => Promise<T>): Promise<WrapOut<T>> => {
     try {
