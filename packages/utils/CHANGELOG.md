@@ -1,5 +1,11 @@
 # @banjoanton/utils
 
+## 1.1.2
+
+### Patch Changes
+
+-   2409cad: Change `raise` and `exhaustiveCheck`to use function instead of const
+
 ## 1.1.1
 
 ### Patch Changes
