@@ -153,9 +153,9 @@ export const memoize = <T extends (...args: any[]) => any>(fn: T): T => {
  *
  * const data = somethingThatMightExist ?? raise("Data does not exist");
  */
-export const raise = (message: string): never => {
+export function raise(message: string): never {
     throw new Error(message);
-};
+}
 
 /**
  * Check that a value is of type never. Useful for checking that a switch statement is exhaustive in TypeScript.
@@ -172,9 +172,9 @@ export const raise = (message: string): never => {
  *      exhaustiveCheck(foo); // raises an error
  *  }
  */
-export const exhaustiveCheck = (value: never): never => {
+export function exhaustiveCheck(value: never): never {
     throw new Error(`Unhandled discriminated union member: ${JSON.stringify(value)}`);
-};
+}
 
 /**
  * Check that a value is not falsy. Useful for narrowing types in TypeScript.
