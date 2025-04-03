@@ -1,5 +1,11 @@
 # @banjoanton/utils
 
+## 1.1.3
+
+### Patch Changes
+
+-   Fix types for parseDate
+
 ## 1.1.2
 
 ### Patch Changes
