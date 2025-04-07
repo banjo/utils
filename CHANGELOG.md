@@ -1,5 +1,12 @@
 # @banjoanton/utils
 
+## 1.1.4
+
+### Patch Changes
+
+-   f1db91b: Will not minify code on build
+-   f1db91b: Add string utils from scule
+
 ## 1.1.3
 
 ### Patch Changes
