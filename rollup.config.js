@@ -18,7 +18,7 @@ const plugins = [
     }),
 ];
 
-const external = ["uncrypto"];
+const external = ["uncrypto", "ohash"];
 
 export default [
     ...entries.map(input => ({

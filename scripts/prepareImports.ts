@@ -1,13 +1,12 @@
 import fs from "fs";
-import { TYPES, Type, format, getDirectories, getUtilFiles } from "./utils";
+import { format, getDirectory, getUtilFiles } from "./utils";
 
-const main = async (type: Type) => {
-    console.log(`Preparing imports for ${type}...`);
-    const files = getUtilFiles(type);
-    const { indexFile } = getDirectories(type);
+const main = async () => {
+    console.log(`Preparing imports...\n`);
+    const files = getUtilFiles();
+    const { indexFile } = getDirectory();
 
     const exportStatements = files
-        .filter(file => !file.fileName.includes("node"))
         .map(file => {
             return `export * from "./utils/${file.fileName}";`;
         })
@@ -19,6 +18,4 @@ const main = async (type: Type) => {
     fs.writeFileSync(indexFile, formatted);
 };
 
-TYPES.forEach(type => {
-    main(type);
-});
+main();

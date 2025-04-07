@@ -1,29 +1,40 @@
 {
-    "name": "@banjoanton/dev-utils",
-    "description": "My dev utils",
-    "repository": "banjo/utils",
-    "version": "0.0.1",
-    "license": "MIT",
-    "private": "true",
+    "name": "@banjoanton/utils",
+    "author": "Anton Ödman <anton.odman@gmail.com>",
     "type": "module",
-    "devDependencies": {
-        "@antfu/ni": "^0.19.0",
-        "@babel/core": "^7.23.2",
-        "@babel/plugin-transform-typescript": "^7.22.15",
-        "@babel/types": "^7.23.3",
-        "@banjoanton/prettier-config": "^0.1.10",
-        "@types/doctrine": "^0.0.9",
-        "@types/node": "^18.15.0",
-        "doctrine": "^3.0.0",
-        "husky": "^8.0.3",
-        "pnpm": "^7.33.3",
-        "rimraf": "^5.0.5",
-        "vite": "^4.1.4",
-        "vitest": "^0.27.3"
+    "version": "1.1.3",
+    "description": "All kinds of dev utils",
+    "homepage": "https://github.com/banjo/utils#readme",
+    "private": false,
+    "publishConfig": {
+        "access": "public"
     },
+    "repository": {
+        "type": "git",
+        "url": "git+https://github.com/banjo/utils.git"
+    },
+    "bugs": "https://github.com/banjo/utils/issues",
+    "main": "dist/index.esm.js",
+    "module": "dist/index.esm.js",
+    "types": "dist/index.d.ts",
+    "exports": {
+        ".": {
+            "types": "./dist/index.d.ts",
+            "require": "./dist/index.cjs",
+            "import": "./dist/index.esm.js"
+        }
+    },
+    "files": [
+        "dist/*"
+    ],
+    "license": "MIT",
     "scripts": {
+        "build": "rimraf dist && nr prepareImports && rollup --config",
+        "dev": "rollup --config --watch",
+        "start": "esno src/index.ts",
+        "prepublishOnly": "nr build",
         "test": "vitest",
-        "addToGit": "git add ./packages/utils/README.md ./packages/node/README.md",
+        "addToGit": "git add ./README.md",
         "prepareImports": "tsx --no-cache ./scripts/prepareImports.ts",
         "prepareDocs": "tsx --no-cache ./scripts/addDocsToReadme.ts",
         "typecheck": "tsc --noEmit",
@@ -35,6 +46,42 @@
     },
     "prettier": "@banjoanton/prettier-config",
     "dependencies": {
-        "@changesets/cli": "^2.27.9"
+        "ohash": "^1.1.3",
+        "uncrypto": "^0.1.3"
+    },
+    "devDependencies": {
+        "@babel/types": "^7.23.3",
+        "@banjoanton/prettier-config": "^0.1.10",
+        "husky": "^8.0.3",
+        "rimraf": "^5.0.5",
+        "@changesets/cli": "^2.27.9",
+        "@antfu/ni": "^0.19.0",
+        "@babel/core": "^7.23.2",
+        "@babel/plugin-transform-typescript": "^7.22.15",
+        "@rollup/plugin-commonjs": "^24.0.1",
+        "@rollup/plugin-json": "^6.0.0",
+        "@rollup/plugin-node-resolve": "^15.0.1",
+        "@types/doctrine": "^0.0.9",
+        "@types/node": "^18.15.0",
+        "@types/throttle-debounce": "^5.0.0",
+        "bumpp": "^8.2.1",
+        "current-week-number": "^1.0.7",
+        "deepmerge": "^4.3.1",
+        "doctrine": "^3.0.0",
+        "dot-prop": "^7.2.0",
+        "esbuild": "^0.17.11",
+        "esno": "^0.16.3",
+        "fast-deep-equal": "^3.1.3",
+        "happy-dom": "^8.9.0",
+        "pnpm": "^7.29.1",
+        "rollup": "^3.19.1",
+        "rollup-plugin-dts": "^5.2.0",
+        "rollup-plugin-esbuild": "^5.0.0",
+        "throttle-debounce": "^5.0.0",
+        "tsup": "^8.0.0",
+        "typescript": "^5.2.2",
+        "vite": "^4.1.4",
+        "vitest": "^0.27.3",
+        "wildcard-match": "^5.1.2"
     }
 }

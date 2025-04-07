@@ -1,18 +1,17 @@
 import { readFileSync, writeFileSync } from "node:fs";
-import { capitalize, objectEntries } from "../packages/utils/src/index";
 import { ParsedAstOutput, astParseFiles } from "./ast";
-import { TYPES, Type, format, getDirectories, getUtilFiles } from "./utils";
+import { format, getDirectory, getUtilFiles } from "./utils";
+import { capitalize } from "src/utils/string";
+import { objectEntries } from "src/utils/object";
 
 const TS_DOCS_REGEX = /\/\*\*[\s\S]*?\*\//g;
 
-TYPES.forEach(type => {
-    main(type);
-});
+main();
 
-async function main(type: Type) {
-    console.log(`Adding docs to ${type}...\n`);
-    const files = getUtilFiles(type);
-    const directories = getDirectories(type);
+async function main() {
+    console.log(`Adding docs...\n`);
+    const files = getUtilFiles();
+    const directories = getDirectory();
 
     const fileOutput = astParseFiles(files);
     const docs = parseDocs(fileOutput);

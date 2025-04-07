@@ -1,30 +1,16 @@
 // @ts-ignore
 import options from "@banjoanton/prettier-config";
 import fs from "fs";
-import { attemptSync } from "packages/utils/src";
 import path from "path";
 import prettier from "prettier";
+import { attemptSync } from "src/utils/test";
 import { fileURLToPath } from "url";
 
 export const __filename = fileURLToPath(import.meta.url);
 export const __dirname = path.dirname(__filename);
 
-export const TYPES = ["utils", "node"] as const;
-export type Type = (typeof TYPES)[number];
-
-const typeData: Record<Type, { dirName: string }> = {
-    utils: {
-        dirName: "utils",
-    },
-    node: {
-        dirName: "node",
-    },
-};
-
-export const getDirectories = (type: Type) => {
-    const { dirName } = typeData[type];
-
-    const packageDirectory = path.join(__dirname, "../packages", dirName);
+export const getDirectory = () => {
+    const packageDirectory = path.join(__dirname, "../");
     const srcDir = path.join(packageDirectory, "src");
 
     return {
@@ -35,8 +21,8 @@ export const getDirectories = (type: Type) => {
     };
 };
 
-export const getUtilFiles = (type: Type) => {
-    const { utilsDir } = getDirectories(type);
+export const getUtilFiles = () => {
+    const { utilsDir } = getDirectory();
     const fallbackValue: string[] = [];
     const utilFiles = attemptSync(() => fs.readdirSync(utilsDir), { fallbackValue });
 

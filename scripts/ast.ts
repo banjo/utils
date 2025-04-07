@@ -1,7 +1,7 @@
 // @ts-ignore
 import babel from "@babel/core";
 import doctrine from "doctrine";
-import { last } from "packages/utils/src";
+import { last } from "src/utils/array";
 
 export type ParsedAst = { name: string; comment: string };
 export type ParsedAstOutput = {
