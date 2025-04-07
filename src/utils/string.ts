@@ -1,5 +1,15 @@
 import wcmatch from "wildcard-match";
 import { flip } from "./object";
+import {
+    camelCase,
+    snakeCase,
+    titleCase,
+    trainCase,
+    upperFirst,
+    lowerFirst,
+    kebabCase,
+    flatCase,
+} from "scule";
 
 /**
  * Utilities for working with strings.
@@ -202,3 +212,69 @@ export const truncate = (str: string, length: number, end = "..."): string => {
     if (str.length <= length) return str;
     return str.slice(0, length) + end;
 };
+
+/**
+ * Converts a string to camelCase format (using scule library).
+ * @param str - The string to convert to camelCase.
+ * @returns The string in camelCase format.
+ * @example
+ * toCamelCase('hello-world'); // returns 'helloWorld'
+ * toCamelCase('hello_world'); // returns 'helloWorld'
+ * toCamelCase('HelloWorld'); // returns 'helloWorld'
+ */
+export const toCamelCase = (str: string): string => camelCase(str);
+
+/**
+ * Converts a string to snake_case format (using scule library).
+ * @param str - The string to convert to snake_case.
+ * @returns The string in snake_case format.
+ * @example
+ * toSnakeCase('helloWorld'); // returns 'hello_world'
+ * toSnakeCase('hello-world'); // returns 'hello_world'
+ * toSnakeCase('HelloWorld'); // returns 'hello_world'
+ */
+export const toSnakeCase = (str: string): string => snakeCase(str);
+
+/**
+ * Converts a string to Title Case format (using scule library).
+ * @param str - The string to convert to Title Case.
+ * @returns The string in Title Case format.
+ * @example
+ * toTitleCase('helloWorld'); // returns 'Hello World'
+ * toTitleCase('hello-world'); // returns 'Hello World'
+ * toTitleCase('hello_world'); // returns 'Hello World'
+ */
+export const toTitleCase = (str: string): string => titleCase(str);
+
+/**
+ * Converts a string to Train-Case format (using scule library).
+ * @param str - The string to convert to Train-Case.
+ * @returns The string in Train-Case format.
+ * @example
+ * toTrainCase('helloWorld'); // returns 'Hello-World'
+ * toTrainCase('hello_world'); // returns 'Hello-World'
+ * toTrainCase('HelloWorld'); // returns 'Hello-World'
+ */
+export const toTrainCase = (str: string): string => trainCase(str);
+
+/**
+ * Converts a string to kebab-case format (using scule library).
+ * @param str - The string to convert to kebab-case.
+ * @returns The string in kebab-case format.
+ * @example
+ * toKebabCase('helloWorld'); // returns 'hello-world'
+ * toKebabCase('hello_world'); // returns 'hello-world'
+ * toKebabCase('HelloWorld'); // returns 'hello-world'
+ */
+export const toKebabCase = (str: string): string => kebabCase(str);
+
+/**
+ * Converts a string to flat case format (no separators, all lowercase) (using scule library).
+ * @param str - The string to convert to flat case.
+ * @returns The string in flat case format.
+ * @example
+ * toFlatCase('helloWorld'); // returns 'helloworld'
+ * toFlatCase('hello-world'); // returns 'helloworld'
+ * toFlatCase('Hello_World'); // returns 'helloworld'
+ */
+export const toFlatCase = (str: string): string => flatCase(str);

@@ -154,6 +154,12 @@ Auto generated from TSDocs.
     -   [escapeRegExp](#escapeRegExp)
     -   [slugify](#slugify)
     -   [truncate](#truncate)
+    -   [toCamelCase](#toCamelCase)
+    -   [toSnakeCase](#toSnakeCase)
+    -   [toTitleCase](#toTitleCase)
+    -   [toTrainCase](#toTrainCase)
+    -   [toKebabCase](#toKebabCase)
+    -   [toFlatCase](#toFlatCase)
 -   [Test](#test)
     -   [attemptSync](#attemptSync)
     -   [attempt](#attempt)
@@ -1757,6 +1763,78 @@ truncate("hello world", 5, "...more"); // returns 'hello...more'
 truncate("hello world", 100); // returns 'hello world'
 truncate("hello world", 5, ""); // returns 'hello'
 truncate("hello world", 5, "..."); // returns 'hello...'
+```
+
+---
+
+#### toCamelCase
+
+> Converts a string to camelCase format (using scule library).
+
+```ts
+toCamelCase("hello-world"); // returns 'helloWorld'
+toCamelCase("hello_world"); // returns 'helloWorld'
+toCamelCase("HelloWorld"); // returns 'helloWorld'
+```
+
+---
+
+#### toSnakeCase
+
+> Converts a string to snake_case format (using scule library).
+
+```ts
+toSnakeCase("helloWorld"); // returns 'hello_world'
+toSnakeCase("hello-world"); // returns 'hello_world'
+toSnakeCase("HelloWorld"); // returns 'hello_world'
+```
+
+---
+
+#### toTitleCase
+
+> Converts a string to Title Case format (using scule library).
+
+```ts
+toTitleCase("helloWorld"); // returns 'Hello World'
+toTitleCase("hello-world"); // returns 'Hello World'
+toTitleCase("hello_world"); // returns 'Hello World'
+```
+
+---
+
+#### toTrainCase
+
+> Converts a string to Train-Case format (using scule library).
+
+```ts
+toTrainCase("helloWorld"); // returns 'Hello-World'
+toTrainCase("hello_world"); // returns 'Hello-World'
+toTrainCase("HelloWorld"); // returns 'Hello-World'
+```
+
+---
+
+#### toKebabCase
+
+> Converts a string to kebab-case format (using scule library).
+
+```ts
+toKebabCase("helloWorld"); // returns 'hello-world'
+toKebabCase("hello_world"); // returns 'hello-world'
+toKebabCase("HelloWorld"); // returns 'hello-world'
+```
+
+---
+
+#### toFlatCase
+
+> Converts a string to flat case format (no separators, all lowercase) (using scule library).
+
+```ts
+toFlatCase("helloWorld"); // returns 'helloworld'
+toFlatCase("hello-world"); // returns 'helloworld'
+toFlatCase("Hello_World"); // returns 'helloworld'
 ```
 
 ---
