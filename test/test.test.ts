@@ -1,5 +1,5 @@
 import { describe, expect, expectTypeOf, it } from "vitest";
-import { attempt, createMockCreator, to, wrap, wrapAsync } from "../src/utils/test";
+import { attempt, createMockCreator, to } from "../src/utils/test";
 
 describe("test", () => {
     it("attempt (sync)", () => {
@@ -41,25 +41,6 @@ describe("test", () => {
         ).toBe(1);
     });
 
-    it("wrap", () => {
-        expect(wrap(() => 1)).toStrictEqual([1, undefined]);
-        expect(
-            wrap(() => {
-                throw new Error("test");
-            })
-        ).toStrictEqual([undefined, new Error("test")]);
-
-        const [res, err] = wrap(() => 1);
-        expectTypeOf(res).toEqualTypeOf<number | undefined>();
-        expectTypeOf(err).toEqualTypeOf<Error | undefined>();
-
-        if (err) {
-            expectTypeOf(err).toEqualTypeOf<Error>();
-        } else {
-            expectTypeOf(res).toEqualTypeOf<number>();
-        }
-    });
-
     it("to (sync)", () => {
         expect(to(() => 1)).toStrictEqual([undefined, 1]);
         expect(
@@ -86,24 +67,6 @@ describe("test", () => {
         ).toStrictEqual(["Error: test", "undefined"]);
 
         const [err, res] = await to(() => Promise.resolve(1));
-        expectTypeOf(res).toEqualTypeOf<number | undefined>();
-        expectTypeOf(err).toEqualTypeOf<Error | undefined>();
-
-        if (err) {
-            expectTypeOf(err).toEqualTypeOf<Error>();
-        } else {
-            expectTypeOf(res).toEqualTypeOf<number>();
-        }
-    });
-
-    it("wrapAsync", async () => {
-        expect(await wrapAsync(() => Promise.resolve(1))).toStrictEqual([1, undefined]);
-        expect(await wrapAsync(() => Promise.reject(new Error("test")))).toStrictEqual([
-            undefined,
-            new Error("test"),
-        ]);
-
-        const [res, err] = await wrapAsync(() => Promise.resolve(1));
         expectTypeOf(res).toEqualTypeOf<number | undefined>();
         expectTypeOf(err).toEqualTypeOf<Error | undefined>();
 

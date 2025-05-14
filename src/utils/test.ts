@@ -143,40 +143,6 @@ export function to<T>(fn: () => T | Promise<T>): Out<T> | Promise<Out<T>> {
     }
 }
 
-type WrapOut<T> = [T, undefined] | [undefined, Error];
-
-/**
- * Attempt to run a function like in Go, returning an array with the result and the error.
- * @deprecated Use `to` instead, as it has better defaults.
- * @example
- * const [result, error] = wrap(() => 1); // [1, undefined]
- * const [result, error] = wrap(() => { throw new Error("test"); }); // [undefined, Error("test")]
- */
-export const wrap = <T>(fn: () => T): WrapOut<T> => {
-    try {
-        const result = fn();
-        return [result, undefined];
-    } catch (e) {
-        return [undefined, e instanceof Error ? e : new Error(String(e))];
-    }
-};
-
-/**
- * Attempt to run an async function like in Go, returning an array with the result and the error.
- * @deprecated Use `to` instead, as it has better defaults.
- * @example
- * const [result, error] = await wrapAsync(async () => Promise.resolve(1)); // [1, undefined]
- * const [result, error] = await wrapAsync(async () => Promise.reject(new Error("test"))); // [undefined, Error("test")]
- */
-export const wrapAsync = async <T>(asyncFn: () => Promise<T>): Promise<WrapOut<T>> => {
-    try {
-        const result = await asyncFn();
-        return [result, undefined];
-    } catch (e) {
-        return [undefined, e instanceof Error ? e : new Error(String(e))];
-    }
-};
-
 const overwriteMerge = (destinationArray: unknown[], sourceArray: unknown[]) => sourceArray;
 /**
  * Create a new create mock function to update the base mock with the partial mock. Will overwrite arrays instead of merging them.

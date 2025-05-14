@@ -165,8 +165,6 @@ Auto generated from TSDocs.
     -   [attempt](#attempt)
     -   [to](#to)
     -   [to](#to)
-    -   [wrap](#wrap)
-    -   [wrapAsync](#wrapAsync)
     -   [createMockCreator](#createMockCreator)
 
 ### Array
@@ -1906,30 +1904,6 @@ const [error, result] = to(() => 1); // [undefined, 1]
 const [error, result] = to(() => {
     throw new Error("test");
 }); // [Error("test"), undefined]
-```
-
----
-
-#### wrap
-
-> Attempt to run a function like in Go, returning an array with the result and the error.
-
-```ts
-const [result, error] = wrap(() => 1); // [1, undefined]
-const [result, error] = wrap(() => {
-    throw new Error("test");
-}); // [undefined, Error("test")]
-```
-
----
-
-#### wrapAsync
-
-> Attempt to run an async function like in Go, returning an array with the result and the error.
-
-```ts
-const [result, error] = await wrapAsync(async () => Promise.resolve(1)); // [1, undefined]
-const [result, error] = await wrapAsync(async () => Promise.reject(new Error("test"))); // [undefined, Error("test")]
 ```
 
 ---
