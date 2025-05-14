@@ -145,44 +145,6 @@ export function to<T>(fn: () => T | Promise<T>): Out<T> | Promise<Out<T>> {
     }
 }
 
-// type Out<T> = [Error, undefined] | [undefined, T];
-//
-// /**
-//  * Attempt to run an async function like in Go, returning a tuple with the error and the result.
-//  * @param asyncFn The async function to execute.
-//  * @returns A tuple with an error and a value. E.g. [error, value]
-//  * @example
-//  *
-//  * const [error, result] = await to(async () => 1); // [undefined, 1]
-//  * const [error, result] = await to(async () => { throw new Error("test"); }); // [Error("test"), undefined]
-//  */
-// export const to = async <T>(asyncFn: () => Promise<T>): Promise<Out<T>> => {
-//     try {
-//         const result = await asyncFn();
-//         return [undefined, result];
-//     } catch (e) {
-//         return [e instanceof Error ? e : new Error(String(e)), undefined];
-//     }
-// };
-//
-// /**
-//  * Attempt to run an sync function like in Go, returning a tuple with the error and the result.
-//  * @param fn - The function to execute.
-//  * @returns A tuple with an error and a value. E.g. [error, value]
-//  * @example
-//  *
-//  * const [error, result] = toSync(() => 1); // [undefined, 1]
-//  * const [error, result] = toSync(() => { throw new Error("test"); }); // [Error("test"), undefined]
-//  */
-// export const toSync = <T>(fn: () => T): Out<T> => {
-//     try {
-//         const result = fn();
-//         return [undefined, result];
-//     } catch (e) {
-//         return [e instanceof Error ? e : new Error(String(e)), undefined];
-//     }
-// };
-
 type WrapOut<T> = [T, undefined] | [undefined, Error];
 
 /**
