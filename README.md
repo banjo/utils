@@ -161,9 +161,8 @@ Auto generated from TSDocs.
     -   [toKebabCase](#toKebabCase)
     -   [toFlatCase](#toFlatCase)
 -   [Test](#test)
-    -   [attemptSync](#attemptSync)
     -   [attempt](#attempt)
-    -   [attemptAsync](#attemptAsync)
+    -   [attempt](#attempt)
     -   [to](#to)
     -   [to](#to)
     -   [wrap](#wrap)
@@ -1845,76 +1844,42 @@ Simple utility function for tests
 
 ---
 
-#### attemptSync
+#### attempt
 
-> Try to run a sync function, and return a fallback value if it throws an error. Defaults to undefined if nothing is provided.
+> Attempt to run a synchronous function, and return a fallback value if it throws an error.
+> Defaults to undefined if nothing is provided.
 
 ```ts
-attemptSync(() => 1); // 1
-attemptSync(() => {
+const result = attempt(() => 1); // 1
+const result = attempt(() => {
     throw new Error("test");
 }); // undefined
-
-attemptSync(
+const result = attempt(
     () => {
         throw new Error("test");
     },
     { fallbackValue: 1 }
 ); // 1
-attemptSync(
-    () => {
-        throw new Error("test");
-    },
-    { fallbackValue: 1, logError: true }
-); // 1, logs error to console
-attemptSync(
-    () => {
-        throw new Error("test");
-    },
-    { fallbackValue: 1, onError: e => console.error(e) }
-); // 1, logs error to console
 ```
 
 ---
 
 #### attempt
 
-> Try to run an async function, and return a fallback value if it throws an error. Defaults to undefined if nothing is provided.
+> Attempt to run an asynchronous function, and return a fallback value if it throws an error.
+> Defaults to undefined if nothing is provided.
 
 ```ts
-await attempt(async () => 1); // 1
-await attempt(async () => {
+const result = await attempt(async () => 1); // 1
+const result = await attempt(async () => {
     throw new Error("test");
 }); // undefined
-
-await attempt(
+const result = await attempt(
     async () => {
         throw new Error("test");
     },
     { fallbackValue: 1 }
 ); // 1
-await attempt(
-    async () => {
-        throw new Error("test");
-    },
-    { fallbackValue: 1, logError: true }
-); // 1, logs error to console
-await attempt(
-    async () => {
-        throw new Error("test");
-    },
-    { fallbackValue: 1, onError: e => console.error(e) }
-); // 1, logs error to console
-```
-
----
-
-#### attemptAsync
-
-> Try to run an async function, and return a fallback value if it throws an error. Defaults to undefined if nothing is provided.
-
-```ts
-undefined;
 ```
 
 ---

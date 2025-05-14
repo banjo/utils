@@ -1,16 +1,16 @@
 import { describe, expect, expectTypeOf, it } from "vitest";
-import { attempt, attemptSync, createMockCreator, to, wrap, wrapAsync } from "../src/utils/test";
+import { attempt, createMockCreator, to, wrap, wrapAsync } from "../src/utils/test";
 
 describe("test", () => {
-    it("attemptSync", () => {
-        expect(attemptSync(() => 1)).toBe(1);
+    it("attempt (sync)", () => {
+        expect(attempt(() => 1)).toBe(1);
         expect(
-            attemptSync(() => {
+            attempt(() => {
                 throw new Error("test");
             })
         ).toBe(undefined);
         expect(
-            attemptSync(
+            attempt(
                 () => {
                     throw new Error("test");
                 },
@@ -18,7 +18,7 @@ describe("test", () => {
             )
         ).toBe(1);
         expect(
-            attemptSync(
+            attempt(
                 () => {
                     throw new Error("test");
                 },
@@ -27,7 +27,7 @@ describe("test", () => {
         ).toBe(1);
     });
 
-    it("attempt", async () => {
+    it("attempt (async)", async () => {
         expect(await attempt(() => Promise.resolve(1))).toBe(1);
         expect(await attempt(() => Promise.reject(new Error("test2")))).toBe(undefined);
         expect(await attempt(() => Promise.reject(new Error("test")), { fallbackValue: 1 })).toBe(

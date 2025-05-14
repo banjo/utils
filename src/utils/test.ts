@@ -31,74 +31,72 @@ const defaultOptions: AttemptOptions = {
 type FallbackType<F> = F extends undefined ? undefined : F;
 
 /**
- * Try to run a sync function, and return a fallback value if it throws an error. Defaults to undefined if nothing is provided.
- * @param fn - The function to run.
- * @param options - The options to use.
- * @returns - The result of the function, or the fallback value if the function throws an error.
- * @example
- * attemptSync(() => 1); // 1
- * attemptSync(() => { throw new Error("test"); }); // undefined
+ * Attempt to run a synchronous function, and return a fallback value if it throws an error.
+ * Defaults to undefined if nothing is provided.
  *
- * attemptSync(() => { throw new Error("test"); }, { fallbackValue: 1 }); // 1
- * attemptSync(() => { throw new Error("test"); }, { fallbackValue: 1, logError: true }); // 1, logs error to console
- * attemptSync(() => { throw new Error("test"); }, { fallbackValue: 1, onError: (e) => console.error(e) }); // 1, logs error to console
+ * @param fn - The synchronous function to run.
+ * @param options - Options for controlling error logging, callbacks, and fallback value.
+ * @returns The result of the function, or the fallback value if the function throws an error.
+ *
+ * @example
+ * const result = attempt(() => 1); // 1
+ * const result = attempt(() => { throw new Error("test"); }); // undefined
+ * const result = attempt(() => { throw new Error("test"); }, { fallbackValue: 1 }); // 1
  */
-export const attemptSync = <T, F = undefined>(
+export function attempt<T, F = undefined>(
     fn: () => T,
     options?: AttemptOptions<F>
-): T | FallbackType<F> => {
-    // The default fallback value is kept as undefined if it is not provided.
-    const { fallbackValue, logError, onError, onFinally } = defaults(options, defaultOptions);
-    try {
-        return fn();
-    } catch (e) {
-        if (onError) onError(e);
-        if (logError) console.error(e);
-        return fallbackValue as FallbackType<F>;
-    } finally {
-        if (onFinally) onFinally();
-    }
-};
+): T | FallbackType<F>;
 
 /**
- * Try to run an async function, and return a fallback value if it throws an error. Defaults to undefined if nothing is provided.
- * @param asyncFn - The async function to run.
- * @param options - The options to use.
- * @returns - The result of the function, or the fallback value if the function throws an error.
- * @example
- * await attempt(async () => 1); // 1
- * await attempt(async () => { throw new Error("test"); }); // undefined
+ * Attempt to run an asynchronous function, and return a fallback value if it throws an error.
+ * Defaults to undefined if nothing is provided.
  *
- * await attempt(async () => { throw new Error("test"); }, { fallbackValue: 1 }); // 1
- * await attempt(async () => { throw new Error("test"); }, { fallbackValue: 1, logError: true }); // 1, logs error to console
- * await attempt(async () => { throw new Error("test"); }, { fallbackValue: 1, onError: (e) => console.error(e) }); // 1, logs error to console
+ * @param asyncFn - The asynchronous function to run.
+ * @param options - Options for controlling error logging, callbacks, and fallback value.
+ * @returns A Promise resolving to either the result of the function, or the fallback value if the function throws an error.
+ *
+ * @example
+ * const result = await attempt(async () => 1); // 1
+ * const result = await attempt(async () => { throw new Error("test"); }); // undefined
+ * const result = await attempt(async () => { throw new Error("test"); }, { fallbackValue: 1 }); // 1
  */
-export const attempt = async <T, F = undefined>(
+export function attempt<T, F = undefined>(
     asyncFn: () => Promise<T>,
     options?: AttemptOptions<F>
-): Promise<T | FallbackType<F>> => {
+): Promise<T | FallbackType<F>>;
+
+export function attempt<T, F = undefined>(
+    fn: (() => T) | (() => Promise<T>),
+    options?: AttemptOptions<F>
+): (T | FallbackType<F>) | Promise<T | FallbackType<F>> {
     const { fallbackValue, logError, onError, onFinally } = defaults(options, defaultOptions);
+
+    let resultOrValue: T | Promise<T>;
     try {
-        return await asyncFn();
+        resultOrValue = fn();
     } catch (e) {
         if (onError) onError(e);
         if (logError) console.error(e);
-        return fallbackValue as FallbackType<F>;
-    } finally {
         if (onFinally) onFinally();
+        return fallbackValue as FallbackType<F>;
     }
-};
 
-/**
- * Try to run an async function, and return a fallback value if it throws an error. Defaults to undefined if nothing is provided.
- * @deprecated Use `attempt` instead.
- */
-export const attemptAsync = async <T, F = undefined>(
-    asyncFn: () => Promise<T>,
-    options?: AttemptOptions<F>
-): Promise<T | FallbackType<F>> => {
-    return attempt(asyncFn, options);
-};
+    if (isThenable<T>(resultOrValue)) {
+        return resultOrValue
+            .catch(err => {
+                if (onError) onError(err);
+                if (logError) console.error(err);
+                return fallbackValue as FallbackType<F>;
+            })
+            .finally(() => {
+                if (onFinally) onFinally();
+            });
+    } else {
+        if (onFinally) onFinally();
+        return resultOrValue;
+    }
+}
 
 type Out<T> = [Error, undefined] | [undefined, T];
 
@@ -149,7 +147,7 @@ type WrapOut<T> = [T, undefined] | [undefined, Error];
 
 /**
  * Attempt to run a function like in Go, returning an array with the result and the error.
- * @deprecated Use `toSync` instead, as it has better defaults.
+ * @deprecated Use `to` instead, as it has better defaults.
  * @example
  * const [result, error] = wrap(() => 1); // [1, undefined]
  * const [result, error] = wrap(() => { throw new Error("test"); }); // [undefined, Error("test")]

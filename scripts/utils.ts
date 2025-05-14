@@ -3,7 +3,7 @@ import options from "@banjoanton/prettier-config";
 import fs from "fs";
 import path from "path";
 import prettier from "prettier";
-import { attemptSync } from "src/utils/test";
+import { attempt } from "src/utils/test";
 import { fileURLToPath } from "url";
 
 export const __filename = fileURLToPath(import.meta.url);
@@ -24,7 +24,7 @@ export const getDirectory = () => {
 export const getUtilFiles = () => {
     const { utilsDir } = getDirectory();
     const fallbackValue: string[] = [];
-    const utilFiles = attemptSync(() => fs.readdirSync(utilsDir), { fallbackValue });
+    const utilFiles = attempt(() => fs.readdirSync(utilsDir), { fallbackValue });
 
     return utilFiles.map((file: string) => {
         const fileName = file.replace(".ts", "");
