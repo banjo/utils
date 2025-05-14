@@ -165,7 +165,7 @@ Auto generated from TSDocs.
     -   [attempt](#attempt)
     -   [attemptAsync](#attemptAsync)
     -   [to](#to)
-    -   [toSync](#toSync)
+    -   [to](#to)
     -   [wrap](#wrap)
     -   [wrapAsync](#wrapAsync)
     -   [createMockCreator](#createMockCreator)
@@ -1932,13 +1932,13 @@ const [error, result] = await to(async () => {
 
 ---
 
-#### toSync
+#### to
 
 > Attempt to run an sync function like in Go, returning a tuple with the error and the result.
 
 ```ts
-const [error, result] = toSync(() => 1); // [undefined, 1]
-const [error, result] = toSync(() => {
+const [error, result] = to(() => 1); // [undefined, 1]
+const [error, result] = to(() => {
     throw new Error("test");
 }); // [Error("test"), undefined]
 ```

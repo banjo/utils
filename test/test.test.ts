@@ -1,13 +1,5 @@
 import { describe, expect, expectTypeOf, it } from "vitest";
-import {
-    attempt,
-    attemptSync,
-    createMockCreator,
-    to,
-    toSync,
-    wrap,
-    wrapAsync,
-} from "../src/utils/test";
+import { attempt, attemptSync, createMockCreator, to, wrap, wrapAsync } from "../src/utils/test";
 
 describe("test", () => {
     it("attemptSync", () => {
@@ -68,15 +60,15 @@ describe("test", () => {
         }
     });
 
-    it("toSync", () => {
-        expect(toSync(() => 1)).toStrictEqual([undefined, 1]);
+    it("to (sync)", () => {
+        expect(to(() => 1)).toStrictEqual([undefined, 1]);
         expect(
-            toSync(() => {
+            to(() => {
                 throw new Error("test");
             })
         ).toStrictEqual([new Error("test"), undefined]);
 
-        const [err, res] = toSync(() => 1);
+        const [err, res] = to(() => 1);
         expectTypeOf(res).toEqualTypeOf<number | undefined>();
         expectTypeOf(err).toEqualTypeOf<Error | undefined>();
 
@@ -87,7 +79,7 @@ describe("test", () => {
         }
     });
 
-    it("to", async () => {
+    it("to (async)", async () => {
         expect(await to(() => Promise.resolve(1))).toStrictEqual([undefined, 1]);
         expect(
             await to(() => Promise.reject(new Error("test"))).then(res => res.map(String))
