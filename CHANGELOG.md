@@ -1,5 +1,12 @@
 # @banjoanton/utils
 
+## 1.1.6
+
+### Patch Changes
+
+- Enable ttl false to have no expiry in cache util
+- Default to no cleanup in cache util
+
 ## 1.1.5
 
 ### Patch Changes
