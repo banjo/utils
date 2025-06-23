@@ -151,4 +151,30 @@ describe("cache", () => {
         expect(c.has(key)).toBe(false);
         expect(c.get(key)).toBeUndefined();
     });
+
+    it("can be used without ttl on single", () => {
+        const c = createCache();
+        const key = "key";
+
+        c.set(key, "value", { ttl: false });
+
+        expect(c.get(key)).toBe("value");
+
+        vi.advanceTimersByTime(1000000);
+
+        expect(c.get(key)).toBe("value");
+    });
+
+    it("can be used without global ttl", () => {
+        const c = createCache({ ttl: false });
+        const key = "key";
+
+        c.set(key, "value");
+
+        expect(c.get(key)).toBe("value");
+
+        vi.advanceTimersByTime(1000000);
+
+        expect(c.get(key)).toBe("value");
+    });
 });

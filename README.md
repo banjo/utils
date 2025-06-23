@@ -555,6 +555,9 @@ const cache = createCache({ persistent: true, key: "my-cache" });
 
 // custom expiration time in ms
 const cache = createCache({ ttl: 1000 });
+
+// without expiration time
+const cache = createCache({ ttl: false });
 ```
 
 ---
