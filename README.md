@@ -64,7 +64,7 @@ Auto generated from TSDocs.
 -   [Base](#base)
     -   [sleep](#sleep)
 -   [Cache](#cache)
-    -   [cache](#cache)
+    -   [createCache](#createCache)
 -   [Crypto](#crypto)
     -   [uuid](#uuid)
     -   [isUUID](#isUUID)
@@ -526,12 +526,12 @@ Cache utility.
 
 ---
 
-#### cache
+#### createCache
 
-> Creates a super simple cache with expiration and support for persistance in browsers. Can be used with strings and symbols as key. Is generic and can be used with any type.
+> Creates a super simple cache with expiration and support for persistence in browsers. Can be used with strings and symbols as key. Is generic and can be used with any type.
 
 ```ts
-const { get, set, has, delete, clear } = cache();
+const { get, set, has, delete, clear } = createCache();
 
 set("key", "value");
 get("key"); // "value"
@@ -540,7 +540,7 @@ delete("key"); // true
 clear();
 
 // can be used with generics
-const cache = cache<string>();
+const cache = createCache<string>();
 
 // can be used with symbols
 const cache = cache();
@@ -548,13 +548,13 @@ const key = Symbol("key");
 cache.set(key, "value");
 
 // can be be persisted in local storage
-const cache = cache({ persistent: true });
+const cache = createCache({ persistent: true });
 
 // can be be persisted in local storage with a custom key
-const cache = cache({ persistent: true, key: "my-cache" });
+const cache = createCache({ persistent: true, key: "my-cache" });
 
 // custom expiration time in ms
-const cache = cache({ ttl: 1000 });
+const cache = createCache({ ttl: 1000 });
 ```
 
 ---

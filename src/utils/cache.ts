@@ -92,10 +92,10 @@ const initMap = <T>(key: string, persistent: boolean) => {
 };
 
 /**
- * Creates a super simple cache with expiration and support for persistance in browsers. Can be used with strings and symbols as key. Is generic and can be used with any type.
+ * Creates a super simple cache with expiration and support for persistence in browsers. Can be used with strings and symbols as key. Is generic and can be used with any type.
  * @returns An object with the following methods: get, set, has, delete, clear, stopCleanup, hasActiveCleanup.
  * @example
- * const { get, set, has, delete, clear } = cache();
+ * const { get, set, has, delete, clear } = createCache();
  *
  * set("key", "value");
  * get("key"); // "value"
@@ -104,7 +104,7 @@ const initMap = <T>(key: string, persistent: boolean) => {
  * clear();
  *
  * // can be used with generics
- * const cache = cache<string>();
+ * const cache = createCache<string>();
  *
  * // can be used with symbols
  * const cache = cache();
@@ -112,15 +112,15 @@ const initMap = <T>(key: string, persistent: boolean) => {
  * cache.set(key, "value");
  *
  * // can be be persisted in local storage
- * const cache = cache({ persistent: true });
+ * const cache = createCache({ persistent: true });
  *
  * // can be be persisted in local storage with a custom key
- * const cache = cache({ persistent: true, key: "my-cache" });
+ * const cache = createCache({ persistent: true, key: "my-cache" });
  *
  * // custom expiration time in ms
- * const cache = cache({ ttl: 1000 });
+ * const cache = createCache({ ttl: 1000 });
  */
-export const cache = <T>(options: Options = defaultOptions) => {
+export const createCache = <T>(options: Options = defaultOptions) => {
     const {
         ttl: globalTtl,
         key,

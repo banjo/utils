@@ -1,5 +1,5 @@
 import { afterEach, beforeEach, describe, expect, it, vi } from "vitest";
-import { cache } from "../src/utils/cache";
+import { createCache } from "../src/utils/cache";
 
 // @vitest-environment happy-dom
 
@@ -20,12 +20,12 @@ describe("cache", () => {
         window.localStorage.clear();
     });
     it("can be used with generics", () => {
-        const c = cache<string>();
+        const c = createCache<string>();
         expect(c).toBeDefined();
     });
 
     it("can be used with symbols", () => {
-        const c = cache();
+        const c = createCache();
         const key = Symbol("key");
 
         c.set(key, "value");
@@ -39,7 +39,7 @@ describe("cache", () => {
     });
 
     it("can be used with strings", () => {
-        const c = cache();
+        const c = createCache();
         const key = "key";
         const value = "value";
 
@@ -52,7 +52,7 @@ describe("cache", () => {
     });
 
     it("can be cleared", () => {
-        const c = cache();
+        const c = createCache();
         const key = "key";
         const value = "value";
 
@@ -66,7 +66,7 @@ describe("cache", () => {
 
     it("can be used with expires", () => {
         const time = 1000;
-        const c = cache({ ttl: time });
+        const c = createCache({ ttl: time });
         const key = "key";
         const value = "value";
 
@@ -82,7 +82,7 @@ describe("cache", () => {
 
     it("can be used with expires and clear", () => {
         const time = 1000;
-        const c = cache({ ttl: time });
+        const c = createCache({ ttl: time });
         const key = "key";
         const value = "value";
 
@@ -101,7 +101,7 @@ describe("cache", () => {
             val2: number;
         };
 
-        const c = cache<TestType>();
+        const c = createCache<TestType>();
         const key = "key";
         const value: TestType = {
             val: "hello",
@@ -115,7 +115,7 @@ describe("cache", () => {
 
     it("can persist in localstorage", () => {
         const localStorageKey = "someKey";
-        const c = cache({ persistent: true, key: localStorageKey });
+        const c = createCache({ persistent: true, key: localStorageKey });
         const key = "key";
         const value = "value";
 
@@ -138,7 +138,7 @@ describe("cache", () => {
 
     it("can be used with local expires", () => {
         const time = 1000;
-        const c = cache();
+        const c = createCache();
         const key = "key";
         const value = "value";
 
