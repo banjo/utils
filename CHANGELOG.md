@@ -1,5 +1,11 @@
 # @banjoanton/utils
 
+## 1.1.8
+
+### Patch Changes
+
+-   Update old result name
+
 ## 1.1.7
 
 ### Patch Changes
