@@ -143,7 +143,7 @@ Auto generated from TSDocs.
     -   [fromAsyncThrowable](#fromAsyncThrowable)
     -   [Result](#Result)
 -   [Simple-result](#simple-result)
-    -   [SimpleResultHelpers](#SimpleResultHelpers)
+    -   [SimpleResult](#SimpleResult)
     -   [createSimpleResult](#createSimpleResult)
     -   [createResultWithErrorData](#createResultWithErrorData)
     -   [createResultWithType](#createResultWithType)
@@ -1596,19 +1596,19 @@ A simple result type that can be used to return a value or an error.
 
 ---
 
-#### SimpleResultHelpers
+#### SimpleResult
 
 > A simple result type that can be used to return a value or an error.
 
 ```ts
-const result = SimpleResultHelpers.ok(1); // or SimpleResultHelpers.error
+const result = SimpleResult.ok(1); // or SimpleResult.error
 if (result.ok) {
     console.log(result.data);
 } else {
     console.log(result.message);
 }
 
-const error = SimpleResultHelpers.error("error message");
+const error = SimpleResult.error("error message");
 console.log(error.message);
 ```
 

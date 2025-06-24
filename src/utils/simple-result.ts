@@ -34,17 +34,17 @@ const simpleError = (message: string): ErrorType => ({
  * @returns A result type that represents a value or an error.
  * @example
  *
- * const result = SimpleResultHelpers.ok(1); // or SimpleResultHelpers.error
+ * const result = SimpleResult.ok(1); // or SimpleResult.error
  * if (result.ok) {
  *    console.log(result.data);
  * } else {
  *   console.log(result.message);
  * }
  *
- * const error = SimpleResultHelpers.error("error message");
+ * const error = SimpleResult.error("error message");
  * console.log(error.message);
  */
-export const SimpleResultHelpers = {
+export const SimpleResult = {
     ok: simpleOk,
     error: simpleError,
 };
@@ -65,7 +65,7 @@ export const SimpleResultHelpers = {
  *   console.log(result.message);
  * }
  */
-export const createSimpleResult = () => SimpleResultHelpers;
+export const createSimpleResult = () => SimpleResult;
 
 type ErrorResultMeta<TErrorDataMap extends Record<string, any>, TDefaultError> =
     | {
