@@ -136,6 +136,12 @@ Auto generated from TSDocs.
     -   [clone](#clone)
     -   [defaults](#defaults)
     -   [flip](#flip)
+-   [Result](#result)
+    -   [ok](#ok)
+    -   [err](#err)
+    -   [fromThrowable](#fromThrowable)
+    -   [fromAsyncThrowable](#fromAsyncThrowable)
+    -   [Result](#Result)
 -   [Simple-result](#simple-result)
     -   [SimpleResultHelpers](#SimpleResultHelpers)
     -   [createSimpleResult](#createSimpleResult)
@@ -1509,6 +1515,77 @@ defaults(obj2, obj1); // => { a: 2 }
 ```ts
 const obj = { a: 1, b: 2, c: 3 };
 flip(obj); // => { 1: "a", 2: "b", 3: "c" }
+```
+
+---
+
+### Result
+
+A result type that can be used to return a value or an error.
+
+---
+
+#### ok
+
+> Creates an Ok result.
+
+```ts
+const result = Result.ok(42);
+```
+
+---
+
+#### err
+
+> Creates an Err result.
+
+```ts
+const result = Result.err("Something went wrong");
+```
+
+---
+
+#### fromThrowable
+
+> Wraps a potentially-throwing function and returns a ResultType.
+> If the function throws, returns Err; otherwise, returns Ok.
+
+```ts
+const safeParse = Result.fromThrowable(JSON.parse);
+const result = safeParse('{"a":1}');
+if (result.ok) {
+    console.log(result.data); // parsed object
+} else {
+    console.log(result.error); // error object
+}
+```
+
+---
+
+#### fromAsyncThrowable
+
+> Wraps a potentially-throwing async function and returns a Promise of ResultType.
+> If the function throws or rejects, returns Err; otherwise, returns Ok.
+
+```ts
+const safeFetch = Result.fromAsyncThrowable(fetch);
+const result = await safeFetch("https://example.com");
+if (result.ok) {
+    console.log(result.data); // fetch response
+} else {
+    console.log(result.error); // error object
+}
+```
+
+---
+
+#### Result
+
+> Utility object for creating and working with Result types.
+
+```ts
+const okResult = Result.ok(42);
+const errResult = Result.err("fail");
 ```
 
 ---
