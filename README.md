@@ -136,9 +136,9 @@ Auto generated from TSDocs.
     -   [clone](#clone)
     -   [defaults](#defaults)
     -   [flip](#flip)
--   [Result](#result)
-    -   [Result](#Result)
-    -   [createResult](#createResult)
+-   [Simple-result](#simple-result)
+    -   [SimpleResultHelpers](#SimpleResultHelpers)
+    -   [createSimpleResult](#createSimpleResult)
     -   [createResultWithErrorData](#createResultWithErrorData)
     -   [createResultWithType](#createResultWithType)
     -   [createTryExpressionResult](#createTryExpressionResult)
@@ -1513,38 +1513,38 @@ flip(obj); // => { 1: "a", 2: "b", 3: "c" }
 
 ---
 
-### Result
+### Simple-result
 
-A result type that can be used to return a value or an error.
+A simple result type that can be used to return a value or an error.
 
 ---
 
-#### Result
+#### SimpleResultHelpers
 
 > A simple result type that can be used to return a value or an error.
 
 ```ts
-const result = Result.ok(1); // or Result.error
+const result = SimpleResultHelpers.ok(1); // or SimpleResultHelpers.error
 if (result.ok) {
     console.log(result.data);
 } else {
     console.log(result.message);
 }
 
-const error = Result.error("error message");
+const error = SimpleResultHelpers.error("error message");
 console.log(error.message);
 ```
 
 ---
 
-#### createResult
+#### createSimpleResult
 
-> Create a wrapper around the default Result type.
-> Making it possible to import the Result type from your own module.
+> Create a wrapper around the simple result type.
+> Making it possible to import the SimpleResult type from your own module.
 > Without any custom error data and types. Use `createResultWithErrorData` for custom error data and types.
 
 ```ts
-const OwnResult = createResult();
+const OwnResult = createSimpleResult();
 
 const result = OwnResult.ok(1); // or OwnResult.error
 if (result.ok) {
@@ -1567,7 +1567,7 @@ type MyErrorDataMap = {
 };
 type DefaultError = "UnknownError";
 
-const OwnResult = createResult<MyErrorDataMap, DefaultError>();
+const OwnResult = createResultWithErrorData<MyErrorDataMap, DefaultError>();
 
 const error = OwnResult.error("error message", {
     type: "network",

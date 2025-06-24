@@ -1,7 +1,7 @@
-import { Result, ResultType } from "src/utils/result-v2";
+import { Result, ResultType } from "src/utils/result";
 import { describe, expect, it } from "vitest";
 
-describe("ResultV2", () => {
+describe("Result", () => {
     describe("isOk", () => {
         it("should return true for an Ok variant", () => {
             const okResult = Result.ok("success");

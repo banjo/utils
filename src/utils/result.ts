@@ -1,208 +1,176 @@
-/**
- * A result type that can be used to return a value or an error.
- */
+interface GenericMethods<T, E> {
+    isOk(): this is Ok<T, E>;
+    isErr(): this is Err<T, E>;
+    map<U>(fn: (data: T) => U): ResultType<U, E>;
+    mapErr<F>(fn: (error: E) => F): ResultType<T, F>;
+    tap<U>(fn: (data: T) => U): ResultType<T, E>;
+    tapErr<F>(fn: (error: E) => F): ResultType<T, F>;
+    andThen<U>(fn: (data: T) => ResultType<U, E>): ResultType<U, E>;
+    match<U>(handlers: { Ok: (data: T) => U; Err: (error: E) => U }): U;
+    unwrap(): T;
+    unwrapOr<U>(defaultValue: U): T | U;
 
-export type SuccessResult<T> = {
-    ok: true;
-    data: T;
-};
-
-export type ErrorType = {
-    ok: false;
-    message: string;
-};
-
-export type ResultType<T> = SuccessResult<T> | ErrorType;
-export type AsyncResultType<T> = Promise<ResultType<T>>;
-
-function ok(): SuccessResult<void>;
-function ok<T>(data: T): SuccessResult<T>;
-function ok<T>(data?: T): SuccessResult<T extends undefined ? void : T> {
-    return {
-        ok: true,
-        data: (data === undefined ? undefined : data) as T extends undefined ? void : T,
-    };
+    // Async variants
+    mapAsync<U>(fn: (data: T) => Promise<U>): Promise<ResultType<U, E>>;
+    mapErrAsync<F>(fn: (error: E) => Promise<F>): Promise<ResultType<T, F>>;
+    tapAsync<U>(fn: (data: T) => Promise<U>): Promise<ResultType<T, E>>;
+    tapErrAsync<F>(fn: (error: E) => Promise<F>): Promise<ResultType<T, F>>;
+    andThenAsync<U>(fn: (data: T) => Promise<ResultType<U, E>>): Promise<ResultType<U, E>>;
 }
 
-const error = (message: string): ErrorType => ({
-    ok: false,
-    message,
-});
+export type ResultType<T, E> = Ok<T, E> | Err<T, E>;
+export type AsyncResultType<T, E> = Promise<ResultType<T, E>>;
 
-/**
- * A simple result type that can be used to return a value or an error.
- * @returns A result type that represents a value or an error.
- * @example
- *
- * const result = Result.ok(1); // or Result.error
- * if (result.ok) {
- *    console.log(result.data);
- * } else {
- *   console.log(result.message);
- * }
- *
- * const error = Result.error("error message");
- * console.log(error.message);
- */
+class Ok<T, E> implements GenericMethods<T, E> {
+    readonly ok = true;
+    constructor(public data: T) {}
+
+    isOk(): this is Ok<T, E> {
+        return true;
+    }
+    isErr(): this is Err<T, E> {
+        return false;
+    }
+
+    map<U>(fn: (data: T) => U): ResultType<U, E> {
+        return new Ok<U, E>(fn(this.data));
+    }
+    mapErr<F>(fn: (error: E) => F): ResultType<T, F> {
+        return new Ok<T, F>(this.data);
+    }
+    tap<U>(fn: (data: T) => U): ResultType<T, E> {
+        fn(this.data);
+        return this;
+    }
+    tapErr<F>(fn: (error: E) => F): ResultType<T, F> {
+        return this as unknown as Ok<T, F>;
+    }
+    andThen<U>(fn: (data: T) => ResultType<U, E>): ResultType<U, E> {
+        return fn(this.data);
+    }
+    match<U>(handlers: { Ok: (data: T) => U; Err: (error: E) => U }): U {
+        return handlers.Ok(this.data);
+    }
+
+    unwrap(): T {
+        return this.data;
+    }
+
+    unwrapOr<U>(defaultValue: U): T | U {
+        return this.data;
+    }
+
+    async mapAsync<U>(fn: (data: T) => Promise<U>): Promise<ResultType<U, E>> {
+        return new Ok<U, E>(await fn(this.data));
+    }
+    async mapErrAsync<F>(fn: (error: E) => Promise<F>): Promise<ResultType<T, F>> {
+        return new Ok<T, F>(this.data);
+    }
+    async tapAsync<U>(fn: (data: T) => Promise<U>): Promise<ResultType<T, E>> {
+        await fn(this.data);
+        return this;
+    }
+    async tapErrAsync<F>(fn: (error: E) => Promise<F>): Promise<ResultType<T, F>> {
+        return this as unknown as Ok<T, F>;
+    }
+    async andThenAsync<U>(fn: (data: T) => Promise<ResultType<U, E>>): Promise<ResultType<U, E>> {
+        return fn(this.data);
+    }
+}
+
+class Err<T, E> implements GenericMethods<T, E> {
+    readonly ok = false;
+    constructor(public error: E) {}
+
+    isOk(): this is Ok<T, E> {
+        return false;
+    }
+    isErr(): this is Err<T, E> {
+        return true;
+    }
+
+    map<U>(fn: (data: T) => U): ResultType<U, E> {
+        return new Err<U, E>(this.error);
+    }
+    mapErr<F>(fn: (error: E) => F): ResultType<T, F> {
+        return new Err<T, F>(fn(this.error));
+    }
+    tap<U>(fn: (data: T) => U): ResultType<T, E> {
+        return this;
+    }
+    tapErr<F>(fn: (error: E) => F): ResultType<T, F> {
+        fn(this.error);
+        return this as unknown as Err<T, F>;
+    }
+    andThen<U>(fn: (data: T) => ResultType<U, E>): ResultType<U, E> {
+        return new Err<U, E>(this.error);
+    }
+    match<U>(handlers: { Ok: (data: T) => U; Err: (error: E) => U }): U {
+        return handlers.Err(this.error);
+    }
+
+    unwrap(): T {
+        throw new Error(`Attempted to unwrap an Err: ${this.error}`);
+    }
+
+    unwrapOr<U>(defaultValue: U): T | U {
+        return defaultValue;
+    }
+
+    async mapAsync<U>(fn: (data: T) => Promise<U>): Promise<ResultType<U, E>> {
+        return new Err<U, E>(this.error);
+    }
+    async mapErrAsync<F>(fn: (error: E) => Promise<F>): Promise<ResultType<T, F>> {
+        return new Err<T, F>(await fn(this.error));
+    }
+    async tapAsync<U>(fn: (data: T) => Promise<U>): Promise<ResultType<T, E>> {
+        return this;
+    }
+    async tapErrAsync<F>(fn: (error: E) => Promise<F>): Promise<ResultType<T, F>> {
+        await fn(this.error);
+        return this as unknown as Err<T, F>;
+    }
+    async andThenAsync<U>(fn: (data: T) => Promise<ResultType<U, E>>): Promise<ResultType<U, E>> {
+        return new Err<U, E>(this.error);
+    }
+}
+
+function ok<T, E = string>(data: T): Ok<T, E> {
+    return new Ok<T, E>(data);
+}
+function err<T = never, E = string>(error: E): Err<T, E> {
+    return new Err<T, E>(error);
+}
+
+const fromThrowable = <Args extends unknown[], T, E>(
+    fn: (...args: Args) => T,
+    errorFn?: (e: unknown) => E
+): ((...args: Args) => ResultType<T, E>) => {
+    return (...args: Args) => {
+        try {
+            return ok(fn(...args));
+        } catch (error) {
+            return err(errorFn ? errorFn(error) : (error as E));
+        }
+    };
+};
+
+const fromAsyncThrowable = <Args extends unknown[], T, E>(
+    fn: (...args: Args) => Promise<T>,
+    errorFn?: (e: unknown) => E
+): ((...args: Args) => Promise<ResultType<T, E>>) => {
+    return async (...args: Args) => {
+        try {
+            return ok(await fn(...args));
+        } catch (error) {
+            return err(errorFn ? errorFn(error) : (error as E));
+        }
+    };
+};
+
 export const Result = {
     ok,
-    error,
-};
-
-/**
- * Create a wrapper around the default Result type.
- * Making it possible to import the Result type from your own module.
- * Without any custom error data and types. Use `createResultWithErrorData` for custom error data and types.
- * @returns A result type that represents a value or an error.
- * @example
- *
- * const OwnResult = createResult();
- *
- * const result = OwnResult.ok(1); // or OwnResult.error
- * if (result.ok) {
- *    console.log(result.data);
- * } else {
- *   console.log(result.message);
- * }
- */
-export const createResult = () => Result;
-
-type ErrorResultMeta<TErrorDataMap extends Record<string, any>, TDefaultError> =
-    | {
-          [K in keyof TErrorDataMap]: TErrorDataMap[K] extends undefined
-              ? { type: K }
-              : { type: K; data: TErrorDataMap[K] };
-      }[keyof TErrorDataMap]
-    | { type: TDefaultError };
-
-export type ErrorResultWithType<
-    TErrorDataMap extends Record<string, any>,
-    TDefaultError,
-> = ErrorType & ErrorResultMeta<TErrorDataMap, TDefaultError>;
-
-export type CreatedResultType<TData, TErrorDataMap extends Record<string, any>, TDefaultError> =
-    | SuccessResult<TData>
-    | ErrorResultWithType<TErrorDataMap, TDefaultError>;
-
-/**
- * Create a custom Result type with error data and types.
- * @returns A result type that represents a value or an error with custom error data and types.
- * @example
- *
- * type MyErrorDataMap = {
- *    network: { endpoint: string; statusCode: number };
- *    internal: { errorId: string; details: string };
- * };
- * type DefaultError = "UnknownError";
- *
- * const OwnResult = createResult<MyErrorDataMap, DefaultError>();
- *
- * const error = OwnResult.error("error message", {
- *    type: "network",
- *    data: { endpoint: "http://example.com", statusCode: 404 },
- * });
- *
- * if (error.type === "network") {
- *    console.log(error.data.endpoint);
- * }
- *
- * const error = OwnResult.error("error message");
- * console.log(error.type); // type "UnknownError"
- */
-export const createResultWithErrorData = <
-    TErrorDataMap extends Record<string, any>,
-    TDefaultError = "UnknownError",
->() => {
-    return {
-        ok,
-        error: (
-            message: string,
-            meta?: ErrorResultMeta<TErrorDataMap, TDefaultError>
-        ): ErrorResultWithType<TErrorDataMap, TDefaultError> => {
-            if (meta) {
-                return {
-                    ok: false,
-                    message,
-                    ...meta,
-                };
-            }
-            return {
-                ok: false,
-                message,
-                type: undefined as any as TDefaultError,
-            };
-        },
-    };
-};
-
-export type ResultWithTypeError<TErrorType> = ErrorType & { type: TErrorType };
-export type ResultWithTypeSuccess<TData> = SuccessResult<TData>;
-export type ResultWithType<TData, TErrorType> =
-    | ResultWithTypeSuccess<TData>
-    | ResultWithTypeError<TErrorType>;
-export type AsyncResultWithType<TData, TErrorType> = Promise<ResultWithType<TData, TErrorType>>;
-
-/**
- * Create a custom Result type with error types, no data.
- * @returns A result type that represents a value or an error with custom error types.
- * @example
- *
- * type MyErrorType = "NetworkError" | "InternalError";
- *
- * const OwnResult = createResultWithType<MyErrorType>();
- *
- * const error = OwnResult.error("error message", "NetworkError");
- * if (error.type === "NetworkError") {
- *    console.log(error.message);
- * }
- */
-export const createResultWithType = <TErrorType extends string>() => {
-    return {
-        ok,
-        error: (message: string, type: TErrorType): ResultWithTypeError<TErrorType> => ({
-            ok: false,
-            message,
-            type,
-        }),
-    };
-};
-
-export type TryExpressionResult<T = undefined, E extends Error = Error> =
-    | [E, undefined]
-    | [undefined, T];
-
-export type AsyncTryExpressionResult<T = undefined, E extends Error = Error> = Promise<
-    TryExpressionResult<T, E>
->;
-
-/**
- * Create a custom Result type based on try expressions, with a Go-like syntax. Used to return a value or an error.
- * Return value is a `TryExpressionResult` tuple with an error and a value.
- * @returns A tuple with an error and a value. E.g. [error, value]
- * @example
- * const Result = createTryExpressionResult();
- * const getResult = () => {
- *   if (something()) {
- *     return Result.ok(1);
- *   } else {
- *     return Result.error(new Error("error"));
- *   }
- * }
- *
- * const [error, value] = getResult();
- * if (error) {
- *   console.log(error.message); // Error is defined
- * } else {
- *   console.log(value);         // Value is defined
- * }
- */
-export const createTryExpressionResult = () => {
-    return {
-        ok: <TData = undefined>(result = undefined as TData): [undefined, TData] => {
-            return [undefined, result];
-        },
-        error: <TError extends Error>(error: TError): [TError, undefined] => {
-            return [error, undefined];
-        },
-    };
+    err,
+    fromThrowable,
+    fromAsyncThrowable,
 };
