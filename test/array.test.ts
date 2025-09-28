@@ -7,6 +7,7 @@ import {
     groupBy,
     includes,
     intersection,
+    keyBy,
     last,
     move,
     partition,
@@ -349,5 +350,71 @@ describe("array", () => {
             ],
             [{ name: "jack", age: 10 }],
         ]);
+    });
+
+    describe("keyBy", () => {
+        it("should key by a property", () => {
+            const users = [
+                { id: 1, name: "Alice" },
+                { id: 2, name: "Bob" },
+                { id: 3, name: "Charlie" },
+            ];
+            expect(keyBy(users, "id")).toEqual({
+                1: { id: 1, name: "Alice" },
+                2: { id: 2, name: "Bob" },
+                3: { id: 3, name: "Charlie" },
+            });
+            expect(keyBy(users, "name")).toEqual({
+                Alice: { id: 1, name: "Alice" },
+                Bob: { id: 2, name: "Bob" },
+                Charlie: { id: 3, name: "Charlie" },
+            });
+        });
+
+        it("should key by a function", () => {
+            const users = [
+                { id: 1, name: "Alice" },
+                { id: 2, name: "Bob" },
+                { id: 3, name: "Charlie" },
+            ];
+            expect(keyBy(users, user => user.id)).toEqual({
+                1: { id: 1, name: "Alice" },
+                2: { id: 2, name: "Bob" },
+                3: { id: 3, name: "Charlie" },
+            });
+            expect(keyBy(users, user => user.name.toUpperCase())).toEqual({
+                ALICE: { id: 1, name: "Alice" },
+                BOB: { id: 2, name: "Bob" },
+                CHARLIE: { id: 3, name: "Charlie" },
+            });
+        });
+
+        it("should use the last item for duplicate keys", () => {
+            const users = [
+                { id: 1, name: "Alice" },
+                { id: 2, name: "Alice" },
+                { id: 3, name: "Bob" },
+            ];
+            expect(keyBy(users, "name")).toEqual({
+                Alice: { id: 2, name: "Alice" },
+                Bob: { id: 3, name: "Bob" },
+            });
+        });
+
+        it("should return an empty object for an empty array", () => {
+            expect(keyBy([], "id")).toEqual({});
+            expect(keyBy([], x => x)).toEqual({});
+        });
+
+        it("should work with numbers as keys", () => {
+            const arr = [
+                { num: 1, value: "a" },
+                { num: 2, value: "b" },
+            ];
+            expect(keyBy(arr, "num")).toEqual({
+                1: { num: 1, value: "a" },
+                2: { num: 2, value: "b" },
+            });
+        });
     });
 });

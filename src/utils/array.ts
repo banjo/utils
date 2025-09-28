@@ -72,10 +72,10 @@ export const uniq = <T>(array: T[]): T[] => {
  * uniqBy([a, b], (item) => item.name); // returns [a]
  * uniqBy([a, b], (item) => item.age); // returns [a, b]
  */
-export const uniqBy = <T>(array: T[], key: string | ((item: T) => any)): T[] => {
+export const uniqBy = <T, K extends keyof T>(array: T[], key: K | ((item: T) => any)): T[] => {
     const keys = new Set();
     return array.filter(item => {
-        const value = typeof key === "string" ? getProperty(item, key) : key(item);
+        const value = typeof key === "function" ? key(item) : item[key];
         if (keys.has(value)) return false;
         keys.add(value);
         return true;
@@ -352,54 +352,37 @@ export const union = <T>(...arrays: T[]) => uniq(arrays.flat());
  * sortBy([a, b, c], (item) => item.name); // returns [a, b, c]
  * sortBy([a, b, c], (item) => item.age); // returns [c, b, a]
  */
-export const sortBy = <T>(
+export const sortBy = <T, K extends keyof T>(
     array: T[],
-    key: string | ((item: T) => any) | string[],
+    key: K | ((item: T) => any) | K[],
     order: "asc" | "desc" = "asc"
 ): T[] => {
     const handle = (a: unknown, b: unknown) => {
         if (isNil(a) || isNil(b)) return 0;
-
         if (typeof a === "string" && typeof b === "string") {
             return order === "asc" ? a.localeCompare(b) : b.localeCompare(a);
         }
-
         if (typeof a === "number" && typeof b === "number") {
             if (a < b) return order === "asc" ? -1 : 1;
             if (a > b) return order === "asc" ? 1 : -1;
         }
-
         return 0;
     };
 
     let comparator;
-    if (typeof key === "string") {
-        comparator = (a: T, b: T) => {
-            const aVal = getProperty(a, key);
-            const bVal = getProperty(b, key);
-
-            return handle(aVal, bVal);
-        };
-    } else if (isArray(key)) {
+    if (typeof key === "function") {
+        comparator = (a: T, b: T) => handle(key(a), key(b));
+    } else if (Array.isArray(key)) {
         comparator = (a: T, b: T) => {
             for (let i = 0; i < key.length; i++) {
                 const k = key[i];
-                const aVal = getProperty(a, k);
-                const bVal = getProperty(b, k);
-
-                const result = handle(aVal, bVal);
+                const result = handle(a[k], b[k]);
                 if (result !== 0) return result;
             }
-
             return 0;
         };
     } else {
-        comparator = (a: T, b: T) => {
-            const aVal = key(a);
-            const bVal = key(b);
-
-            return handle(aVal, bVal);
-        };
+        comparator = (a: T, b: T) => handle(a[key], b[key]);
     }
 
     return [...array].sort(comparator);
@@ -421,16 +404,47 @@ export const sortBy = <T>(
  * groupBy([a, b, c], (item) => item.name); // returns {Alex: [a, b], Bony: [c]}
  * groupBy([a, b, c], (item) => item.age); // returns {5: [c], 15: [b], 20: [a]}
  */
-export const groupBy = <T>(array: T[], key: string | ((item: T) => any)): Record<string, T[]> => {
+export const groupBy = <T, K extends keyof T>(
+    array: T[],
+    key: K | ((item: T) => any)
+): Record<string, T[]> => {
     const groups: Record<string, T[]> = {};
-
     array.forEach(item => {
-        const value = typeof key === "string" ? getProperty(item, key) : key(item);
-        if (!groups[value]) groups[value] = [];
-        groups[value].push(item);
+        const value = typeof key === "function" ? key(item) : item[key];
+        if (!groups[value as any]) groups[value as any] = [];
+        groups[value as any].push(item);
     });
-
     return groups;
+};
+
+/**
+ * Creates an object composed of keys generated from the results of running each element of the array through the given key.
+ * The key can be a property name (must be a key of T) or a function that returns a key for each item.
+ * If multiple items produce the same key, the last one will be used.
+ *
+ * @param array - The array to process.
+ * @param key - The property name (must be keyof T) or a function to generate the key for each item.
+ * @returns An object where each key is generated from the item and the value is the item itself.
+ * @example
+ * type User = { id: number; name: string; };
+ * const users: User[] = [
+ *   { id: 1, name: "Alice" },
+ *   { id: 2, name: "Bob" }
+ * ];
+ *
+ * keyBy(users, "id"); // returns { "1": { id: 1, name: "Alice" }, "2": { id: 2, name: "Bob" } }
+ * keyBy(users, user => user.name); // returns { "Alice": { id: 1, name: "Alice" }, "Bob": { id: 2, name: "Bob" } }
+ */
+export const keyBy = <T, K extends keyof T>(
+    array: T[],
+    key: K | ((item: T) => any)
+): Record<string, T> => {
+    const map: Record<string, T> = {};
+    array.forEach(item => {
+        const value = typeof key === "function" ? key(item) : item[key];
+        map[value as any] = item;
+    });
+    return map;
 };
 
 /**

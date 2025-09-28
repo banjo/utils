@@ -57,6 +57,7 @@ Auto generated from TSDocs.
     -   [union](#union)
     -   [sortBy](#sortBy)
     -   [groupBy](#groupBy)
+    -   [keyBy](#keyBy)
     -   [includes](#includes)
     -   [zip](#zip)
     -   [partition](#partition)
@@ -451,6 +452,25 @@ groupBy([a, b, c], "age"); // returns {5: [c], 15: [b], 20: [a]}
 
 groupBy([a, b, c], item => item.name); // returns {Alex: [a, b], Bony: [c]}
 groupBy([a, b, c], item => item.age); // returns {5: [c], 15: [b], 20: [a]}
+```
+
+---
+
+#### keyBy
+
+> Creates an object composed of keys generated from the results of running each element of the array through the given key.
+> The key can be a property name (must be a key of T) or a function that returns a key for each item.
+> If multiple items produce the same key, the last one will be used.
+
+```ts
+type User = { id: number; name: string };
+const users: User[] = [
+    { id: 1, name: "Alice" },
+    { id: 2, name: "Bob" },
+];
+
+keyBy(users, "id"); // returns { "1": { id: 1, name: "Alice" }, "2": { id: 2, name: "Bob" } }
+keyBy(users, user => user.name); // returns { "Alice": { id: 1, name: "Alice" }, "Bob": { id: 2, name: "Bob" } }
 ```
 
 ---
