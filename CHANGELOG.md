@@ -1,5 +1,12 @@
 # @banjoanton/utils
 
+## 1.1.9
+
+### Patch Changes
+
+-   Add keyBy
+-   Better typing for array methods
+
 ## 1.1.8
 
 ### Patch Changes
