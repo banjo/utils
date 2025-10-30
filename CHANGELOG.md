@@ -1,5 +1,11 @@
 # @banjoanton/utils
 
+## 1.1.10
+
+### Patch Changes
+
+-   Merge overwrites arrays per default
+
 ## 1.1.9
 
 ### Patch Changes
