@@ -125,8 +125,10 @@ export type DeepPartial<T> = {
     [P in keyof T]?: T[P] extends object ? DeepPartial<T[P]> : T[P];
 };
 
+const _overwriteMerge = (destinationArray: unknown[], sourceArray: unknown[]) => sourceArray;
+
 /**
- * Deeply merges two or more objects. The last object in the arguments list overwrites previous values. No mutation. Uses the `deepmerge` library.
+ * Deeply merges two or more objects. The last object in the arguments list overwrites previous values. No mutation. Arrays are overwritten. Uses the `deepmerge` library.
  * @param target - object to merge into
  * @param sources - objects to merge from
  * @returns A new merged object.
@@ -148,7 +150,7 @@ export const merge = <T extends object = object, S extends object = DeepPartial<
     target: T | S,
     ...sources: Array<S>
 ): T & S => {
-    return deepMerge.all([target, ...sources]) as T & S;
+    return deepMerge.all([target, ...sources], { arrayMerge: _overwriteMerge }) as T & S;
 };
 
 /**

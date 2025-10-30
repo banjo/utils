@@ -1483,7 +1483,7 @@ objectEntries({}); // => []
 
 #### merge
 
-> Deeply merges two or more objects. The last object in the arguments list overwrites previous values. No mutation. Uses the `deepmerge` library.
+> Deeply merges two or more objects. The last object in the arguments list overwrites previous values. No mutation. Arrays are overwritten. Uses the `deepmerge` library.
 
 ```ts
 const obj1 = { a: 1 };

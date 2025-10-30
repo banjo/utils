@@ -55,6 +55,25 @@ describe("object", () => {
 
         const res4 = merge({ a: [] }, { b: 2 });
         expect(res4).toEqual({ a: [], b: 2 });
+
+        // Array overwrite: should NOT concatenate arrays, later should overwrite
+        const arrObj1 = { arr: [1, 2], x: 1 };
+        const arrObj2 = { arr: [3, 4], y: 2 };
+        const arrRes = merge(arrObj1, arrObj2);
+        expect(arrRes).toEqual({ arr: [3, 4], x: 1, y: 2 });
+
+        // Nested array overwrite
+        const nestedArrObj1 = { a: { arr: [1, 2] } };
+        const nestedArrObj2 = { a: { arr: [3, 4] } };
+        const nestedArrRes = merge(nestedArrObj1, nestedArrObj2);
+        expect(nestedArrRes).toEqual({ a: { arr: [3, 4] } });
+
+        // three objects with arrays
+        const threeArrObj1 = { a: { arr: [1, 2] } };
+        const threeArrObj2 = { a: { arr: [3, 4] } };
+        const threeArrObj3 = { a: { arr: [5, 6] } };
+        const threeArrRes = merge(threeArrObj1, threeArrObj2, threeArrObj3);
+        expect(threeArrRes).toEqual({ a: { arr: [5, 6] } });
     });
 
     it("clone", () => {
