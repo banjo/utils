@@ -11,6 +11,7 @@ import {
     isFunction,
     isNil,
     isNull,
+    isNullish,
     isNumber,
     isObject,
     isPrimitive,
@@ -156,6 +157,18 @@ describe("is", () => {
         expect(isNil([])).toBe(false);
         expect(isNil(new Date())).toBe(false);
         expect(isNil(() => {})).toBe(false);
+    });
+
+    it("isNullish", () => {
+        expect(isNullish(null)).toBe(true);
+        expect(isNullish(undefined)).toBe(true);
+        expect(isNullish(1)).toBe(false);
+        expect(isNullish("1")).toBe(false);
+        expect(isNullish(true)).toBe(false);
+        expect(isNullish({})).toBe(false);
+        expect(isNullish([])).toBe(false);
+        expect(isNullish(new Date())).toBe(false);
+        expect(isNullish(() => {})).toBe(false);
     });
 
     it("exists", () => {

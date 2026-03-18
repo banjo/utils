@@ -147,7 +147,22 @@ export const isUndefined = (value: any): value is undefined => value === undefin
  * isNil("hello world"); // false
  * isNil(1); // false
  */
-export const isNil = (value: any): value is null | undefined => isNull(value) || isUndefined(value);
+/**
+ * Check if the given value is null or undefined.
+ * @param value - The value to check.
+ * @returns true if the value is null or undefined, false otherwise.
+ * @example
+ * isNullish(null); // true
+ * isNullish(undefined); // true
+ * isNullish("hello world"); // false
+ * isNullish(1); // false
+ */
+export const isNullish = (value: any): value is null | undefined => isNull(value) || isUndefined(value);
+
+/**
+ * @deprecated Use isNullish instead.
+ */
+export const isNil = (value: any): value is null | undefined => isNullish(value);
 
 /**
  * Check if the given value exists (is not undefined). Also type guards against undefined.
@@ -295,7 +310,7 @@ export function isEmpty(value: any): boolean {
         return value.size === 0;
     }
 
-    if (isNil(value)) {
+    if (isNullish(value)) {
         return true;
     }
     if (isArray(value)) {
