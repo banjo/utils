@@ -43,6 +43,7 @@ type Docs = {
     fileName: string;
     fileContent: string;
     example?: string;
+    deprecated?: string;
     params: Param[];
     returns?: string;
 };
@@ -56,9 +57,10 @@ function parseDocs(comments: ParsedAstOutput[]) {
 
         c.comments.forEach(comment => {
             const description = comment.comment.description;
-            const params = comment.comment.tags.filter((t: any) => t.title === "param");
-            const returns = comment.comment.tags.find((t: any) => t.title === "returns");
-            const example = comment.comment.tags.find((t: any) => t.title === "example");
+            const params = comment.comment.tags.filter(tag => tag.title === "param");
+            const returns = comment.comment.tags.find(tag => tag.title === "returns");
+            const example = comment.comment.tags.find(tag => tag.title === "example");
+            const deprecated = comment.comment.tags.find(tag => tag.title === "deprecated");
             const name = comment.name;
 
             docs.push({
@@ -68,6 +70,7 @@ function parseDocs(comments: ParsedAstOutput[]) {
                     description: p.description ?? "",
                 })),
                 example: example?.description ?? undefined,
+                deprecated: deprecated?.description ?? undefined,
                 name,
                 returns: returns?.description ?? undefined,
                 fileName,
@@ -132,16 +135,16 @@ function generateMarkdown(docs: DocsWithContent[], toc: string): string {
 
 function generateContentForEachDoc(docs: Docs[]) {
     const content: DocsWithContent[] = docs.map(doc => {
+        const description = doc.description.trim();
+        const descriptionContent = description.length > 0 ? `> ${description}\n\n` : "";
+        const deprecatedContent = doc.deprecated ? `> **Deprecated:** ${doc.deprecated}\n\n` : "";
+        const exampleContent = doc.example ? `\`\`\`ts\n${doc.example}\n\`\`\`\n\n` : "";
+
         return {
             ...doc,
             content: `#### ${doc.name}
 
-> ${doc.description}
-
-\`\`\`ts
-${doc.example}
-\`\`\`
-
+${descriptionContent}${deprecatedContent}${exampleContent}
 ---
 `,
         };

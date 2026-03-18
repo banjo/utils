@@ -1188,10 +1188,15 @@ isNullish(1); // false
 
 #### isNil
 
->
+> Check if the given value is null or undefined.
+
+> **Deprecated:** Use isNullish instead.
 
 ```ts
-undefined;
+isNil(null); // true
+isNil(undefined); // true
+isNil("hello world"); // false
+isNil(1); // false
 ```
 
 ---
