@@ -1,5 +1,11 @@
 # @banjoanton/utils
 
+## 1.1.13
+
+### Patch Changes
+
+- ebc4ee3: better types for Result
+
 ## 1.1.12
 
 ### Patch Changes
