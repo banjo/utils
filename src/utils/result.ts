@@ -14,7 +14,7 @@
  *   console.log(result.error);
  * }
  */
-export type ResultType<T, E> = Ok<T, E> | Err<T, E>;
+export type ResultType<T, E> = Ok<T> | Err<E>;
 
 /**
  * A Promise of a ResultType.
@@ -37,7 +37,7 @@ interface GenericMethods<T, E> {
      *   // result is Ok
      * }
      */
-    isOk(): this is Ok<T, E>;
+    isOk(): this is Ok<T>;
 
     /**
      * Returns true if the result is Err.
@@ -46,7 +46,7 @@ interface GenericMethods<T, E> {
      *   // result is Err
      * }
      */
-    isErr(): this is Err<T, E>;
+    isErr(): this is Err<E>;
 
     /**
      * If Ok, maps the value using the provided function and returns a new Ok result.
@@ -78,7 +78,7 @@ interface GenericMethods<T, E> {
      * @example
      * result.tapErr(err => console.error(err));
      */
-    tapErr<F>(fn: (error: E) => F): ResultType<T, F>;
+    tapErr(fn: (error: E) => void): ResultType<T, E>;
 
     /**
      * If Ok, calls the provided function and returns its result.
@@ -144,7 +144,7 @@ interface GenericMethods<T, E> {
      * @example
      * await result.tapErrAsync(async err => console.error(err));
      */
-    tapErrAsync<F>(fn: (error: E) => Promise<F>): Promise<ResultType<T, F>>;
+    tapErrAsync(fn: (error: E) => Promise<void>): Promise<ResultType<T, E>>;
 
     /**
      * If Ok, asynchronously calls the provided function and returns its result.
@@ -164,33 +164,33 @@ interface GenericMethods<T, E> {
  *   console.log(okResult.data); // 42
  * }
  */
-export class Ok<T, E> implements GenericMethods<T, E> {
+export class Ok<T> implements GenericMethods<T, never> {
     readonly ok = true;
     constructor(public data: T) {}
 
-    isOk(): this is Ok<T, E> {
+    isOk(): this is Ok<T> {
         return true;
     }
-    isErr(): this is Err<T, E> {
+    isErr(): this is Err<never> {
         return false;
     }
-    map<U>(fn: (data: T) => U): ResultType<U, E> {
-        return new Ok<U, E>(fn(this.data));
+    map<U>(fn: (data: T) => U): Ok<U> {
+        return new Ok<U>(fn(this.data));
     }
-    mapErr<F>(fn: (error: E) => F): ResultType<T, F> {
-        return new Ok<T, F>(this.data);
+    mapErr<F>(fn: (error: never) => F): Ok<T> {
+        return this;
     }
-    tap<U>(fn: (data: T) => U): ResultType<T, E> {
+    tap<U>(fn: (data: T) => U): Ok<T> {
         fn(this.data);
         return this;
     }
-    tapErr<F>(fn: (error: E) => F): ResultType<T, F> {
-        return this as unknown as Ok<T, F>;
+    tapErr(fn: (error: never) => void): Ok<T> {
+        return this;
     }
-    andThen<U>(fn: (data: T) => ResultType<U, E>): ResultType<U, E> {
+    andThen<U, E2>(fn: (data: T) => ResultType<U, E2>): ResultType<U, E2> {
         return fn(this.data);
     }
-    match<U>(handlers: { Ok: (data: T) => U; Err: (error: E) => U }): U {
+    match<U>(handlers: { Ok: (data: T) => U; Err: (error: never) => U }): U {
         return handlers.Ok(this.data);
     }
     unwrap(): T {
@@ -199,20 +199,22 @@ export class Ok<T, E> implements GenericMethods<T, E> {
     unwrapOr<U>(defaultValue: U): T | U {
         return this.data;
     }
-    async mapAsync<U>(fn: (data: T) => Promise<U>): Promise<ResultType<U, E>> {
-        return new Ok<U, E>(await fn(this.data));
+    async mapAsync<U>(fn: (data: T) => Promise<U>): Promise<Ok<U>> {
+        return new Ok<U>(await fn(this.data));
     }
-    async mapErrAsync<F>(fn: (error: E) => Promise<F>): Promise<ResultType<T, F>> {
-        return new Ok<T, F>(this.data);
+    async mapErrAsync<F>(fn: (error: never) => Promise<F>): Promise<Ok<T>> {
+        return this;
     }
-    async tapAsync<U>(fn: (data: T) => Promise<U>): Promise<ResultType<T, E>> {
+    async tapAsync<U>(fn: (data: T) => Promise<U>): Promise<Ok<T>> {
         await fn(this.data);
         return this;
     }
-    async tapErrAsync<F>(fn: (error: E) => Promise<F>): Promise<ResultType<T, F>> {
-        return this as unknown as Ok<T, F>;
+    async tapErrAsync(fn: (error: never) => Promise<void>): Promise<Ok<T>> {
+        return this;
     }
-    async andThenAsync<U>(fn: (data: T) => Promise<ResultType<U, E>>): Promise<ResultType<U, E>> {
+    async andThenAsync<U, E2>(
+        fn: (data: T) => Promise<ResultType<U, E2>>
+    ): Promise<ResultType<U, E2>> {
         return fn(this.data);
     }
 }
@@ -226,56 +228,56 @@ export class Ok<T, E> implements GenericMethods<T, E> {
  *   console.log(errResult.error); // "fail"
  * }
  */
-export class Err<T, E> implements GenericMethods<T, E> {
+export class Err<E> implements GenericMethods<never, E> {
     readonly ok = false;
     constructor(public error: E) {}
 
-    isOk(): this is Ok<T, E> {
+    isOk(): this is Ok<never> {
         return false;
     }
-    isErr(): this is Err<T, E> {
+    isErr(): this is Err<E> {
         return true;
     }
-    map<U>(fn: (data: T) => U): ResultType<U, E> {
-        return new Err<U, E>(this.error);
-    }
-    mapErr<F>(fn: (error: E) => F): ResultType<T, F> {
-        return new Err<T, F>(fn(this.error));
-    }
-    tap<U>(fn: (data: T) => U): ResultType<T, E> {
+    map<U>(fn: (data: never) => U): Err<E> {
         return this;
     }
-    tapErr<F>(fn: (error: E) => F): ResultType<T, F> {
+    mapErr<F>(fn: (error: E) => F): Err<F> {
+        return new Err<F>(fn(this.error));
+    }
+    tap<U>(fn: (data: never) => U): Err<E> {
+        return this;
+    }
+    tapErr(fn: (error: E) => void): Err<E> {
         fn(this.error);
-        return this as unknown as Err<T, F>;
+        return this;
     }
-    andThen<U>(fn: (data: T) => ResultType<U, E>): ResultType<U, E> {
-        return new Err<U, E>(this.error);
+    andThen<U, E2>(fn: (data: never) => ResultType<U, E2>): Err<E> {
+        return this;
     }
-    match<U>(handlers: { Ok: (data: T) => U; Err: (error: E) => U }): U {
+    match<U>(handlers: { Ok: (data: never) => U; Err: (error: E) => U }): U {
         return handlers.Err(this.error);
     }
-    unwrap(): T {
+    unwrap(): never {
         throw new Error(`Attempted to unwrap an Err: ${this.error}`);
     }
-    unwrapOr<U>(defaultValue: U): T | U {
+    unwrapOr<U>(defaultValue: U): U {
         return defaultValue;
     }
-    async mapAsync<U>(fn: (data: T) => Promise<U>): Promise<ResultType<U, E>> {
-        return new Err<U, E>(this.error);
-    }
-    async mapErrAsync<F>(fn: (error: E) => Promise<F>): Promise<ResultType<T, F>> {
-        return new Err<T, F>(await fn(this.error));
-    }
-    async tapAsync<U>(fn: (data: T) => Promise<U>): Promise<ResultType<T, E>> {
+    async mapAsync<U>(fn: (data: never) => Promise<U>): Promise<Err<E>> {
         return this;
     }
-    async tapErrAsync<F>(fn: (error: E) => Promise<F>): Promise<ResultType<T, F>> {
-        await fn(this.error);
-        return this as unknown as Err<T, F>;
+    async mapErrAsync<F>(fn: (error: E) => Promise<F>): Promise<Err<F>> {
+        return new Err<F>(await fn(this.error));
     }
-    async andThenAsync<U>(fn: (data: T) => Promise<ResultType<U, E>>): Promise<ResultType<U, E>> {
-        return new Err<U, E>(this.error);
+    async tapAsync<U>(fn: (data: never) => Promise<U>): Promise<Err<E>> {
+        return this;
+    }
+    async tapErrAsync(fn: (error: E) => Promise<void>): Promise<Err<E>> {
+        await fn(this.error);
+        return this;
+    }
+    async andThenAsync<U, E2>(fn: (data: never) => Promise<ResultType<U, E2>>): Promise<Err<E>> {
+        return this;
     }
 }
 
@@ -284,8 +286,8 @@ export class Err<T, E> implements GenericMethods<T, E> {
  * @example
  * const result = Result.ok(42);
  */
-export function ok<T, E = string>(data: T): Ok<T, E> {
-    return new Ok<T, E>(data);
+export function ok<T>(data: T): Ok<T> {
+    return new Ok<T>(data);
 }
 
 /**
@@ -293,8 +295,8 @@ export function ok<T, E = string>(data: T): Ok<T, E> {
  * @example
  * const result = Result.err("Something went wrong");
  */
-export function err<T = never, E = string>(error: E): Err<T, E> {
-    return new Err<T, E>(error);
+export function err<E = string>(error: E): Err<E> {
+    return new Err<E>(error);
 }
 
 /**
@@ -397,8 +399,8 @@ export const Result = {
  * });
  */
 export const createResult = <E>() => ({
-    ok: <T>(data: T) => ok<T, E>(data),
-    err: <T = never>(error: E) => err<T, E>(error),
+    ok: <T>(data: T) => ok(data),
+    err: (error: E) => err(error),
     fromThrowable: <Args extends unknown[], T>(
         fn: (...args: Args) => T,
         errorFn?: (e: unknown) => E

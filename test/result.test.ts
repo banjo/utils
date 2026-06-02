@@ -1,5 +1,5 @@
-import { Result, ResultType } from "src/utils/result";
-import { describe, expect, it } from "vitest";
+import { describe, expect, expectTypeOf, it } from "vitest";
+import { Result, ResultType, Ok, Err } from "../src/utils/result";
 
 describe("Result", () => {
     describe("isOk", () => {
@@ -440,6 +440,212 @@ describe("Result", () => {
             expect(called).toBe(false);
             expect(result.ok).toBe(false);
             if (!result.ok) expect(result.error).toBe("fail");
+        });
+    });
+
+    describe("type inference with mixed return types", () => {
+        class AppError {
+            constructor(
+                public code: string,
+                public message: string
+            ) {}
+        }
+
+        function getOrder(id: number): ResultType<{ id: number; name: string }, AppError> {
+            if (id <= 0) return Result.err(new AppError("NOT_FOUND", "Order not found"));
+            return Result.ok({ id, name: "Test Order" });
+        }
+
+        function inferredGetOrder(id: number) {
+            if (id <= 0) return Result.err(new AppError("NOT_FOUND", "Order not found"));
+            return Result.ok({ id, name: "Test Order" });
+        }
+
+        function deleteOrder(id: number): ResultType<void, AppError> {
+            if (id <= 0) return Result.err(new AppError("NOT_FOUND", "Order not found"));
+            return Result.ok(undefined as void);
+        }
+
+        function validateOrder(id: number): ResultType<void, AppError> {
+            if (id <= 0) return Result.err(new AppError("VALIDATION", "Invalid order"));
+            return Result.ok(undefined as void);
+        }
+
+        it("should handle function returning object result", () => {
+            const result = getOrder(1);
+            expect(result.ok).toBe(true);
+            if (result.ok) {
+                expect(result.data).toEqual({ id: 1, name: "Test Order" });
+            }
+        });
+
+        it("should handle inferred function returning object result", () => {
+            const result = inferredGetOrder(1);
+            expect(result.ok).toBe(true);
+            if (result.ok) {
+                expect(result.data).toEqual({ id: 1, name: "Test Order" });
+            }
+        });
+
+        it("should handle function returning void result", () => {
+            const result = deleteOrder(1);
+            expect(result.ok).toBe(true);
+            if (result.ok) {
+                expect(result.data).toBeUndefined();
+            }
+        });
+
+        it("should chain void result into object result", () => {
+            const result = validateOrder(1).andThen(() => getOrder(1));
+            expect(result.ok).toBe(true);
+            if (result.ok) {
+                expect(result.data).toEqual({ id: 1, name: "Test Order" });
+            }
+        });
+
+        it("should propagate error from void result in chain", () => {
+            const result = validateOrder(-1).andThen(() => getOrder(1));
+            expect(result.ok).toBe(false);
+            if (!result.ok) {
+                expect(result.error).toBeInstanceOf(AppError);
+                expect(result.error.code).toBe("VALIDATION");
+            }
+        });
+
+        it("should handle early return pattern with different result types", () => {
+            function processOrder(id: number): ResultType<{ id: number; name: string }, AppError> {
+                const validation = validateOrder(id);
+                if (!validation.ok) return validation;
+
+                const order = getOrder(id);
+                if (!order.ok) return order;
+
+                return Result.ok(order.data);
+            }
+
+            const success = processOrder(1);
+            expect(success.ok).toBe(true);
+            if (success.ok) {
+                expect(success.data).toEqual({ id: 1, name: "Test Order" });
+            }
+
+            const failure = processOrder(-1);
+            expect(failure.ok).toBe(false);
+            if (!failure.ok) {
+                expect(failure.error.code).toBe("VALIDATION");
+            }
+        });
+
+        it("should allow returning Err<AppError> where ResultType<T, AppError> is expected", () => {
+            function getOrDelete(
+                id: number,
+                del: boolean
+            ): ResultType<{ id: number; name: string }, AppError> {
+                if (del) {
+                    const deleted = deleteOrder(id);
+                    if (!deleted.ok) return deleted;
+                    return Result.ok({ id, name: "Deleted" });
+                }
+                return getOrder(id);
+            }
+
+            const result = getOrDelete(1, true);
+            expect(result.ok).toBe(true);
+            if (result.ok) {
+                expect(result.data.name).toBe("Deleted");
+            }
+
+            const errResult = getOrDelete(-1, true);
+            expect(errResult.ok).toBe(false);
+        });
+
+        it("should match on result from mixed-return function", () => {
+            function doWork(id: number): ResultType<{ id: number; name: string }, AppError> {
+                const v = validateOrder(id);
+                if (!v.ok) return v;
+                return getOrder(id);
+            }
+
+            const message = doWork(-1).match({
+                Ok: data => `Got: ${data.name}`,
+                Err: err => `Failed: ${err.code}`,
+            });
+
+            expect(message).toBe("Failed: VALIDATION");
+        });
+    });
+
+    describe("type tests", () => {
+        class AppError {
+            constructor(
+                public code: string,
+                public message: string
+            ) {}
+        }
+
+        it("Ok<T> has no phantom E type parameter", () => {
+            const ok = Result.ok({ id: 1, name: "test" });
+            expectTypeOf(ok).toEqualTypeOf<Ok<{ id: number; name: string }>>();
+        });
+
+        it("Err<E> has no phantom T type parameter", () => {
+            const err = Result.err(new AppError("FAIL", "failed"));
+            expectTypeOf(err).toEqualTypeOf<Err<AppError>>();
+        });
+
+        it("early return Err narrows correctly", () => {
+            function process(): ResultType<{ id: number }, AppError> {
+                const validation: ResultType<void, AppError> = Result.ok(undefined as void);
+                if (!validation.ok) return validation;
+
+                // After narrowing, we know validation is Ok<void>
+                expectTypeOf(validation).toEqualTypeOf<Ok<void>>();
+                return Result.ok({ id: 1 });
+            }
+
+            process();
+        });
+
+        it("map transforms Ok type without affecting Err type", () => {
+            const ok = Result.ok("42");
+            const mapped = ok.map(x => parseInt(x, 10));
+            expectTypeOf(mapped).toEqualTypeOf<Ok<number>>();
+        });
+
+        it("mapErr transforms Err type without affecting Ok type", () => {
+            const err = Result.err("fail");
+            const mapped = err.mapErr(e => new AppError("X", e));
+            expectTypeOf(mapped).toEqualTypeOf<Err<AppError>>();
+        });
+
+        it("andThen infers correct union type", () => {
+            const result = Result.ok("42").andThen(v => {
+                if (v === "42") return Result.ok(42);
+                return Result.err(new AppError("PARSE", "not a number"));
+            });
+            expectTypeOf(result).toEqualTypeOf<ResultType<number, AppError>>();
+        });
+
+        it("unwrapOr returns T | U", () => {
+            const result: ResultType<number, AppError> = Result.ok(42);
+            const value = result.unwrapOr("default");
+            expectTypeOf(value).toEqualTypeOf<number | string>();
+        });
+
+        it("ResultType<void, E> error is assignable to ResultType<T, E>", () => {
+            function deleteItem(): ResultType<void, AppError> {
+                return Result.err(new AppError("NOT_FOUND", "missing"));
+            }
+
+            function getItem(): ResultType<{ name: string }, AppError> {
+                const del = deleteItem();
+                if (!del.ok) return del;
+                return Result.ok({ name: "item" });
+            }
+
+            // This test passes if it compiles — the assignment in getItem() is the real test
+            const result = getItem();
+            expectTypeOf(result).toEqualTypeOf<ResultType<{ name: string }, AppError>>();
         });
     });
 });
