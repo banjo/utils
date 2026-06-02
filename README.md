@@ -144,6 +144,7 @@ Auto generated from TSDocs.
     - [fromThrowable](#fromThrowable)
     - [fromAsyncThrowable](#fromAsyncThrowable)
     - [Result](#Result)
+    - [createResult](#createResult)
 - [Simple-result](#simple-result)
     - [SimpleResult](#SimpleResult)
     - [createSimpleResult](#createSimpleResult)
@@ -1622,6 +1623,49 @@ if (result.ok) {
 ```ts
 const okResult = Result.ok(42);
 const errResult = Result.err("fail");
+```
+
+---
+
+#### createResult
+
+> Creates a Result factory locked to a specific error type.
+> Useful when you want to own a Result type in your module with a consistent error shape.
+
+```ts
+class AppError extends Error {
+    constructor(
+        public code: number,
+        message: string
+    ) {
+        super(message);
+    }
+}
+
+const MyResult = createResult<AppError>();
+
+// Services return Results
+function getUser(id: string): ResultType<User, AppError> {
+    const user = db.find(id);
+    if (!user) return MyResult.err(new AppError(404, "User not found"));
+    return MyResult.ok(user);
+}
+
+function getUserOrders(user: User): ResultType<Order[], AppError> {
+    const orders = db.ordersFor(user.id);
+    if (!orders) return MyResult.err(new AppError(500, "DB failure"));
+    return MyResult.ok(orders);
+}
+
+// Chain with andThen + map, then match in the controller
+const result = getUser(id)
+    .andThen(user => getUserOrders(user))
+    .map(orders => orders.reduce((sum, o) => sum + o.total, 0));
+
+return result.match({
+    Ok: total => ({ status: 200, body: { total } }),
+    Err: err => ({ status: err.code, body: { message: err.message } }),
+});
 ```
 
 ---
