@@ -1,5 +1,11 @@
 # @banjoanton/utils
 
+## 1.1.12
+
+### Patch Changes
+
+- 3745314: createResult type and bug fixes
+
 ## 1.1.11
 
 ### Patch Changes
