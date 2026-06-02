@@ -2084,29 +2084,3 @@ createNumbersMock(updatedData); // => { a: 2, b: 2, c: 3 }
 ---
 
 <!-- DOCS END -->
-
-## Release
-
-Steps to publish a new release:
-
-```bash
-# 1. Add a changeset (describes the change and bump type)
-pnpm change:add
-
-# 2. Commit the changeset file together with your changes
-git add .
-git commit -m "feat: description"
-
-# 3. Bump version, update CHANGELOG, and remove the changeset file
-pnpm change:version
-
-# 4. Commit the version bump
-git add .
-git commit -m "chore: new version"
-
-# 5. Publish to npm (this also creates a git tag)
-pnpm change:publish
-
-# 6. Push everything including the tag
-git push --follow-tags
-```
