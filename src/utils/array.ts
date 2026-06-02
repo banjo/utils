@@ -91,7 +91,12 @@ export const uniqBy = <T, K extends keyof T>(array: T[], key: K | ((item: T) => 
  * shuffle(['a', 'b', 'c', 'd', 'e']); // returns ['b', 'd', 'a', 'e', 'c']
  */
 export const shuffle = <T>(array: T[]): T[] => {
-    return produce(array, draft => draft.sort(() => Math.random() - 0.5));
+    const result = [...array];
+    for (let i = result.length - 1; i > 0; i--) {
+        const j = Math.floor(Math.random() * (i + 1));
+        [result[i], result[j]] = [result[j], result[i]];
+    }
+    return result;
 };
 
 /**
@@ -255,7 +260,7 @@ export const compact = <T>(array: (T | Falsy)[]): T[] => array.filter(isTruthy);
  * const obj = {};
  * difference([obj], [obj]); // returns []
  * difference([{ a: 1 }], [{ a: 1 }]); // returns []
- * difference([{ a: 1 }], [{ a: 2 }]); // returns [{ a: 1 }, { a: 2 }]
+ * difference([{ a: 1 }], [{ a: 2 }]); // returns [{ a: 1 }]
  *
  * // custom comparator
  * const comparator = (a: any, b: any) => a === b;
@@ -329,7 +334,7 @@ export const intersection = <T>(
  *
  * union([point1, point2], [point2, point3], [point3ButSame]); // returns [point1, point2, point3]
  */
-export const union = <T>(...arrays: T[]) => uniq(arrays.flat());
+export const union = <T>(...arrays: T[][]): T[] => uniq(arrays.flat());
 /**
  * Sort an array. Can sort by a single key or multiple keys. Can also take a custom function that receives the item to choose the value to sort by.
  * @param array - The array to sort.

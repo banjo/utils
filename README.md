@@ -361,7 +361,7 @@ difference(["a", "b", "c", "d"], ["b", "d"]); // returns ['a', 'c']
 const obj = {};
 difference([obj], [obj]); // returns []
 difference([{ a: 1 }], [{ a: 1 }]); // returns []
-difference([{ a: 1 }], [{ a: 2 }]); // returns [{ a: 1 }, { a: 2 }]
+difference([{ a: 1 }], [{ a: 2 }]); // returns [{ a: 1 }]
 
 // custom comparator
 const comparator = (a: any, b: any) => a === b;
@@ -699,7 +699,7 @@ toMilliseconds({ minutes: 10 }); // returns 600000
 toMilliseconds({ hours: 10 }); // returns 36000000
 
 toMilliseconds({ seconds: 10, minutes: 10 }); // returns 610000
-toMilliseconds({ seconds: 10, minutes: 10, hours: 10 }); // returns 3610000
+toMilliseconds({ seconds: 10, minutes: 10, hours: 10 }); // returns 36610000
 ```
 
 ---
@@ -2084,3 +2084,29 @@ createNumbersMock(updatedData); // => { a: 2, b: 2, c: 3 }
 ---
 
 <!-- DOCS END -->
+
+## Release
+
+Steps to publish a new release:
+
+```bash
+# 1. Add a changeset (describes the change and bump type)
+pnpm change:add
+
+# 2. Commit the changeset file together with your changes
+git add .
+git commit -m "feat: description"
+
+# 3. Bump version, update CHANGELOG, and remove the changeset file
+pnpm change:version
+
+# 4. Commit the version bump
+git add .
+git commit -m "chore: new version"
+
+# 5. Publish to npm (this also creates a git tag)
+pnpm change:publish
+
+# 6. Push everything including the tag
+git push --follow-tags
+```

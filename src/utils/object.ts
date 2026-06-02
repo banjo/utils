@@ -196,7 +196,7 @@ export const defaults = <T extends object, U extends Partial<T>>(
  * const obj = { a: 1, b: 2, c: 3 };
  * flip(obj); // => { 1: "a", 2: "b", 3: "c" }
  */
-export const flip = <T extends object>(obj: T): T => {
+export const flip = <T extends object>(obj: T): Record<string, string> => {
     const ret: any = {};
     objectKeys(obj).forEach(key => {
         ret[obj[key]] = key;

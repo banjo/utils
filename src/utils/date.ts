@@ -98,7 +98,7 @@ const defaultProps = {
  * toMilliseconds({ hours: 10 }); // returns 36000000
  *
  * toMilliseconds({ seconds: 10, minutes: 10 }); // returns 610000
- * toMilliseconds({ seconds: 10, minutes: 10, hours: 10 }); // returns 3610000
+ * toMilliseconds({ seconds: 10, minutes: 10, hours: 10 }); // returns 36610000
  */
 export const toMilliseconds = (props: TimeProps) => {
     if (!props) {

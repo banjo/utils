@@ -20,14 +20,14 @@ describe("number", () => {
             const r = random(5, true);
             expect(r).toBeGreaterThanOrEqual(0);
             expect(r).toBeLessThanOrEqual(5);
-            expect(r.toString()).toContain(".");
+            expect(Number.isInteger(r)).toBe(false);
         });
 
         range(100).forEach(() => {
             const r = random(0, 5, true);
             expect(r).toBeGreaterThanOrEqual(0);
             expect(r).toBeLessThanOrEqual(5);
-            expect(r.toString()).toContain(".");
+            expect(Number.isInteger(r)).toBe(false);
         });
     });
 

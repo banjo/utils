@@ -37,7 +37,7 @@ export function random(...args: any): number {
     }
 
     if (floating) {
-        return Math.random() * (Number(max.toPrecision()) - min) + min;
+        return Math.random() * (max - min) + min;
     }
 
     return Math.floor(Math.random() * (max - min + 1)) + min;

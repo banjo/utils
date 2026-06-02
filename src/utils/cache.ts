@@ -82,6 +82,7 @@ const initMap = <T>(key: string, persistent: boolean) => {
         const parsed = JSON.parse(previousCache);
         if (!Array.isArray(parsed)) {
             cache = new Map();
+            return cache;
         }
         cache = new Map(parsed);
         return cache;

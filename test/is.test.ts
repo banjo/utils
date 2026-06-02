@@ -33,6 +33,9 @@ describe("is", () => {
         expect(isNumber([])).toBe(false);
         expect(isNumber(new Date())).toBe(false);
         expect(isNumber(() => {})).toBe(false);
+        expect(isNumber(NaN)).toBe(false);
+        expect(isNumber(Infinity)).toBe(true);
+        expect(isNumber(-Infinity)).toBe(true);
     });
 
     it("isBoolean", () => {

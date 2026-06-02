@@ -24,7 +24,7 @@ export const isBoolean = (value: any): value is boolean => typeof value === "boo
  * isNumber("hello world"); // false
  * isNumber(NaN); // false
  */
-export const isNumber = (value: any): value is number => typeof value === "number";
+export const isNumber = (value: any): value is number => typeof value === "number" && !Number.isNaN(value);
 
 /**
  * Check if the given value is a string.
