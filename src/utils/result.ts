@@ -370,19 +370,20 @@ export const Result = {
  *     }
  * }
  *
- * const MyResult = createResult<AppError>();
+ * const Result = createResult<AppError>();
+ * type Result<T> = ResultType<T, AppError>;
  *
  * // Services return Results
- * function getUser(id: string): ResultType<User, AppError> {
+ * function getUser(id: string): Result<User> {
  *     const user = db.find(id);
- *     if (!user) return MyResult.err(new AppError(404, "User not found"));
- *     return MyResult.ok(user);
+ *     if (!user) return Result.err(new AppError(404, "User not found"));
+ *     return Result.ok(user);
  * }
  *
- * function getUserOrders(user: User): ResultType<Order[], AppError> {
+ * function getUserOrders(user: User): Result<Order[]> {
  *     const orders = db.ordersFor(user.id);
- *     if (!orders) return MyResult.err(new AppError(500, "DB failure"));
- *     return MyResult.ok(orders);
+ *     if (!orders) return Result.err(new AppError(500, "DB failure"));
+ *     return Result.ok(orders);
  * }
  *
  * // Chain with andThen + map, then match in the controller
