@@ -1608,11 +1608,14 @@ if (result.isErr()) {
 > If Err, does nothing and returns the original Err.
 
 ```ts
-const result = Result.ok(5);
-const doubled = result.map(x => x * 2); // Ok(10)
+const double = (x: number) => x * 2;
+const addOne = (x: number) => x + 1;
 
-const err = Result.err("fail");
-const stillErr = err.map(x => x * 2); // Err("fail")
+Result.ok(5)
+    .map(double) // Ok(10)
+    .map(addOne); // Ok(11)
+
+Result.err("fail").map(double); // Err("fail") — untouched
 ```
 
 ---
@@ -1623,11 +1626,10 @@ const stillErr = err.map(x => x * 2); // Err("fail")
 > If Ok, does nothing and returns the original Ok.
 
 ```ts
-const result = Result.err("not found");
-const mapped = result.mapErr(e => new Error(e)); // Err(Error("not found"))
+const toError = (msg: string) => new Error(msg);
 
-const ok = Result.ok(42);
-const stillOk = ok.mapErr(e => new Error(e)); // Ok(42)
+Result.err("not found").mapErr(toError); // Err(Error("not found"))
+Result.ok(42).mapErr(toError); // Ok(42) — untouched
 ```
 
 ---
@@ -1638,10 +1640,12 @@ const stillOk = ok.mapErr(e => new Error(e)); // Ok(42)
 > If Err, does nothing and returns the original Err.
 
 ```ts
-const result = Result.ok("hello");
-result
-    .tap(val => console.log("got:", val)) // logs "got: hello"
-    .map(s => s.toUpperCase()); // Ok("HELLO")
+const log = (val: string) => console.log("got:", val);
+const upper = (s: string) => s.toUpperCase();
+
+Result.ok("hello")
+    .tap(log) // logs "got: hello", still Ok("hello")
+    .map(upper); // Ok("HELLO")
 ```
 
 ---
@@ -1652,10 +1656,12 @@ result
 > If Ok, does nothing and returns the original Ok.
 
 ```ts
-const result = Result.err("timeout");
-result
-    .tapErr(e => console.error("failed:", e)) // logs "failed: timeout"
-    .mapErr(e => `Request ${e}`); // Err("Request timeout")
+const logError = (e: string) => console.error("failed:", e);
+const prefix = (e: string) => `Request ${e}`;
+
+Result.err("timeout")
+    .tapErr(logError) // logs "failed: timeout", still Err("timeout")
+    .mapErr(prefix); // Err("Request timeout")
 ```
 
 ---
@@ -1667,12 +1673,14 @@ result
 > If Err, does nothing and returns the original Err.
 
 ```ts
-const divide = (a: number, b: number) =>
-    b === 0 ? Result.err("division by zero") : Result.ok(a / b);
+const parse = (s: string) => Result.fromThrowable(JSON.parse)(s);
+const getAge = (obj: any) => (obj.age ? Result.ok(obj.age) : Result.err("missing age"));
+const validate = (age: number) => (age >= 18 ? Result.ok(age) : Result.err("too young"));
 
-const result = Result.ok(10)
-    .andThen(x => divide(x, 2)) // Ok(5)
-    .andThen(x => divide(x, 0)); // Err("division by zero")
+Result.ok('{"age": 25}')
+    .andThen(parse) // Ok({ age: 25 })
+    .andThen(getAge) // Ok(25)
+    .andThen(validate); // Ok(25)
 ```
 
 ---
@@ -1726,11 +1734,12 @@ err.unwrapOr(0); // 0
 > If Err, does nothing and returns the original Err.
 
 ```ts
-const result = Result.ok(1);
-const mapped = await result.mapAsync(async x => {
-    const response = await fetch(`/api/items/${x}`);
-    return response.json();
-}); // Ok({ ... })
+const fetchUser = async (id: number) => {
+    const res = await fetch(`/api/users/${id}`);
+    return res.json();
+};
+
+const user = await Result.ok(1).mapAsync(fetchUser); // Ok({ name: "Alice", ... })
 ```
 
 ---
@@ -1741,11 +1750,12 @@ const mapped = await result.mapAsync(async x => {
 > If Ok, does nothing and returns the original Ok.
 
 ```ts
-const result = Result.err("not_found");
-const mapped = await result.mapErrAsync(async code => {
+const enrichError = async (code: string) => {
     const message = await lookupErrorMessage(code);
     return new AppError(code, message);
-}); // Err(AppError("not_found", "Resource not found"))
+};
+
+const result = await Result.err("not_found").mapErrAsync(enrichError); // Err(AppError("not_found", "Resource not found"))
 ```
 
 ---
@@ -1756,10 +1766,11 @@ const mapped = await result.mapErrAsync(async code => {
 > If Err, does nothing and returns the original Err.
 
 ```ts
-const result = Result.ok(user);
-await result.tapAsync(async u => {
-    await analytics.track("user_loaded", { id: u.id });
-}); // Ok(user) — unchanged
+const trackEvent = async (user: User) => {
+    await analytics.track("user_loaded", { id: user.id });
+};
+
+const result = await Result.ok(user).tapAsync(trackEvent); // Ok(user) — unchanged
 ```
 
 ---
@@ -1770,10 +1781,11 @@ await result.tapAsync(async u => {
 > If Ok, does nothing and returns the original Ok.
 
 ```ts
-const result = Result.err("timeout");
-await result.tapErrAsync(async e => {
+const reportError = async (e: string) => {
     await errorReporter.report(e);
-}); // Err("timeout") — unchanged
+};
+
+const result = await Result.err("timeout").tapErrAsync(reportError); // Err("timeout") — unchanged
 ```
 
 ---
@@ -1785,12 +1797,13 @@ await result.tapErrAsync(async e => {
 > If Err, does nothing and returns the original Err.
 
 ```ts
-const result = Result.ok(userId);
-const orders = await result.andThenAsync(async id => {
-    const res = await fetch(`/api/orders/${id}`);
+const fetchOrders = async (userId: string) => {
+    const res = await fetch(`/api/orders/${userId}`);
     if (!res.ok) return Result.err("fetch failed");
     return Result.ok(await res.json());
-}); // Ok([...orders]) or Err("fetch failed")
+};
+
+const orders = await Result.ok("user-123").andThenAsync(fetchOrders); // Ok([...orders]) or Err("fetch failed")
 ```
 
 ---
