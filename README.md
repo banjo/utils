@@ -139,11 +139,25 @@ Auto generated from TSDocs.
     - [defaults](#defaults)
     - [flip](#flip)
 - [Result](#result)
-    - [ok](#ok)
-    - [err](#err)
-    - [fromThrowable](#fromThrowable)
-    - [fromAsyncThrowable](#fromAsyncThrowable)
-    - [Result](#Result)
+    - [result.isOk](#result.isOk)
+    - [result.isErr](#result.isErr)
+    - [result.map](#result.map)
+    - [result.mapErr](#result.mapErr)
+    - [result.tap](#result.tap)
+    - [result.tapErr](#result.tapErr)
+    - [result.andThen](#result.andThen)
+    - [result.match](#result.match)
+    - [result.unwrap](#result.unwrap)
+    - [result.unwrapOr](#result.unwrapOr)
+    - [result.mapAsync](#result.mapAsync)
+    - [result.mapErrAsync](#result.mapErrAsync)
+    - [result.tapAsync](#result.tapAsync)
+    - [result.tapErrAsync](#result.tapErrAsync)
+    - [result.andThenAsync](#result.andThenAsync)
+    - [Result.ok](#Result.ok)
+    - [Result.err](#Result.err)
+    - [Result.fromThrowable](#Result.fromThrowable)
+    - [Result.fromAsyncThrowable](#Result.fromAsyncThrowable)
     - [createResult](#createResult)
 - [Simple-result](#simple-result)
     - [SimpleResult](#SimpleResult)
@@ -1562,7 +1576,174 @@ A result type that can be used to return a value or an error.
 
 ---
 
-#### ok
+#### result.isOk
+
+> Returns true if the result is Ok.
+
+```ts
+if (result.isOk()) {
+    // result is Ok
+}
+```
+
+---
+
+#### result.isErr
+
+> Returns true if the result is Err.
+
+```ts
+if (result.isErr()) {
+    // result is Err
+}
+```
+
+---
+
+#### result.map
+
+> If Ok, maps the value using the provided function and returns a new Ok result.
+> If Err, does nothing and returns the original Err.
+
+```ts
+const mapped = result.map(x => x + 1);
+```
+
+---
+
+#### result.mapErr
+
+> If Err, maps the error using the provided function and returns a new Err result.
+> If Ok, does nothing and returns the original Ok.
+
+```ts
+const mapped = result.mapErr(err => `Error: ${err}`);
+```
+
+---
+
+#### result.tap
+
+> If Ok, runs a side-effect on the value. Returns the original result.
+> If Err, does nothing and returns the original Err.
+
+```ts
+result.tap(x => console.log(x));
+```
+
+---
+
+#### result.tapErr
+
+> If Err, runs a side-effect on the error. Returns the original result.
+> If Ok, does nothing and returns the original Ok.
+
+```ts
+result.tapErr(err => console.error(err));
+```
+
+---
+
+#### result.andThen
+
+> If Ok, calls the provided function and returns its result.
+> If Err, does nothing and returns the original Err.
+
+```ts
+const chained = result.andThen(x => Result.ok(x + 1));
+```
+
+---
+
+#### result.match
+
+> Pattern-matches on Ok/Err and returns the result.
+
+```ts
+const message = result.match({
+    Ok: x => `Value: ${x}`,
+    Err: e => `Error: ${e}`,
+});
+```
+
+---
+
+#### result.unwrap
+
+> Returns the Ok value, or throws if Err.
+
+```ts
+const value = result.unwrap();
+```
+
+---
+
+#### result.unwrapOr
+
+> Returns the Ok value, or the provided default if Err.
+
+```ts
+const value = result.unwrapOr(42);
+```
+
+---
+
+#### result.mapAsync
+
+> If Ok, asynchronously maps the value using the provided function and returns a new Ok result.
+> If Err, does nothing and returns the original Err.
+
+```ts
+const mapped = await result.mapAsync(async x => x + 1);
+```
+
+---
+
+#### result.mapErrAsync
+
+> If Err, asynchronously maps the error using the provided function and returns a new Err result.
+> If Ok, does nothing and returns the original Ok.
+
+```ts
+const mapped = await result.mapErrAsync(async err => `Error: ${err}`);
+```
+
+---
+
+#### result.tapAsync
+
+> If Ok, asynchronously runs a side-effect on the value. Returns the original result.
+> If Err, does nothing and returns the original Err.
+
+```ts
+await result.tapAsync(async x => console.log(x));
+```
+
+---
+
+#### result.tapErrAsync
+
+> If Err, asynchronously runs a side-effect on the error. Returns the original result.
+> If Ok, does nothing and returns the original Ok.
+
+```ts
+await result.tapErrAsync(async err => console.error(err));
+```
+
+---
+
+#### result.andThenAsync
+
+> If Ok, asynchronously calls the provided function and returns its result.
+> If Err, does nothing and returns the original Err.
+
+```ts
+const chained = await result.andThenAsync(async x => Result.ok(x + 1));
+```
+
+---
+
+#### Result.ok
 
 > Creates an Ok result.
 
@@ -1572,7 +1753,7 @@ const result = Result.ok(42);
 
 ---
 
-#### err
+#### Result.err
 
 > Creates an Err result.
 
@@ -1582,7 +1763,7 @@ const result = Result.err("Something went wrong");
 
 ---
 
-#### fromThrowable
+#### Result.fromThrowable
 
 > Wraps a potentially-throwing function and returns a ResultType.
 > If the function throws, returns Err; otherwise, returns Ok.
@@ -1599,7 +1780,7 @@ if (result.ok) {
 
 ---
 
-#### fromAsyncThrowable
+#### Result.fromAsyncThrowable
 
 > Wraps a potentially-throwing async function and returns a Promise of ResultType.
 > If the function throws or rejects, returns Err; otherwise, returns Ok.
@@ -1612,17 +1793,6 @@ if (result.ok) {
 } else {
     console.log(result.error); // error object
 }
-```
-
----
-
-#### Result
-
-> Utility object for creating and working with Result types.
-
-```ts
-const okResult = Result.ok(42);
-const errResult = Result.err("fail");
 ```
 
 ---
