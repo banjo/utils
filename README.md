@@ -1578,11 +1578,12 @@ A result type that can be used to return a value or an error.
 
 #### result.isOk
 
-> Returns true if the result is Ok.
+> Returns true if the result is Ok. Narrows the type so you can safely access `.data`.
 
 ```ts
+const result = Result.ok(42);
 if (result.isOk()) {
-    // result is Ok
+    console.log(result.data); // 42
 }
 ```
 
@@ -1590,11 +1591,12 @@ if (result.isOk()) {
 
 #### result.isErr
 
-> Returns true if the result is Err.
+> Returns true if the result is Err. Narrows the type so you can safely access `.error`.
 
 ```ts
+const result = Result.err("not found");
 if (result.isErr()) {
-    // result is Err
+    console.log(result.error); // "not found"
 }
 ```
 
@@ -1606,7 +1608,11 @@ if (result.isErr()) {
 > If Err, does nothing and returns the original Err.
 
 ```ts
-const mapped = result.map(x => x + 1);
+const result = Result.ok(5);
+const doubled = result.map(x => x * 2); // Ok(10)
+
+const err = Result.err("fail");
+const stillErr = err.map(x => x * 2); // Err("fail")
 ```
 
 ---
@@ -1617,73 +1623,99 @@ const mapped = result.map(x => x + 1);
 > If Ok, does nothing and returns the original Ok.
 
 ```ts
-const mapped = result.mapErr(err => `Error: ${err}`);
+const result = Result.err("not found");
+const mapped = result.mapErr(e => new Error(e)); // Err(Error("not found"))
+
+const ok = Result.ok(42);
+const stillOk = ok.mapErr(e => new Error(e)); // Ok(42)
 ```
 
 ---
 
 #### result.tap
 
-> If Ok, runs a side-effect on the value. Returns the original result.
+> If Ok, runs a side-effect on the value without changing the result. Useful for logging or debugging.
 > If Err, does nothing and returns the original Err.
 
 ```ts
-result.tap(x => console.log(x));
+const result = Result.ok("hello");
+result
+    .tap(val => console.log("got:", val)) // logs "got: hello"
+    .map(s => s.toUpperCase()); // Ok("HELLO")
 ```
 
 ---
 
 #### result.tapErr
 
-> If Err, runs a side-effect on the error. Returns the original result.
+> If Err, runs a side-effect on the error without changing the result. Useful for logging errors.
 > If Ok, does nothing and returns the original Ok.
 
 ```ts
-result.tapErr(err => console.error(err));
+const result = Result.err("timeout");
+result
+    .tapErr(e => console.error("failed:", e)) // logs "failed: timeout"
+    .mapErr(e => `Request ${e}`); // Err("Request timeout")
 ```
 
 ---
 
 #### result.andThen
 
-> If Ok, calls the provided function and returns its result.
+> If Ok, calls the provided function with the value and returns its Result.
+> Useful for chaining operations that themselves can fail.
 > If Err, does nothing and returns the original Err.
 
 ```ts
-const chained = result.andThen(x => Result.ok(x + 1));
+const divide = (a: number, b: number) =>
+    b === 0 ? Result.err("division by zero") : Result.ok(a / b);
+
+const result = Result.ok(10)
+    .andThen(x => divide(x, 2)) // Ok(5)
+    .andThen(x => divide(x, 0)); // Err("division by zero")
 ```
 
 ---
 
 #### result.match
 
-> Pattern-matches on Ok/Err and returns the result.
+> Pattern-matches on Ok/Err, calling the corresponding handler and returning its value.
 
 ```ts
+const result = Result.ok(42);
 const message = result.match({
-    Ok: x => `Value: ${x}`,
-    Err: e => `Error: ${e}`,
-});
+    Ok: x => `Success: ${x}`,
+    Err: e => `Failed: ${e}`,
+}); // "Success: 42"
 ```
 
 ---
 
 #### result.unwrap
 
-> Returns the Ok value, or throws if Err.
+> Returns the Ok value. Throws an error if the result is Err.
+> Use only when you are certain the result is Ok.
 
 ```ts
-const value = result.unwrap();
+const result = Result.ok(42);
+result.unwrap(); // 42
+
+const err = Result.err("fail");
+err.unwrap(); // throws Error
 ```
 
 ---
 
 #### result.unwrapOr
 
-> Returns the Ok value, or the provided default if Err.
+> Returns the Ok value, or the provided default value if Err.
 
 ```ts
-const value = result.unwrapOr(42);
+const ok = Result.ok(42);
+ok.unwrapOr(0); // 42
+
+const err = Result.err("fail");
+err.unwrapOr(0); // 0
 ```
 
 ---
@@ -1694,7 +1726,11 @@ const value = result.unwrapOr(42);
 > If Err, does nothing and returns the original Err.
 
 ```ts
-const mapped = await result.mapAsync(async x => x + 1);
+const result = Result.ok(1);
+const mapped = await result.mapAsync(async x => {
+    const response = await fetch(`/api/items/${x}`);
+    return response.json();
+}); // Ok({ ... })
 ```
 
 ---
@@ -1705,40 +1741,56 @@ const mapped = await result.mapAsync(async x => x + 1);
 > If Ok, does nothing and returns the original Ok.
 
 ```ts
-const mapped = await result.mapErrAsync(async err => `Error: ${err}`);
+const result = Result.err("not_found");
+const mapped = await result.mapErrAsync(async code => {
+    const message = await lookupErrorMessage(code);
+    return new AppError(code, message);
+}); // Err(AppError("not_found", "Resource not found"))
 ```
 
 ---
 
 #### result.tapAsync
 
-> If Ok, asynchronously runs a side-effect on the value. Returns the original result.
+> If Ok, asynchronously runs a side-effect on the value. Returns the original result unchanged.
 > If Err, does nothing and returns the original Err.
 
 ```ts
-await result.tapAsync(async x => console.log(x));
+const result = Result.ok(user);
+await result.tapAsync(async u => {
+    await analytics.track("user_loaded", { id: u.id });
+}); // Ok(user) — unchanged
 ```
 
 ---
 
 #### result.tapErrAsync
 
-> If Err, asynchronously runs a side-effect on the error. Returns the original result.
+> If Err, asynchronously runs a side-effect on the error. Returns the original result unchanged.
 > If Ok, does nothing and returns the original Ok.
 
 ```ts
-await result.tapErrAsync(async err => console.error(err));
+const result = Result.err("timeout");
+await result.tapErrAsync(async e => {
+    await errorReporter.report(e);
+}); // Err("timeout") — unchanged
 ```
 
 ---
 
 #### result.andThenAsync
 
-> If Ok, asynchronously calls the provided function and returns its result.
+> If Ok, asynchronously calls the provided function and returns its Result.
+> Useful for chaining async operations that themselves can fail.
 > If Err, does nothing and returns the original Err.
 
 ```ts
-const chained = await result.andThenAsync(async x => Result.ok(x + 1));
+const result = Result.ok(userId);
+const orders = await result.andThenAsync(async id => {
+    const res = await fetch(`/api/orders/${id}`);
+    if (!res.ok) return Result.err("fetch failed");
+    return Result.ok(await res.json());
+}); // Ok([...orders]) or Err("fetch failed")
 ```
 
 ---
