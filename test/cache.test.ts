@@ -1,8 +1,6 @@
 import { afterEach, beforeEach, describe, expect, it, vi } from "vitest";
 import { createCache } from "../src/utils/cache";
 
-// @vitest-environment happy-dom
-
 const loadValue = (content: string, key: string) => {
     const map = new Map(JSON.parse(content));
     const v: any = map.get(key);
