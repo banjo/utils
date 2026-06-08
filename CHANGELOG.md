@@ -1,5 +1,11 @@
 # @banjoanton/utils
 
+## 1.1.14
+
+### Patch Changes
+
+- 83ea13f: Result updates and skills
+
 ## 1.1.13
 
 ### Patch Changes
