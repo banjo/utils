@@ -154,8 +154,13 @@ Auto generated from TSDocs.
     - [result.tapAsync](#result.tapAsync)
     - [result.tapErrAsync](#result.tapErrAsync)
     - [result.andThenAsync](#result.andThenAsync)
+    - [tryResult](#tryResult)
     - [Result.ok](#Result.ok)
     - [Result.err](#Result.err)
+    - [Result.isResult](#Result.isResult)
+    - [Result.tryAsync](#Result.tryAsync)
+    - [Result.fromNullable](#Result.fromNullable)
+    - [Result.all](#Result.all)
     - [Result.fromThrowable](#Result.fromThrowable)
     - [Result.fromAsyncThrowable](#Result.fromAsyncThrowable)
     - [createResult](#createResult)
@@ -1808,6 +1813,22 @@ const orders = await Result.ok("user-123").andThenAsync(fetchOrders); // Ok([...
 
 ---
 
+#### tryResult
+
+> Runs a synchronous operation and converts thrown errors into Err.
+> Use this for sync API/service work that can throw, such as parsing headers, URLs, or request data.
+
+```ts
+const tenantResult = Result.try(
+    () => new URL(request.url).pathname.split("/")[2],
+    cause => new ApiError("Invalid tenant route", { cause })
+);
+
+if (!tenantResult.ok) return tenantResult;
+```
+
+---
+
 #### Result.ok
 
 > Creates an Ok result.
@@ -1824,6 +1845,76 @@ const result = Result.ok(42);
 
 ```ts
 const result = Result.err("Something went wrong");
+```
+
+---
+
+#### Result.isResult
+
+> Returns true when a value has the Result shape.
+> Useful at API boundaries where values are unknown, for example when a generic handler accepts
+> either a raw response or a service Result.
+
+```ts
+const value: unknown = await maybeReturnsResult();
+
+if (Result.isResult(value)) {
+    return value.match({
+        Ok: data => ({ status: 200, body: data }),
+        Err: error => ({ status: 500, body: { message: String(error) } }),
+    });
+}
+```
+
+---
+
+#### Result.tryAsync
+
+> Runs an async operation and converts rejected promises or thrown errors into Err.
+> This is useful for API service calls such as database queries, external SDK calls, or fetches.
+
+```ts
+const ordersResult = await Result.tryAsync(
+    () => db.orders.findMany({ tenantId }),
+    cause => new ApiError("DB error listing orders", { cause })
+);
+
+if (!ordersResult.ok) return ordersResult;
+return Result.ok(ordersResult.data.map(OrderListItem.fromDb));
+```
+
+---
+
+#### Result.fromNullable
+
+> Converts a nullable value into a Result.
+> Useful after lookups such as Array.find, Map.get, or database methods returning undefined.
+
+```ts
+const orderResult = Result.fromNullable(
+    await db.orders.findFirst({ id: orderId, tenantId }),
+    () => new ApiError("Order not found")
+);
+
+if (!orderResult.ok) return orderResult;
+```
+
+---
+
+#### Result.all
+
+> Combines multiple Results into one Result.
+> Returns Ok with all successful values, or the first Err encountered. Useful for independent
+> service validation steps before running a mutation.
+
+```ts
+const validation = Result.all([
+    requirePositiveInteger(orderId, "Order ID"),
+    requireNonEmpty(cancelReason, "Cancel reason"),
+    requireTenantAccess(user, tenantId),
+] as const);
+
+if (!validation.ok) return validation;
 ```
 
 ---

@@ -1,5 +1,5 @@
 import { describe, expect, expectTypeOf, it } from "vitest";
-import { Result, ResultType, Ok, Err } from "../src/utils/result";
+import { Result, ResultType, Ok, Err, createResult } from "../src/utils/result";
 
 describe("Result", () => {
     describe("isOk", () => {
@@ -348,6 +348,185 @@ describe("Result", () => {
                 }
             });
         });
+
+        describe("try", () => {
+            it("should return Ok when sync operation succeeds", () => {
+                const result = Result.try(() => ({ tenantSlug: "demo" }));
+
+                expect(result.ok).toBe(true);
+                if (result.ok) {
+                    expect(result.data).toEqual({ tenantSlug: "demo" });
+                }
+            });
+
+            it("should return Err when sync operation throws", () => {
+                const cause = new Error("invalid url");
+                const result = Result.try(
+                    () => {
+                        throw cause;
+                    },
+                    error => ({ code: "BAD_REQUEST", cause: error })
+                );
+
+                expect(result.ok).toBe(false);
+                if (!result.ok) {
+                    expect(result.error).toEqual({ code: "BAD_REQUEST", cause });
+                }
+            });
+        });
+
+        describe("tryAsync", () => {
+            it("should return Ok when async operation resolves", async () => {
+                const result = await Result.tryAsync(() =>
+                    Promise.resolve([{ id: 1, orderNumber: 1001 }])
+                );
+
+                expect(result.ok).toBe(true);
+                if (result.ok) {
+                    expect(result.data).toEqual([{ id: 1, orderNumber: 1001 }]);
+                }
+            });
+
+            it("should return mapped Err when async operation rejects", async () => {
+                const cause = new Error("connection failed");
+                const result = await Result.tryAsync(
+                    async () => {
+                        throw cause;
+                    },
+                    error => ({ code: "INTERNAL", message: "DB error listing orders", cause: error })
+                );
+
+                expect(result.ok).toBe(false);
+                if (!result.ok) {
+                    expect(result.error).toEqual({
+                        cause,
+                        code: "INTERNAL",
+                        message: "DB error listing orders",
+                    });
+                }
+            });
+        });
+
+        describe("fromNullable", () => {
+            it("should return Ok for defined values", () => {
+                const order = { id: 1, status: "unpaid" };
+                const result = Result.fromNullable(order, () => ({ code: "NOT_FOUND" }));
+
+                expect(result.ok).toBe(true);
+                if (result.ok) {
+                    expect(result.data).toEqual(order);
+                }
+            });
+
+            it("should return lazy Err for nullish values", () => {
+                const result = Result.fromNullable(undefined, () => ({ code: "NOT_FOUND" }));
+
+                expect(result.ok).toBe(false);
+                if (!result.ok) {
+                    expect(result.error).toEqual({ code: "NOT_FOUND" });
+                }
+            });
+        });
+
+        describe("all", () => {
+            it("should collect all Ok values", () => {
+                const result = Result.all([
+                    Result.ok(undefined as void),
+                    Result.ok("tenant-1"),
+                    Result.ok({ orderId: 1 }),
+                ] as const);
+
+                expect(result.ok).toBe(true);
+                if (result.ok) {
+                    expect(result.data).toEqual([undefined, "tenant-1", { orderId: 1 }]);
+                }
+            });
+
+            it("should return first Err", () => {
+                const result = Result.all([
+                    Result.ok(undefined as void),
+                    Result.err({ code: "VALIDATION", message: "Order ID is invalid" }),
+                    Result.err({ code: "FORBIDDEN", message: "No access" }),
+                ] as const);
+
+                expect(result.ok).toBe(false);
+                if (!result.ok) {
+                    expect(result.error).toEqual({
+                        code: "VALIDATION",
+                        message: "Order ID is invalid",
+                    });
+                }
+            });
+        });
+
+        describe("isResult", () => {
+            it("should identify Result values", () => {
+                expect(Result.isResult(Result.ok(1))).toBe(true);
+                expect(Result.isResult(Result.err("fail"))).toBe(true);
+            });
+
+            it("should reject non-Result values", () => {
+                expect(Result.isResult(undefined)).toBe(false);
+                expect(Result.isResult({ ok: true })).toBe(false);
+                expect(Result.isResult({ ok: false })).toBe(false);
+                expect(Result.isResult({ data: 1 })).toBe(false);
+            });
+        });
+
+        describe("createResult", () => {
+            class ApiError {
+                constructor(
+                    public code: string,
+                    public message: string,
+                    public cause?: unknown
+                ) {}
+            }
+
+            const ApiResult = createResult<ApiError>();
+
+            it("should expose typed tryAsync", async () => {
+                const cause = new Error("db unavailable");
+                const result = await ApiResult.tryAsync(
+                    async () => {
+                        throw cause;
+                    },
+                    error => new ApiError("INTERNAL", "DB error fetching order", error)
+                );
+
+                expect(result.ok).toBe(false);
+                if (!result.ok) {
+                    expect(result.error).toBeInstanceOf(ApiError);
+                    expect(result.error.code).toBe("INTERNAL");
+                    expect(result.error.cause).toBe(cause);
+                }
+            });
+
+            it("should expose typed fromNullable", () => {
+                const result = ApiResult.fromNullable(
+                    null,
+                    () => new ApiError("NOT_FOUND", "Order not found")
+                );
+
+                expect(result.ok).toBe(false);
+                if (!result.ok) {
+                    expect(result.error).toBeInstanceOf(ApiError);
+                    expect(result.error.code).toBe("NOT_FOUND");
+                }
+            });
+
+            it("should expose typed all", () => {
+                const result = ApiResult.all([
+                    ApiResult.ok(undefined as void),
+                    ApiResult.err(new ApiError("VALIDATION", "Invalid quantity")),
+                ] as const);
+
+                expect(result.ok).toBe(false);
+                if (!result.ok) {
+                    expect(result.error).toBeInstanceOf(ApiError);
+                    expect(result.error.code).toBe("VALIDATION");
+                }
+            });
+        });
     });
 
     describe("async", () => {
@@ -646,6 +825,52 @@ describe("Result", () => {
             // This test passes if it compiles — the assignment in getItem() is the real test
             const result = getItem();
             expectTypeOf(result).toEqualTypeOf<ResultType<{ name: string }, AppError>>();
+        });
+
+        it("try infers ResultType for sync operation", () => {
+            const result = Result.try(
+                () => ({ id: 1 }),
+                () => new AppError("INTERNAL", "failed")
+            );
+
+            expectTypeOf(result).toEqualTypeOf<ResultType<{ id: number }, AppError>>();
+        });
+
+        it("tryAsync infers AsyncResultType for async operation", async () => {
+            const result = Result.tryAsync(
+                async () => ({ id: 1 }),
+                () => new AppError("INTERNAL", "failed")
+            );
+
+            expectTypeOf(result).toEqualTypeOf<Promise<ResultType<{ id: number }, AppError>>>();
+            await result;
+        });
+
+        it("fromNullable removes null and undefined from Ok type", () => {
+            const order: { id: number } | undefined = { id: 1 };
+            const result = Result.fromNullable(order, () => new AppError("NOT_FOUND", "missing"));
+
+            expectTypeOf(result).toEqualTypeOf<ResultType<{ id: number }, AppError>>();
+        });
+
+        it("all preserves tuple value types and unions error types", () => {
+            const result = Result.all([
+                Result.ok(undefined as void),
+                Result.ok({ id: 1 }),
+                Result.err(new AppError("VALIDATION", "invalid")),
+            ] as const);
+
+            expectTypeOf(result).toEqualTypeOf<
+                ResultType<readonly [void, { id: number }, never], AppError>
+            >();
+        });
+
+        it("isResult narrows unknown values", () => {
+            const value: unknown = Result.ok({ id: 1 });
+
+            if (Result.isResult(value)) {
+                expectTypeOf(value).toEqualTypeOf<ResultType<unknown, unknown>>();
+            }
         });
     });
 });

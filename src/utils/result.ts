@@ -25,6 +25,16 @@ export type ResultType<T, E> = Ok<T> | Err<E>;
  */
 export type AsyncResultType<T, E> = Promise<ResultType<T, E>>;
 
+type ResultValue<T> = T extends Ok<infer Value> ? Value : never;
+type ResultError<T> = T extends Err<infer Error> ? Error : never;
+
+type ResultValues<T extends readonly ResultType<unknown, unknown>[]> = {
+    [K in keyof T]: ResultValue<T[K]>;
+};
+
+type ResultErrors<T extends readonly ResultType<unknown, unknown>[]> =
+    ResultError<T[number]>;
+
 /**
  * Interface for Result methods.
  * See Ok and Err for concrete implementations.
@@ -372,6 +382,132 @@ export function err<E = string>(error: E): Err<E> {
 }
 
 /**
+ * Returns true when a value has the Result shape.
+ * Useful at API boundaries where values are unknown, for example when a generic handler accepts
+ * either a raw response or a service Result.
+ * @example
+ * const value: unknown = await maybeReturnsResult();
+ *
+ * if (Result.isResult(value)) {
+ *   return value.match({
+ *     Ok: data => ({ status: 200, body: data }),
+ *     Err: error => ({ status: 500, body: { message: String(error) } }),
+ *   });
+ * }
+ */
+export const isResult = (value: unknown): value is ResultType<unknown, unknown> => {
+    if (!value || typeof value !== "object" || !("ok" in value)) {
+        return false;
+    }
+
+    if (value.ok === true) {
+        return "data" in value;
+    }
+
+    if (value.ok === false) {
+        return "error" in value;
+    }
+
+    return false;
+};
+
+/**
+ * Runs a synchronous operation and converts thrown errors into Err.
+ * Use this for sync API/service work that can throw, such as parsing headers, URLs, or request data.
+ * @example
+ * const tenantResult = Result.try(
+ *   () => new URL(request.url).pathname.split('/')[2],
+ *   cause => new ApiError('Invalid tenant route', { cause }),
+ * );
+ *
+ * if (!tenantResult.ok) return tenantResult;
+ */
+export const tryResult = <T, E = unknown>(
+    fn: () => T,
+    errorFn?: (error: unknown) => E
+): ResultType<T, E> => {
+    try {
+        return ok(fn());
+    } catch (error) {
+        return err(errorFn ? errorFn(error) : (error as E));
+    }
+};
+
+/**
+ * Runs an async operation and converts rejected promises or thrown errors into Err.
+ * This is useful for API service calls such as database queries, external SDK calls, or fetches.
+ * @example
+ * const ordersResult = await Result.tryAsync(
+ *   () => db.orders.findMany({ tenantId }),
+ *   cause => new ApiError('DB error listing orders', { cause }),
+ * );
+ *
+ * if (!ordersResult.ok) return ordersResult;
+ * return Result.ok(ordersResult.data.map(OrderListItem.fromDb));
+ */
+export const tryAsync = async <T, E = unknown>(
+    fn: () => Promise<T>,
+    errorFn?: (error: unknown) => E
+): AsyncResultType<T, E> => {
+    try {
+        return ok(await fn());
+    } catch (error) {
+        return err(errorFn ? errorFn(error) : (error as E));
+    }
+};
+
+/**
+ * Converts a nullable value into a Result.
+ * Useful after lookups such as Array.find, Map.get, or database methods returning undefined.
+ * @example
+ * const orderResult = Result.fromNullable(
+ *   await db.orders.findFirst({ id: orderId, tenantId }),
+ *   () => new ApiError('Order not found'),
+ * );
+ *
+ * if (!orderResult.ok) return orderResult;
+ */
+export const fromNullable = <T, E>(
+    value: T | null | undefined,
+    error: E | (() => E)
+): ResultType<NonNullable<T>, E> => {
+    if (value === null || value === undefined) {
+        return err(typeof error === "function" ? (error as () => E)() : error);
+    }
+
+    return ok(value as NonNullable<T>);
+};
+
+/**
+ * Combines multiple Results into one Result.
+ * Returns Ok with all successful values, or the first Err encountered. Useful for independent
+ * service validation steps before running a mutation.
+ * @example
+ * const validation = Result.all([
+ *   requirePositiveInteger(orderId, 'Order ID'),
+ *   requireNonEmpty(cancelReason, 'Cancel reason'),
+ *   requireTenantAccess(user, tenantId),
+ * ] as const);
+ *
+ * if (!validation.ok) return validation;
+ */
+export const all = <T extends readonly ResultType<unknown, unknown>[]>(
+    results: T
+): ResultType<ResultValues<T>, ResultErrors<T>> => {
+    const values = [] as unknown[];
+
+    for (const result of results) {
+        if (!result.ok) {
+            return err(result.error) as ResultType<ResultValues<T>, ResultErrors<T>>;
+        }
+
+        values.push(result.data);
+    }
+
+    return ok(values as ResultValues<T>);
+};
+
+/**
  * Wraps a potentially-throwing function and returns a ResultType.
  * If the function throws, returns Err; otherwise, returns Ok.
  * @example
@@ -428,10 +564,15 @@ export const fromAsyncThrowable = <Args extends unknown[], T, E>(
  * const errResult = Result.err("fail");
  */
 export const Result = {
+    all,
     ok,
     err,
+    fromNullable,
     fromThrowable,
     fromAsyncThrowable,
+    isResult,
+    try: tryResult,
+    tryAsync,
 };
 
 /**
@@ -471,8 +612,11 @@ export const Result = {
  * });
  */
 export const createResult = <E>() => ({
+    all: <T extends readonly ResultType<unknown, E>[]>(results: T) => all(results),
     ok: <T>(data: T) => ok(data),
     err: (error: E) => err(error),
+    fromNullable: <T>(value: T | null | undefined, error: E | (() => E)) =>
+        fromNullable<T, E>(value, error),
     fromThrowable: <Args extends unknown[], T>(
         fn: (...args: Args) => T,
         errorFn?: (e: unknown) => E
@@ -481,4 +625,8 @@ export const createResult = <E>() => ({
         fn: (...args: Args) => Promise<T>,
         errorFn?: (e: unknown) => E
     ) => fromAsyncThrowable<Args, T, E>(fn, errorFn),
+    isResult,
+    try: <T>(fn: () => T, errorFn?: (e: unknown) => E) => tryResult<T, E>(fn, errorFn),
+    tryAsync: <T>(fn: () => Promise<T>, errorFn?: (e: unknown) => E) =>
+        tryAsync<T, E>(fn, errorFn),
 });
