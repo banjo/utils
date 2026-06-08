@@ -1,5 +1,11 @@
 # @banjoanton/utils
 
+## 1.1.15
+
+### Patch Changes
+
+- 552c91f: Include skills in build package
+
 ## 1.1.14
 
 ### Patch Changes

@@ -2,7 +2,7 @@
     "name": "@banjoanton/utils",
     "author": "Anton Ödman <anton.odman@gmail.com>",
     "type": "module",
-    "version": "1.1.14",
+    "version": "1.1.15",
     "description": "All kinds of dev utils",
     "homepage": "https://github.com/banjo/utils#readme",
     "private": false,
